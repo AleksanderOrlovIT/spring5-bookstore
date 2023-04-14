@@ -1,9 +1,6 @@
 package com.example.bookstore.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,10 +12,19 @@ import java.util.Set;
 @Setter
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor
 @Entity
 @Table(name = "publishers")
 public class Publisher extends BaseEntity{
+
+    @Builder
+    public Publisher(Long id, String name, String address, Set<Book> books) {
+        super(id);
+        this.name = name;
+        this.address = address;
+        if(books != null) {
+            this.books = books;
+        }
+    }
 
     @Column(name = "name")
     private String name;

@@ -2,9 +2,11 @@ package com.example.bookstore.service.map;
 
 import com.example.bookstore.model.Customer;
 import com.example.bookstore.service.CustomerService;
+import org.springframework.stereotype.Service;
 
 import java.util.Set;
 
+@Service
 public class CustomerServiceImpl extends AbstractMapService<Customer, Long> implements CustomerService {
     @Override
     public Set<Customer> findAll() {

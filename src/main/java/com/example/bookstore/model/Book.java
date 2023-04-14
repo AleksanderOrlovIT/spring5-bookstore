@@ -1,9 +1,6 @@
 package com.example.bookstore.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -12,10 +9,26 @@ import java.util.Set;
 @Setter
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor
 @Entity
 @Table(name = "books")
 public class Book extends BaseEntity{
+
+    @Builder
+    public Book(Long id, String name, Double price, Set<Author> authors, Set<Publisher> publishers,
+                Set<Customer> customers) {
+        super(id);
+        this.name = name;
+        this.price = price;
+        if(authors != null) {
+            this.authors = authors;
+        }
+        if(publishers != null) {
+            this.publishers = publishers;
+        }
+        if(customers != null) {
+            this.customers = customers;
+        }
+    }
 
     @Column(name = "name")
     private String name;
