@@ -75,4 +75,10 @@ public class BookController {
             return "redirect:/book/" + savedBook.getId() + "/show";
         }
     }
+
+    @RequestMapping("/book/{id}/delete")
+    public String deleteBook(@PathVariable String id){
+        bookService.deleteById(Long.valueOf(id));
+        return "redirect:/books";
+    }
 }
