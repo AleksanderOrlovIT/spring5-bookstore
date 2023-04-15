@@ -67,4 +67,10 @@ public class AuthorController {
             return "redirect:/author/" + savedAuthor.getId() + "/show";
         }
     }
+
+    @RequestMapping("author/{id}/delete")
+    public String deleteAuthor(@PathVariable Long id){
+        authorService.deleteById(id);
+        return "redirect:/authors";
+    }
 }

@@ -1,6 +1,7 @@
 package com.example.bookstore.service.map;
 
 import com.example.bookstore.model.Author;
+import com.example.bookstore.model.Book;
 import com.example.bookstore.repositories.AuthorRepository;
 import com.example.bookstore.service.AuthorService;
 import org.springframework.stereotype.Service;
@@ -41,6 +42,12 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     public void deleteById(Long id) {
+        Author author = findById(id);
+        if(author != null && author.getBooks() != null){
+            for(Book book : author.getBooks()){
+                book.getAuthors().remove(author);
+            }
+        }
         authorRepository.deleteById(id);
     }
 }
