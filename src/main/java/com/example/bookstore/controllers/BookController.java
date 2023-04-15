@@ -69,9 +69,8 @@ public class BookController {
         if(result.hasErrors()){
             return bookForm;
         }else{
-            book.setId(id);
-            Book savedBook = bookService.save(book);
-            return "redirect:/book/" + savedBook.getId() + "/show";
+            bookService.save(book);
+            return "redirect:/book/" + book.getId() + "/show";
         }
     }
 

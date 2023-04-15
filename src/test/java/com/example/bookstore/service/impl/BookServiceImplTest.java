@@ -1,4 +1,4 @@
-package com.example.bookstore.service.map;
+package com.example.bookstore.service.impl;
 
 import com.example.bookstore.model.Book;
 import com.example.bookstore.repositories.BookRepository;
@@ -19,7 +19,7 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class BookServiceTest {
+class BookServiceImplTest {
 
     public static final Long bookId = 1L;
 

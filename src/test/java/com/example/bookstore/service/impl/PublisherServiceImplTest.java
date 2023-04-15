@@ -1,4 +1,4 @@
-package com.example.bookstore.service.map;
+package com.example.bookstore.service.impl;
 
 import com.example.bookstore.model.Publisher;
 import com.example.bookstore.repositories.PublisherRepository;

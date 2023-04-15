@@ -14,7 +14,7 @@ import javax.validation.Valid;
 
 @Controller
 public class AuthorController {
-    private final String authorForm = "author/authorform";
+    private final static String authorForm = "author/authorform";
 
     private final AuthorService authorService;
 
@@ -56,15 +56,13 @@ public class AuthorController {
         return authorForm;
     }
 
-    @PostMapping("author/{id}/update")
+    @PostMapping("/author/{id}/update")
     public String processUpdateAuthorForm(@Valid Author author, BindingResult result, @PathVariable Long id){
         if(result.hasErrors()){
             return authorForm;
         }else{
-            System.out.println(author.getId());
-            author.setId(id);
-            Author savedAuthor = authorService.save(author);
-            return "redirect:/author/" + savedAuthor.getId() + "/show";
+            authorService.save(author);
+            return "redirect:/author/" + author.getId() + "/show";
         }
     }
 

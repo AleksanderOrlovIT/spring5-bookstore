@@ -25,12 +25,28 @@
           <div class="panel-heading">
             <div class="row">
               <div class="col-md-3">
-                <h1 class="panel-title" th:text="${publisher.name}">Book name here!</h1>
+                <h1 class="panel-title" th:text="${publisher.name}">Publisher name here!</h1>
               </div>
 
               <div class="col-md-1">
                 <a class="btn btn-default" href="#"
                    th:href="@{'/publisher/' + ${publisher.id} + '/image'}" role="button">Change Image</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="panel panel-primary">
+          <div class="panel-heading">
+            <div class="row">
+              <div class="col-md-11">
+                <h1 class="panel-title">Address</h1>
+              </div>
+            </div>
+          </div>
+          <div class="panel-body">
+            <div class="row">
+              <div class="col-md-12">
+                <p th:text="${'Address: ' + (publisher.address)}">30 $</p>
               </div>
             </div>
           </div>
@@ -48,6 +64,7 @@
             </div>
           </div>
           <div class="panel-body">
+            </div>
             <div class="row">
               <div class="col-md-12">
                 <ul>
