@@ -58,10 +58,9 @@ public class BookController {
         }
     }
 
-    @GetMapping("/book/{bookId}/update")
-    public String initUpdateBookForm(@PathVariable Long bookId, Model model){
-        model.addAttribute(bookService.findById(bookId));
-        System.out.println(bookService.findById(bookId).getAuthors());
+    @GetMapping("/book/{id}/update")
+    public String initUpdateBookForm(@PathVariable Long id, Model model){
+        model.addAttribute(bookService.findById(id));
         return bookForm;
     }
 
