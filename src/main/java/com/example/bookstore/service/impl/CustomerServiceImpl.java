@@ -1,5 +1,6 @@
 package com.example.bookstore.service.impl;
 
+import com.example.bookstore.model.Book;
 import com.example.bookstore.model.Customer;
 import com.example.bookstore.repositories.CustomerRepository;
 import com.example.bookstore.service.CustomerService;
@@ -41,6 +42,12 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public void deleteById(Long id) {
+        Customer customer = findById(id);
+        if(customer != null && customer.getBooks() != null){
+            for(Book book : customer.getBooks()){
+                book.getCustomers().remove(customer);
+            }
+        }
         customerRepository.deleteById(id);
     }
 }
