@@ -41,25 +41,34 @@ public class InitialBootstrap implements CommandLineRunner {
 
 
         //adding to sets
+        bookDorian.getAuthors().add(authorOscar);
+        bookDorian.getPublishers().add(publisherLondon);
+        bookDorian.getCustomers().add(customer1);
+
+        book1984.getAuthors().add(authorJorj);
+        book1984.getPublishers().add(publisherLondon);
+        book1984.getCustomers().add(customer1);
+
         authorOscar.getBooks().add(bookDorian);
         authorJorj.getBooks().add(book1984);
 
-        bookDorian.getAuthors().add(authorOscar);
-        bookDorian.getPublishers().add(publisherLondon);
+        publisherLondon.getBooks().add(book1984);
+        publisherLondon.getBooks().add(bookDorian);
 
-        book1984.getAuthors().add(authorJorj);
-        bookDorian.getPublishers().add(publisherLondon);
+        customer1.getBooks().add(book1984);
+        customer1.getBooks().add(bookDorian);
 
         //saving
-        bookService.save(bookDorian);
-        bookService.save(book1984);
+        publisherService.save(publisherLondon);
 
         authorService.save(authorOscar);
         authorService.save(authorJorj);
 
-        publisherService.save(publisherLondon);
-
         customerService.save(customer1);
+
+        bookService.save(book1984);
+        bookService.save(bookDorian);
+
 
         System.out.println("Authors : " + authorService.findAll());
         System.out.println("Books : " + bookService.findAll().toString());
