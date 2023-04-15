@@ -66,4 +66,10 @@ public class PublisherController {
             return "redirect:/publisher/" + publisher.getId() + "/show";
         }
     }
+
+    @RequestMapping("publisher/{id}/delete")
+    public String deletePublisher(@PathVariable Long id){
+        publisherService.deleteById(id);
+        return "redirect:/publishers";
+    }
 }

@@ -1,5 +1,6 @@
 package com.example.bookstore.service.impl;
 
+import com.example.bookstore.model.Book;
 import com.example.bookstore.model.Publisher;
 import com.example.bookstore.repositories.PublisherRepository;
 import com.example.bookstore.service.PublisherService;
@@ -41,6 +42,12 @@ public class PublisherServiceImpl implements PublisherService {
 
     @Override
     public void deleteById(Long id) {
+        Publisher publisher = findById(id);
+        if(publisher != null && publisher.getBooks() != null){
+            for(Book book : publisher.getBooks()){
+                book.getPublishers().remove(publisher);
+            }
+        }
         publisherRepository.deleteById(id);
     }
 }
