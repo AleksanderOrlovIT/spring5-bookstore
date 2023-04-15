@@ -31,7 +31,7 @@
               <thead class="thead-inverse">
               <tr>
                 <th>ID</th>
-                <th>Description</th>
+                <th>Name</th>
                 <th>View</th>
                 <th>Update</th>
                 <th>Delete</th>
@@ -49,8 +49,7 @@
               </tr>
               <tr th:each="author : ${authors}">
                 <td th:text="${author.id}">334</td>
-                <td th:text="${author.firstName}">Tasty Goodnees 3</td>
-                <td th:text="${author.lastName}">Tasty Goodnees 3</td>
+                <td th:text="${(author.firstName + ' ' + author.lastName)}">Tasty Goodnees 3</td>
                 <td><a href="#" th:href="@{'/author/' + ${author.id} + '/show'}">View</a></td>
                 <td><a href="#" th:href="@{'/author/' + ${author.id} + '/update'}">Update</a></td>
                 <td><a href="#" th:href="@{'/author/' + ${author.id} + '/delete'}">Delete</a></td>

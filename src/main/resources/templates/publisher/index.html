@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8"/>
-  <title>Books Home</title>
+  <title>Publisher Home</title>
 
   <!-- Latest compiled and minified CSS -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
@@ -23,10 +23,10 @@
       <div class="panel panel-primary">
 
         <div class="panel-heading">
-          <h1 class="panel-title">Books on our website!</h1>
+          <h1 class="panel-title">Publishers on our site</h1>
         </div>
         <div class="panel-body">
-          <div class="table-responsive" th:if="${not #lists.isEmpty(books)}">
+          <div class="table-responsive" th:if="${not #lists.isEmpty(publishers)}">
             <table class="table table-hover ">
               <thead class="thead-inverse">
               <tr>
@@ -47,12 +47,12 @@
                 <td>Tasty Goodnees 2</td>
                 <td><a href="#">View</a></td>
               </tr>
-              <tr th:each="book : ${books}">
-                <td th:text="${book.id}">334</td>
-                <td th:text="${book.name}">Tasty Goodnees 3</td>
-                <td><a href="#" th:href="@{'/book/' + ${book.id} + '/show'}">View</a></td>
-                <td><a href="#" th:href="@{'/book/' + ${book.id} + '/update'}">Update</a></td>
-                <td><a href="#" th:href="@{'/book/' + ${book.id} + '/delete'}">Delete</a></td>
+              <tr th:each="publisher : ${publishers}">
+                <td th:text="${publisher.id}">334</td>
+                <td th:text="${publisher.name}">Tasty Goodnees 3</td>
+                <td><a href="#" th:href="@{'/publisher/' + ${publisher.id} + '/show'}">View</a></td>
+                <td><a href="#" th:href="@{'/publisher/' + ${publisher.id} + '/update'}">Update</a></td>
+                <td><a href="#" th:href="@{'/publisher/' + ${publisher.id} + '/delete'}">Delete</a></td>
               </tr>
             </table>
           </div>
