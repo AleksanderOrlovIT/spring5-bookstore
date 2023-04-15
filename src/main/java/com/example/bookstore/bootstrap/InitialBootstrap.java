@@ -51,12 +51,11 @@ public class InitialBootstrap implements CommandLineRunner {
         bookDorian.getPublishers().add(publisherLondon);
 
         //saving
+        bookService.save(bookDorian);
+        bookService.save(book1984);
 
         authorService.save(authorOscar);
         authorService.save(authorJorj);
-
-        bookService.save(bookDorian);
-        bookService.save(book1984);
 
         publisherService.save(publisherLondon);
 

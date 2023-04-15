@@ -1,35 +1,46 @@
 package com.example.bookstore.service.map;
 
 import com.example.bookstore.model.Author;
+import com.example.bookstore.repositories.AuthorRepository;
 import com.example.bookstore.service.AuthorService;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Service
-public class AuthorServiceImpl extends AbstractMapService<Author, Long> implements AuthorService {
+public class AuthorServiceImpl implements AuthorService {
+
+    private final AuthorRepository authorRepository;
+
+    public AuthorServiceImpl(AuthorRepository authorRepository) {
+        this.authorRepository = authorRepository;
+    }
+
     @Override
     public Set<Author> findAll() {
-        return super.findAll();
+        Set<Author> authors =  new HashSet<>();
+        authorRepository.findAll().forEach(authors::add);
+        return authors;
     }
 
     @Override
     public Author findById(Long id) {
-        return super.findById(id);
+        return authorRepository.findById(id).orElse(null);
     }
 
     @Override
     public Author save(Author author) {
-        return super.save(author);
+        return authorRepository.save(author);
     }
 
     @Override
     public void delete(Author author) {
-        super.delete(author);
+        authorRepository.delete(author);
     }
 
     @Override
     public void deleteById(Long id) {
-        super.deleteById(id);
+        authorRepository.deleteById(id);
     }
 }

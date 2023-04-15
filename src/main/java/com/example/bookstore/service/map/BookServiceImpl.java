@@ -1,35 +1,46 @@
 package com.example.bookstore.service.map;
 
 import com.example.bookstore.model.Book;
+import com.example.bookstore.repositories.BookRepository;
 import com.example.bookstore.service.BookService;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Service
-public class BookServiceImpl extends AbstractMapService<Book, Long> implements BookService {
+public class BookServiceImpl implements BookService {
+
+    private final BookRepository bookRepository;
+
+    public BookServiceImpl(BookRepository bookRepository) {
+        this.bookRepository = bookRepository;
+    }
+
     @Override
     public Set<Book> findAll() {
-        return super.findAll();
+        Set<Book> books = new HashSet<>();
+        bookRepository.findAll().forEach(books::add);
+        return books;
     }
 
     @Override
     public Book findById(Long id) {
-        return super.findById(id);
+        return bookRepository.findById(id).orElse(null);
     }
 
     @Override
     public Book save(Book book) {
-        return super.save(book);
+        return bookRepository.save(book);
     }
 
     @Override
     public void delete(Book book) {
-        super.delete(book);
+        bookRepository.delete(book);
     }
 
     @Override
     public void deleteById(Long id) {
-        super.deleteById(id);
+        bookRepository.deleteById(id);
     }
 }
