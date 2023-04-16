@@ -39,7 +39,7 @@ public class InitialBootstrap implements CommandLineRunner {
 
         Publisher publisherLondon = Publisher.builder().name("LondonPublicity").address("London").build();
 
-        Customer customer1 = Customer.builder().userName("SashaOrlov").balance(11.0).build();
+        Customer customer1 = Customer.builder().userName("SashaOrlov").balance(BigDecimal.valueOf(11.0)).build();
 
 
         //adding to sets
