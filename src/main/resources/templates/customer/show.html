@@ -56,6 +56,10 @@
                             <div class="col-md-11">
                                 <h1 class="panel-title">Customer's books</h1>
                             </div>
+                            <div class="col-md-1">
+                                <a class="btn btn-default" href="#"
+                                   th:href="@{'/customer/' + ${customer.id} + '/books'}" role="button">View</a>
+                            </div>
                         </div>
                     </div>
                     <div class="panel-body">
