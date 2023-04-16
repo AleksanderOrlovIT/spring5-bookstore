@@ -50,4 +50,13 @@ public class CustomerServiceImpl implements CustomerService {
         }
         customerRepository.deleteById(id);
     }
+
+    @Override
+    public Customer findByUserName(String userName) {
+        for(Customer customer : customerRepository.findAll()){
+            if(customer.getUserName().equals(userName))
+                return customer;
+        }
+        return null;
+    }
 }

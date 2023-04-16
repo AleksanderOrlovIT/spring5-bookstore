@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.HashSet;
@@ -35,7 +36,7 @@ public class AuthorServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        returnAuthor = Author.builder().id(authorId).firstName(authorName).build();
+        returnAuthor = Author.builder().id(authorId).firstName(authorName).lastName(authorName).build();
     }
 
     @Test

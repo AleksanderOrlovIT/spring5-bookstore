@@ -50,4 +50,13 @@ public class PublisherServiceImpl implements PublisherService {
         }
         publisherRepository.deleteById(id);
     }
+
+    @Override
+    public Publisher findByName(String name) {
+        for(Publisher publisher : publisherRepository.findAll()){
+            if(publisher.getName().equals(name))
+                return publisher;
+        }
+        return null;
+    }
 }

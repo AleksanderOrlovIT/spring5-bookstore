@@ -70,10 +70,10 @@ public class InitialBootstrap implements CommandLineRunner {
         bookService.save(bookDorian);
 
 
-        System.out.println("Authors : " + authorService.findAll());
-        System.out.println("Books : " + bookService.findAll().toString());
-        System.out.println("Publishers : " + publisherService.findAll().toString());
-        System.out.println("Customers : " + customerService.findAll().toString());
+        //System.out.println("Authors : " + authorService.findAll());
+        //System.out.println("Books : " + bookService.findAll().toString());
+        //System.out.println("Publishers : " + publisherService.findAll().toString());
+        //System.out.println("Customers : " + customerService.findAll().toString());
     }
 
     @Override

@@ -60,4 +60,13 @@ public class BookServiceImpl implements BookService {
         }
         return newBook;
     }
+
+    @Override
+    public Book findByName(String name) {
+        for(Book book : bookRepository.findAll()){
+            if(book.getName().equals(name))
+                return book;
+        }
+        return null;
+    }
 }

@@ -50,4 +50,13 @@ public class AuthorServiceImpl implements AuthorService {
         }
         authorRepository.deleteById(id);
     }
+
+    @Override
+    public Author findByFullName(String firstName, String lastName) {
+        for(Author author : authorRepository.findAll()){
+            if(author.getFirstName().equals(firstName) && author.getLastName().equals(lastName))
+                return author;
+        }
+        return null;
+    }
 }
