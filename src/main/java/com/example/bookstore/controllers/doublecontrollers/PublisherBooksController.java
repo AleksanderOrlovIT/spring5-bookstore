@@ -62,4 +62,17 @@ public class PublisherBooksController {
             return "redirect:/publisher/" + publisherId + "/books";
         }
     }
+
+    @RequestMapping("/book/{bookId}/delete")
+    public String deleteBook(@PathVariable Long bookId, @PathVariable Long publisherId){
+        Book deletedBook = bookService.findById(bookId);
+        currentPublisher = publisherService.findById(publisherId);
+
+        currentPublisher.getBooks().remove(deletedBook);
+        deletedBook.getPublishers().remove(currentPublisher);
+
+        publisherService.save(currentPublisher);
+        bookService.save(deletedBook);
+        return "redirect:/publisher/" + publisherId + "/books";
+    }
 }
