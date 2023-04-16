@@ -69,6 +69,7 @@ public class BookController {
         if(result.hasErrors()){
             return bookForm;
         }else{
+            bookService.saveBookSets(book, bookService.findById(id));
             bookService.save(book);
             return "redirect:/book/" + book.getId() + "/show";
         }
