@@ -65,4 +65,17 @@ public class AuthorBooksController {
         }
     }
 
+    @RequestMapping("/book/{bookId}/delete")
+    public String deleteBook(@PathVariable Long bookId, @PathVariable Long authorId){
+        Book deletedBook = bookService.findById(bookId);
+        currentAuthor = authorService.findById(authorId);
+
+        currentAuthor.getBooks().remove(deletedBook);
+        deletedBook.getAuthors().remove(currentAuthor);
+
+        authorService.save(currentAuthor);
+        bookService.save(deletedBook);
+        return "redirect:/author/" + authorId + "/books";
+    }
+
 }
