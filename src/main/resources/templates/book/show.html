@@ -76,8 +76,8 @@
                 <h1 class="panel-title">Authors</h1>
               </div>
               <div class="col-md-1">
-                <!--<a class="btn btn-default" href="#"
-                   th:href="@{'/author/' + ${recipe.id} + '/ingredients'}" role="button">View</a>-->
+                <a class="btn btn-default" href="#"
+                   th:href="@{'/book/' + ${book.id} + '/authors'}" role="button">View</a>
               </div>
             </div>
           </div>
@@ -102,6 +102,10 @@
               <div class="col-md-11">
                 <h1 class="panel-title">Publishers</h1>
               </div>
+              <div class="col-md-1">
+                <a class="btn btn-default" href="#"
+                   th:href="@{'/book/' + ${book.id} + '/publishers'}" role="button">View</a>
+              </div>
             </div>
           </div>
           <div class="panel-body">
@@ -124,6 +128,10 @@
             <div class="row">
               <div class="col-md-11">
                 <h1 class="panel-title">Customers</h1>
+              </div>
+              <div class="col-md-1">
+                <a class="btn btn-default" href="#"
+                   th:href="@{'/book/' + ${book.id} + '/customers'}" role="button">View</a>
               </div>
             </div>
           </div>
