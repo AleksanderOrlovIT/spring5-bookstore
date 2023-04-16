@@ -11,6 +11,8 @@ import com.example.bookstore.service.PublisherService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
+
 @Component
 public class InitialBootstrap implements CommandLineRunner {
 
@@ -32,8 +34,8 @@ public class InitialBootstrap implements CommandLineRunner {
         Author authorOscar = Author.builder().firstName("Oscar").lastName("Wilde").build();
         Author authorJorj = Author.builder().firstName("Jorj").lastName("Oruell").build();
 
-        Book bookDorian = Book.builder().name("Dorian gray").price(5.0).build();
-        Book book1984 = Book.builder().name("1984").price(6.0).build();
+        Book bookDorian = Book.builder().name("Dorian gray").price(BigDecimal.valueOf(5.0)).build();
+        Book book1984 = Book.builder().name("1984").price(BigDecimal.valueOf(6.0)).build();
 
         Publisher publisherLondon = Publisher.builder().name("LondonPublicity").address("London").build();
 

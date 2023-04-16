@@ -52,6 +52,7 @@ public class CustomerBooksController {
             Book findBook = bookService.findByName(book.getName());
             currentCustomer = customerService.findById(customerId);
             if(findBook != null){
+                findBook.setPrice(book.getPrice());
                 book = findBook;
             }
             currentCustomer.getBooks().add(book);

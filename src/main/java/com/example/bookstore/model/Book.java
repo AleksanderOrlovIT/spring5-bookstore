@@ -3,6 +3,8 @@ package com.example.bookstore.model;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.*;
+import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -14,7 +16,7 @@ import java.util.Set;
 public class Book extends BaseEntity{
 
     @Builder
-    public Book(Long id, String name, Double price, Set<Author> authors, Set<Publisher> publishers,
+    public Book(Long id, String name, BigDecimal price, Set<Author> authors, Set<Publisher> publishers,
                 Set<Customer> customers) {
         super(id);
         this.name = name;
@@ -30,11 +32,14 @@ public class Book extends BaseEntity{
         }
     }
 
+    @NotEmpty
     @Column(name = "name")
     private String name;
 
+    @NotNull
+    @DecimalMin(value = "0.0")
     @Column(name = "price")
-    private Double price;
+    private BigDecimal price;
 
     @ManyToMany
     @JoinTable(name = "book_authors", joinColumns = @JoinColumn(name = "book_id"),

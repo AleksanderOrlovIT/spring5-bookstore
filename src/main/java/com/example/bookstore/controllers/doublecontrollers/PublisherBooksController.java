@@ -52,6 +52,7 @@ public class PublisherBooksController {
             Book findBook = bookService.findByName(book.getName());
             currentPublisher = publisherService.findById(publisherId);
             if(findBook != null){
+                findBook.setPrice(book.getPrice());
                 book = findBook;
             }
             currentPublisher.getBooks().add(book);

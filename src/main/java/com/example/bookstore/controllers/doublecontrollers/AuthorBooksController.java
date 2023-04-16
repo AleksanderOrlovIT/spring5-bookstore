@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.validation.Valid;
+import java.math.BigDecimal;
 
 @Controller
 @RequestMapping("/author/{authorId}")
@@ -42,7 +43,7 @@ public class AuthorBooksController {
 
     @GetMapping("/book/new")
     public String initCreationForm(Model model){
-        model.addAttribute("book", Book.builder().build());
+        model.addAttribute("book", Book.builder().price(BigDecimal.valueOf(0.0)).build());
         return authorBookForm;
     }
 
@@ -54,6 +55,7 @@ public class AuthorBooksController {
             Book findBook = bookService.findByName(book.getName());
             currentAuthor = authorService.findById(authorId);
             if(findBook != null){
+                findBook.setPrice(book.getPrice());
                 book = findBook;
             }
             currentAuthor.getBooks().add(book);
