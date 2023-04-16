@@ -43,7 +43,7 @@ public class AuthorBooksController {
     @GetMapping("/book/new")
     public String initCreationForm(Model model){
         model.addAttribute("book", Book.builder().build());
-        return "author/authorbooks/authorbookform";
+        return authorBookForm;
     }
 
     @PostMapping("/book/new")
