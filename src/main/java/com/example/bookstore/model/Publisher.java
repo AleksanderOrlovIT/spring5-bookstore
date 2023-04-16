@@ -6,6 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -26,9 +27,11 @@ public class Publisher extends BaseEntity{
         }
     }
 
+    @NotEmpty
     @Column(name = "name")
     private String name;
 
+    @NotEmpty
     @Column(name = "address")
     private String address;
 
