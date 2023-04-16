@@ -62,4 +62,17 @@ public class CustomerBooksController {
             return "redirect:/customer/" + customerId + "/books";
         }
     }
+
+    @RequestMapping("/book/{bookId}/delete")
+    public String deleteBook(@PathVariable Long bookId, @PathVariable Long customerId){
+        Book deletedBook = bookService.findById(bookId);
+        currentCustomer = customerService.findById(customerId);
+
+        currentCustomer.getBooks().remove(deletedBook);
+        deletedBook.getCustomers().remove(currentCustomer);
+
+        customerService.save(currentCustomer);
+        bookService.save(deletedBook);
+        return "redirect:/customer/" + customerId + "/books";
+    }
 }
