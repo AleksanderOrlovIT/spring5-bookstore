@@ -3,6 +3,7 @@ package com.example.bookstore.model;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -23,9 +24,11 @@ public class Author extends BaseEntity{
         }
     }
 
+    @NotEmpty
     @Column(name = "firstName")
     private String firstName;
 
+    @NotEmpty
     @Column(name = "lastName")
     private String lastName;
 
