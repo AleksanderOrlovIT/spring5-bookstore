@@ -60,7 +60,7 @@ public class BookAuthorsController {
 
             authorService.save(author);
             bookService.save(currentBook);
-            return "redirect:/book/" + currentBook.getId() + "/authors";
+            return "redirect:/book/" + bookId + "/authors";
         }
     }
 
