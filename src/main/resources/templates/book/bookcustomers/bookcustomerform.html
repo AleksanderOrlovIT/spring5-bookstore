@@ -22,34 +22,35 @@
         <div class="col-md-6 col-md-offset-3">
             <form th:object="${customer}" method="post">
                 <div th:if="${#fields.hasErrors('*')}" class="alert alert-danger">
-                    <p>Please Correct Errors Below</p>
+                    <p style="font-size: 20px">Please Correct Errors Below</p>
                 </div>
                 <input type="hidden" th:field="*{id}"/>
                 <div class="pannel-group">
                     <div class="panel panel-primary">
                         <div class="panel-heading">
-                            <h1 class="panel-title">Edit Customer Information</h1>
+                            <h1 class="panel-title" style="font-size: 20px">Edit Customer Information</h1>
                         </div>
                         <div class="panel-body">
-
                             <div class="row">
                                 <div class="col-md-3 form-group">
-                                    <label>Username:</label>
-                                    <input type="text" class="form-control" th:field="*{userName}"/>
+                                    <label style="font-size: 20px">Username:</label>
+                                    <input type="text" class="form-control" th:field="*{userName}"
+                                           style="font-size: 20px"/>
                                     <div class="alert alert-warning" th:if="${#fields.hasErrors('userName')}"
-                                         th:errors="*{userName}"></div>
+                                         th:errors="*{userName}" style="font-size: 20px"></div>
                                 </div>
                                 <div class="col-md-3 form-group">
-                                    <label>Balance:</label>
-                                    <input type="number" class="form-control" th:field="*{balance}"/>
+                                    <label style="font-size: 20px">Balance:</label>
+                                    <input type="number" class="form-control" th:field="*{balance}"
+                                           style="font-size: 20px"/>
                                     <div class="alert alert-warning" th:if="${#fields.hasErrors('balance')}"
-                                         th:errors="*{balance}"></div>
+                                         th:errors="*{balance}" style="font-size: 20px"></div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <button type="submit" class="btn btn-primary" style="font-size: 20px">Submit</button>
             </form>
         </div>
     </div>

@@ -24,12 +24,13 @@
                 <div class="panel panel-primary">
                     <div class="panel-heading">
                         <div class="row">
-                            <div class="col-md-3">
-                                <h1 class="panel-title" th:text="${customer.userName}">Customer userName here!</h1>
+                            <div class="col-md-11">
+                                <h1 class="panel-title" th:text="${customer.userName}"
+                                    style="font-size: 30px;">Author name here!</h1>
                             </div>
-                            <div class="col-md-1">
-                                <a class="btn btn-default" href="#"
-                                   th:href="@{'/customer/' + ${customer.id} + '/image'}" role="button">Change Image</a>
+                            <div class="col-md-1" style="margin-left: 750px;">
+                                <a class="btn btn-default" href="#" th:href="@{'/'}" role="button"
+                                   style="font-size: 20px">Main page</a>
                             </div>
                         </div>
                     </div>
@@ -38,14 +39,15 @@
                     <div class="panel-heading">
                         <div class="row">
                             <div class="col-md-11">
-                                <h1 class="panel-title">Customer's Balance</h1>
+                                <h1 class="panel-title" style="font-size: 20px">Customer's Balance</h1>
                             </div>
                         </div>
                     </div>
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-md-12">
-                                <p th:text="${'Balance: ' + (customer.balance) +  '  $'}">30 $</p>
+                                <p th:text="${'Balance: ' + (customer.balance) +  '  $'}" style="font-size: 20px">30
+                                    $</p>
                             </div>
                         </div>
                     </div>
@@ -54,11 +56,12 @@
                     <div class="panel-heading">
                         <div class="row">
                             <div class="col-md-11">
-                                <h1 class="panel-title">Customer's books</h1>
+                                <h1 class="panel-title" style="font-size: 20px">Customer's books</h1>
                             </div>
-                            <div class="col-md-1">
+                            <div class="col-md-1" style="margin-left: 775px;">
                                 <a class="btn btn-default" href="#"
-                                   th:href="@{'/customer/' + ${customer.id} + '/books'}" role="button">View</a>
+                                   th:href="@{'/customer/' + ${customer.id} + '/books'}" role="button"
+                                   style="font-size: 20px">View</a>
                             </div>
                         </div>
                     </div>
@@ -69,7 +72,8 @@
                                     <li th:remove="all">1 Cup of milk</li>
                                     <li th:remove="all">1 Teaspoon of chocolate</li>
                                     <li th:each="book : ${customer.books}"
-                                        th:text="${'Book name: ' + book.getName()}">1 Teaspoon of Sugar
+                                        th:text="${'Book name: ' + book.getName()}" style="font-size: 20px">1 Teaspoon
+                                        of Sugar
                                     </li>
                                 </ul>
                             </div>

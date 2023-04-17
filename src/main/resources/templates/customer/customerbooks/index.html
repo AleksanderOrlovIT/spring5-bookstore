@@ -23,18 +23,27 @@
             <div class="panel panel-primary">
 
                 <div class="panel-heading">
-                    <h1 class="panel-title"
-                        th:text="${customer.userName} + ' books'">Books on our website!</h1>
+                    <div class="row">
+                        <div class="col-md-11">
+                            <h1 class="panel-title"
+                                th:text="${customer.userName} + ' books'" style="font-size: 30px">Books on our
+                                website!</h1>
+                        </div>
+                        <div class="col-md-1" style="margin-left: 750px;">
+                            <a class="btn btn-default" href="#" th:href="@{'/'}" role="button"
+                               style="font-size: 20px">Main page</a>
+                        </div>
+                    </div>
                 </div>
                 <div class="panel-body">
                     <div class="table-responsive" th:if="${not #lists.isEmpty(books)}">
                         <table class="table table-hover ">
                             <thead class="thead-inverse">
                             <tr>
-                                <th>ID</th>
-                                <th>Name</th>
-                                <th>View</th>
-                                <th>Delete</th>
+                                <th style="font-size: 25px">ID</th>
+                                <th style="font-size: 25px">Name</th>
+                                <th style="font-size: 25px">View</th>
+                                <th style="font-size: 25px">Delete</th>
                             </tr>
                             </thead>
                             <tr th:remove="all">
@@ -48,16 +57,20 @@
                                 <td><a href="#">View</a></td>
                             </tr>
                             <tr th:each="book : ${books}">
-                                <td th:text="${book.id}">334</td>
-                                <td th:text="${book.name}">Tasty Goodnees 3</td>
-                                <td><a href="#" th:href="@{'/book/' + ${book.id} + '/show'}">View</a></td>
-                                <td><a href="#" th:href="@{'/customer/' + ${customer.id} + '/book/' + ${book.id} + '/delete'}">Delete</a></td>
+                                <td th:text="${book.id}" style="font-size: 20px">334</td>
+                                <td th:text="${book.name}" style="font-size: 20px">Tasty Goodnees 3</td>
+                                <td><a href="#" th:href="@{'/book/' + ${book.id} + '/show'}" style="font-size: 20px">View</a>
+                                </td>
+                                <td><a href="#"
+                                       th:href="@{'/customer/' + ${customer.id} + '/book/' + ${book.id} + '/delete'}"
+                                       style="font-size: 20px">Delete</a></td>
                             </tr>
                         </table>
                     </div>
                     <div class="col-md-1">
                         <a class="btn btn-default" href="#"
-                           th:href="@{'/customer/' + ${customer.id} +'/book/new'}" role="button">Add Book</a>
+                           th:href="@{'/customer/' + ${customer.id} +'/book/new'}" role="button"
+                           style="font-size: 20px">Add Book</a>
                     </div>
                 </div>
             </div>

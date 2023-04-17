@@ -20,37 +20,38 @@
 <div class="container-fluid" style="margin-top: 20px">
     <div class="row">
         <div class="col-md-6 col-md-offset-3">
-            <form  th:object="${publisher}" method="post">
+            <form th:object="${publisher}" method="post">
                 <div th:if="${#fields.hasErrors('*')}" class="alert alert-danger">
-                    <p>Please Correct Errors Below</p>
+                    <p style="font-size: 20px">Please Correct Errors Below</p>
                 </div>
                 <input type="hidden" th:field="*{id}"/>
                 <div class="pannel-group">
                     <div class="panel panel-primary">
                         <div class="panel-heading">
-                            <h1 class="panel-title">Edit Publisher Information</h1>
+                            <h1 class="panel-title" style="font-size: 20px">Edit Publisher Information</h1>
                         </div>
                         <div class="panel-body">
 
                             <div class="row">
                                 <div class="col-md-3 form-group">
-                                    <label>Name:</label>
-                                    <input type="text" class="form-control" th:field="*{name}"/>
+                                    <label style="font-size: 20px">Name:</label>
+                                    <input type="text" class="form-control" th:field="*{name}" style="font-size: 20px"/>
                                     <div class="alert alert-warning" th:if="${#fields.hasErrors('name')}"
-                                         th:errors="*{name}"></div>
+                                         th:errors="*{name}" style="font-size: 20px"></div>
                                 </div>
 
                                 <div class="col-md-3 form-group">
-                                    <label>Address:</label>
-                                    <input type="text" class="form-control" th:field="*{address}"/>
+                                    <label style="font-size: 20px">Address:</label>
+                                    <input type="text" class="form-control" th:field="*{address}"
+                                           style="font-size: 20px"/>
                                     <div class="alert alert-warning" th:if="${#fields.hasErrors('address')}"
-                                         th:errors="*{address}"></div>
+                                         th:errors="*{address}" style="font-size: 20px"></div>
                                 </div>
 
                             </div>
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="submit" class="btn btn-primary" style="font-size: 20px">Submit</button>
                 </div>
             </form>
         </div>
