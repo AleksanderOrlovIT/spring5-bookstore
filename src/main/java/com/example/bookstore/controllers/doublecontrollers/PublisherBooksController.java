@@ -30,7 +30,7 @@ public class PublisherBooksController {
         this.bookService = bookService;
     }
 
-    @RequestMapping({"/books", "books/show"})
+    @RequestMapping({"/books", "/books/show"})
     public String getAllPublishersBooks(@PathVariable Long publisherId, Model model){
         currentPublisher = publisherService.findById(publisherId);
         model.addAttribute("books", currentPublisher.getBooks());

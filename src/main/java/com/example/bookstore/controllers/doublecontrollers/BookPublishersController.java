@@ -32,7 +32,7 @@ public class BookPublishersController {
     }
 
     @RequestMapping({"/publishers", "/publishers/show"})
-    public String getAllBookAuthors(@PathVariable Long bookId, Model model){
+    public String getAllBookPublishers(@PathVariable Long bookId, Model model){
         currentBook = bookService.findById(bookId);
         model.addAttribute("publishers", currentBook.getPublishers());
         model.addAttribute("book", currentBook);
