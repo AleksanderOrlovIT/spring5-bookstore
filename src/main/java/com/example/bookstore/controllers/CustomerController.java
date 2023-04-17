@@ -15,7 +15,7 @@ import javax.validation.Valid;
 @Controller
 public class CustomerController {
 
-    private final static String customerForm = "customer/customerform";
+    private final static String customerForm = "/customer/customerform";
 
     private final CustomerService customerService;
 
@@ -30,7 +30,7 @@ public class CustomerController {
     }
 
     @RequestMapping("/customer/{id}/show")
-    public String getCustomerById(@PathVariable String id, Model model){
+    public String showCustomerById(@PathVariable String id, Model model){
         model.addAttribute("customer", customerService.findById(Long.valueOf(id)));
         return "customer/show";
     }

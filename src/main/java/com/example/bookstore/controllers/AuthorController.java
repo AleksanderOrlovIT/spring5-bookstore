@@ -14,7 +14,7 @@ import javax.validation.Valid;
 
 @Controller
 public class AuthorController {
-    private final static String authorForm = "author/authorform";
+    private final static String authorForm = "/author/authorform";
 
     private final AuthorService authorService;
 
@@ -29,7 +29,7 @@ public class AuthorController {
     }
 
     @RequestMapping("/author/{id}/show")
-    public String getAuthorById(@PathVariable String id, Model model){
+    public String showAuthorById(@PathVariable String id, Model model){
         model.addAttribute("author", authorService.findById(Long.valueOf(id)));
         return "author/show";
     }

@@ -15,7 +15,7 @@ import javax.validation.Valid;
 @Controller
 public class PublisherController {
 
-    private final static String publisherForm = "publisher/publisherform";
+    private final static String publisherForm = "/publisher/publisherform";
 
     private final PublisherService publisherService;
 
@@ -24,13 +24,13 @@ public class PublisherController {
     }
 
     @RequestMapping({"/publishers", "/publishers/show"})
-    public String getPublishers(Model model){
+    public String getAllPublishers(Model model){
         model.addAttribute("publishers", publisherService.findAll());
         return "publisher/index";
     }
 
     @RequestMapping("/publisher/{id}/show")
-    public String showById(@PathVariable String id, Model model){
+    public String showPublisherById(@PathVariable String id, Model model){
         model.addAttribute("publisher", publisherService.findById(Long.valueOf(id)));
         return "publisher/show";
     }

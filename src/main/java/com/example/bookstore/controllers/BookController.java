@@ -18,16 +18,9 @@ public class BookController {
     private static final String bookForm = "/book/bookform";
 
     private final BookService bookService;
-    private final AuthorService authorService;
-    private final PublisherService publisherService;
-    private final CustomerService customerService;
 
-    public BookController(BookService bookService, AuthorService authorService, PublisherService publisherService,
-                          CustomerService customerService) {
+    public BookController(BookService bookService){
         this.bookService = bookService;
-        this.authorService = authorService;
-        this.publisherService = publisherService;
-        this.customerService = customerService;
     }
 
     @RequestMapping({"/books", "/books/show"})
@@ -37,7 +30,7 @@ public class BookController {
     }
 
     @RequestMapping("/book/{id}/show")
-    public String showById(@PathVariable String id, Model model){
+    public String showBookById(@PathVariable String id, Model model){
         model.addAttribute("book", bookService.findById(Long.valueOf(id)));
         return "book/show";
     }
