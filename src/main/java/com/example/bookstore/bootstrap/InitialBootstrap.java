@@ -4,14 +4,19 @@ import com.example.bookstore.model.Author;
 import com.example.bookstore.model.Book;
 import com.example.bookstore.model.Customer;
 import com.example.bookstore.model.Publisher;
-import com.example.bookstore.service.AuthorService;
-import com.example.bookstore.service.BookService;
-import com.example.bookstore.service.CustomerService;
-import com.example.bookstore.service.PublisherService;
+import com.example.bookstore.service.*;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.math.BigDecimal;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 @Component
 public class InitialBootstrap implements CommandLineRunner {
@@ -20,19 +25,21 @@ public class InitialBootstrap implements CommandLineRunner {
     private final AuthorService authorService;
     private final PublisherService publisherService;
     private final CustomerService customerService;
+    private final ImageService imageService;
 
     public InitialBootstrap(BookService bookService, AuthorService authorService, PublisherService publisherService,
-                            CustomerService customerService) {
+                            CustomerService customerService, ImageService imageService) {
         this.bookService = bookService;
         this.authorService = authorService;
         this.publisherService = publisherService;
         this.customerService = customerService;
+        this.imageService = imageService;
     }
 
     private void loadData(){
         //Init
         Author authorOscar = Author.builder().firstName("Oscar").lastName("Wilde").build();
-        Author authorJorj = Author.builder().firstName("Jorj").lastName("Oruell").build();
+        Author authorJorj = Author.builder().firstName("George").lastName("Oruell").build();
 
         Book bookDorian = Book.builder().name("Dorian gray").price(BigDecimal.valueOf(5.0)).build();
         Book book1984 = Book.builder().name("1984").price(BigDecimal.valueOf(6.0)).build();
@@ -70,16 +77,33 @@ public class InitialBootstrap implements CommandLineRunner {
 
         bookService.save(book1984);
         bookService.save(bookDorian);
+    }
 
+    private void loadImages(){
+            Path image1984Path = Paths.get("src/main/resources/static/images/1984.jpg");
+            MultipartFile multipartFile = returnMultiPartFile(image1984Path);
+            if(multipartFile != null)
+                imageService.saveBookImage(bookService.findByName("1984").getId(), multipartFile);
 
-        //System.out.println("Authors : " + authorService.findAll());
-        //System.out.println("Books : " + bookService.findAll().toString());
-        //System.out.println("Publishers : " + publisherService.findAll().toString());
-        //System.out.println("Customers : " + customerService.findAll().toString());
+            Path imageDorianPath = Paths.get("src/main/resources/static/images/dorian.jpg");
+            multipartFile = returnMultiPartFile(imageDorianPath);
+            if(multipartFile != null)
+                imageService.saveBookImage(bookService.findByName("Dorian gray").getId(), multipartFile);
+    }
+
+    private MultipartFile returnMultiPartFile(Path path){
+        try {
+            return new MockMultipartFile("file",
+                    path.getFileName().toString(), "image/jpeg", Files.readAllBytes(path));
+        }catch (IOException e){
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override
     public void run(String... args) throws Exception {
         loadData();
+        loadImages();
     }
 }

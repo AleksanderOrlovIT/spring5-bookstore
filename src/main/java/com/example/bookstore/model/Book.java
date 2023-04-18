@@ -41,6 +41,9 @@ public class Book extends BaseEntity{
     @Column(name = "price")
     private BigDecimal price;
 
+    @Lob
+    private Byte[] image;
+
     @ManyToMany
     @JoinTable(name = "book_authors", joinColumns = @JoinColumn(name = "book_id"),
             inverseJoinColumns = @JoinColumn(name = "author_id"))
@@ -56,4 +59,5 @@ public class Book extends BaseEntity{
     @JoinTable(name = "book_customers", joinColumns = @JoinColumn(name = "book_id"),
             inverseJoinColumns = @JoinColumn(name = "customer_id"))
     private Set<Customer> customers = new HashSet<>();
+
 }

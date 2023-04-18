@@ -39,6 +39,29 @@
                     <div class="panel-heading">
                         <div class="row">
                             <div class="col-md-11">
+                                <h5 style="font-size: 20px">Photo:</h5>
+                            </div>
+                            <div class="col-md-1" style="margin-left: 725px;">
+                                <a class="btn btn-default" href="#"
+                                   th:href="@{'/book/' + ${book.id} + '/image'}" role="button"
+                                   style="font-size: 20px">Change Image</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <img src="../../static/images/1984.jpg"
+                                     th:src="@{'/book/' + ${book.id} + '/bookimage'}"
+                                     width="400" height="400">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-md-11">
                                 <h5 style="font-size: 20px">Genre:</h5>
                             </div>
                         </div>
