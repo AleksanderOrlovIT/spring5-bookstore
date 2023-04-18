@@ -118,6 +118,7 @@ class PublisherControllerTest {
     void processUpdatePublisherForm() throws Exception{
         Publisher publisher = Publisher.builder().id(1L).name("publisher").address("address").build();
         when(publisherService.save(any())).thenReturn(publisher);
+        when(publisherService.findById(anyLong())).thenReturn(publisher);
 
         mockMvc.perform(post("/publisher/1/update")
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
@@ -127,18 +128,24 @@ class PublisherControllerTest {
                 .andExpect(view().name("redirect:/publisher/" + publisher.getId() + "/show"));
 
         verify(publisherService, times(1)).save(any());
+        verify(publisherService, times(1)).findById(anyLong());
     }
 
     @Test
     void processUpdatePublisherFormWithoutParams() throws Exception{
+        when(publisherService.findById(anyLong())).thenReturn(Publisher.builder().build());
+
         mockMvc.perform(post("/publisher/1/update"))
                 .andExpect(status().isOk())
                 .andExpect(view().name(publisherForm));
-        verifyNoInteractions(publisherService);
+
+        verify(publisherService, times(1)).findById(anyLong());
     }
 
     @Test
     void deletePublisher() throws Exception{
+        when(publisherService.findById(anyLong())).thenReturn(Publisher.builder().build());
+
         mockMvc.perform(get("/publisher/1/delete"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/publishers"));

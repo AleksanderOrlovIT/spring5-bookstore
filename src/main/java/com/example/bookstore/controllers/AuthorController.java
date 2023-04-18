@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 
@@ -29,8 +30,13 @@ public class AuthorController {
     }
 
     @RequestMapping("/author/{id}/show")
-    public String showAuthorById(@PathVariable String id, Model model){
-        model.addAttribute("author", authorService.findById(Long.valueOf(id)));
+    public String showAuthorById(@PathVariable Long id, Model model){
+        Author author = authorService.findById(id);
+        if(author == null){
+            model.addAttribute("exception", new Exception("There is no author with id: " + id));
+            return "/error/400error";
+        }
+        model.addAttribute("author", author);
         return "author/show";
     }
 
@@ -52,12 +58,21 @@ public class AuthorController {
 
     @GetMapping("/author/{id}/update")
     public String initUpdateAuthorForm(@PathVariable Long id, Model model){
-        model.addAttribute(authorService.findById(id));
+        Author author = authorService.findById(id);
+        if(author == null){
+            model.addAttribute("exception", new Exception("There is no author with id: " + id));
+            return "/error/400error";
+        }
+        model.addAttribute(author);
         return authorForm;
     }
 
     @PostMapping("/author/{id}/update")
-    public String processUpdateAuthorForm(@Valid Author author, BindingResult result, @PathVariable Long id){
+    public String processUpdateAuthorForm(@Valid Author author, BindingResult result, @PathVariable Long id, Model model){
+        if(authorService.findById(id) == null){
+            model.addAttribute("exception", new Exception("There is no author with id: " + id));
+            return "/error/400error";
+        }
         if(result.hasErrors()){
             return authorForm;
         }else{
@@ -67,7 +82,11 @@ public class AuthorController {
     }
 
     @RequestMapping("author/{id}/delete")
-    public String deleteAuthor(@PathVariable Long id){
+    public String deleteAuthor(@PathVariable Long id, Model model){
+        if(authorService.findById(id) == null){
+            model.addAttribute("exception", new Exception("There is no author with id: " + id));
+            return "/error/400error";
+        }
         authorService.deleteById(id);
         return "redirect:/authors";
     }

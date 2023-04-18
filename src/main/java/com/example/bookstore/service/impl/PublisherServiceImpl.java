@@ -37,18 +37,27 @@ public class PublisherServiceImpl implements PublisherService {
 
     @Override
     public void delete(Publisher publisher) {
-        publisherRepository.delete(publisher);
+        if(publisherRepository.findById(publisher.getId()).isPresent()) {
+            if(publisher.getBooks() != null){
+                for(Book book : publisher.getBooks()){
+                    book.getPublishers().remove(publisher);
+                }
+            }
+            publisherRepository.delete(publisher);
+        }
     }
 
     @Override
     public void deleteById(Long id) {
-        Publisher publisher = findById(id);
-        if(publisher != null && publisher.getBooks() != null){
-            for(Book book : publisher.getBooks()){
-                book.getPublishers().remove(publisher);
+        if(publisherRepository.findById(id).isPresent()) {
+            Publisher publisher = findById(id);
+            if (publisher != null && publisher.getBooks() != null) {
+                for (Book book : publisher.getBooks()) {
+                    book.getPublishers().remove(publisher);
+                }
             }
+            publisherRepository.deleteById(id);
         }
-        publisherRepository.deleteById(id);
     }
 
     @Override

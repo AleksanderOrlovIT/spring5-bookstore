@@ -24,17 +24,4 @@ public class ControllerExceptionHandler {
 
         return modelAndView;
     }
-
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ExceptionHandler(NotFoundException.class)
-    public ModelAndView handleNotFound(Exception exception){
-        log.error("Handing not found Exception");
-        log.error(exception.getMessage());
-
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("error/404error");
-        modelAndView.addObject("exception", exception);
-
-        return modelAndView;
-    }
 }

@@ -118,6 +118,7 @@ class GenreControllerTest {
     void processUpdateAuthorForm() throws Exception{
         Genre genre = Genre.builder().id(1L).name("name").build();
         when(genreService.save(any())).thenReturn(genre);
+        when(genreService.findById(anyLong())).thenReturn(genre);
 
         mockMvc.perform(post("/genre/1/update")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
@@ -126,18 +127,24 @@ class GenreControllerTest {
                 .andExpect(view().name("redirect:/genre/" + genre.getId() + "/show"));
 
         verify(genreService, times(1)).save(any());
+        verify(genreService, times(1)).findById(anyLong());
     }
 
     @Test
     void processUpdateAuthorFormWithoutParams() throws Exception{
+        when(genreService.findById(anyLong())).thenReturn(Genre.builder().build());
+
         mockMvc.perform(post("/genre/1/update"))
                 .andExpect(status().isOk())
                 .andExpect(view().name(genreForm));
-        verifyNoInteractions(genreService);
+
+        verify(genreService, times(1)).findById(anyLong());
     }
 
     @Test
     void deleteAuthor() throws Exception{
+        when(genreService.findById(anyLong())).thenReturn(Genre.builder().build());
+
         mockMvc.perform(get("/genre/1/delete"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/genres"));

@@ -27,8 +27,13 @@ public class BookController {
     }
 
     @RequestMapping("/book/{id}/show")
-    public String showBookById(@PathVariable String id, Model model){
-        model.addAttribute("book", bookService.findById(Long.valueOf(id)));
+    public String showBookById(@PathVariable Long id, Model model){
+        Book book = bookService.findById(id);
+        if(book == null){
+            model.addAttribute("exception", new Exception("There is no book with id: " + id));
+            return "/error/400error";
+        }
+        model.addAttribute("book", book);
         return "book/show";
     }
 
@@ -50,12 +55,21 @@ public class BookController {
 
     @GetMapping("/book/{id}/update")
     public String initUpdateBookForm(@PathVariable Long id, Model model){
-        model.addAttribute(bookService.findById(id));
+        Book book = bookService.findById(id);
+        if(book == null){
+            model.addAttribute("exception", new Exception("There is no book with id: " + id));
+            return "/error/400error";
+        }
+        model.addAttribute(book);
         return bookForm;
     }
 
     @PostMapping("/book/{id}/update")
-    public String processUpdateBookForm(@Valid Book book, BindingResult result, @PathVariable Long id){
+    public String processUpdateBookForm(@Valid Book book, BindingResult result, @PathVariable Long id, Model model){
+        if(bookService.findById(id) == null){
+            model.addAttribute("exception", new Exception("There is no book with id: " + id));
+            return "/error/400error";
+        }
         if(result.hasErrors()){
             return bookForm;
         }else{
@@ -66,8 +80,12 @@ public class BookController {
     }
 
     @RequestMapping("/book/{id}/delete")
-    public String deleteBook(@PathVariable String id){
-        bookService.deleteById(Long.valueOf(id));
+    public String deleteBook(@PathVariable Long id, Model model){
+        if(bookService.findById(id) == null){
+            model.addAttribute("exception", new Exception("There is no book with id: " + id));
+            return "/error/400error";
+        }
+        bookService.deleteById(id);
         return "redirect:/books";
     }
 }

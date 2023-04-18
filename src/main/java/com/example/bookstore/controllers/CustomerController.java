@@ -30,8 +30,13 @@ public class CustomerController {
     }
 
     @RequestMapping("/customer/{id}/show")
-    public String showCustomerById(@PathVariable String id, Model model){
-        model.addAttribute("customer", customerService.findById(Long.valueOf(id)));
+    public String showCustomerById(@PathVariable Long id, Model model){
+        Customer customer = customerService.findById(id);
+        if(customer == null){
+            model.addAttribute("exception", new Exception("There is no customer with id: " + id));
+            return "/error/400error";
+        }
+        model.addAttribute("customer", customer);
         return "customer/show";
     }
 
@@ -53,12 +58,22 @@ public class CustomerController {
 
     @GetMapping("/customer/{id}/update")
     public String initUpdateCustomerForm(@PathVariable Long id, Model model){
-        model.addAttribute(customerService.findById(id));
+        Customer customer = customerService.findById(id);
+        if(customer == null){
+            model.addAttribute("exception", new Exception("There is no customer with id: " + id));
+            return "/error/400error";
+        }
+        model.addAttribute(customer);
         return customerForm;
     }
 
     @PostMapping("/customer/{id}/update")
-    public String processUpdateCustomerForm(@Valid Customer customer, BindingResult result, @PathVariable Long id){
+    public String processUpdateCustomerForm(@Valid Customer customer, BindingResult result, @PathVariable Long id,
+                                            Model model){
+        if(customerService.findById(id) == null){
+            model.addAttribute("exception", new Exception("There is no customer with id: " + id));
+            return "/error/400error";
+        }
         if(result.hasErrors()){
             return customerForm;
         }else{
@@ -67,9 +82,12 @@ public class CustomerController {
         }
     }
 
-    @RequestMapping("" +
-            "customer/{id}/delete")
-    public String deleteCustomer(@PathVariable Long id){
+    @RequestMapping("customer/{id}/delete")
+    public String deleteCustomer(@PathVariable Long id, Model model){
+        if(customerService.findById(id) == null){
+            model.addAttribute("exception", new Exception("There is no customer with id: " + id));
+            return "/error/400error";
+        }
         customerService.deleteById(id);
         return "redirect:/customers";
     }

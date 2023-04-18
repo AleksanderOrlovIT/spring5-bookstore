@@ -93,12 +93,16 @@ public class GenreServiceImplTest {
 
     @Test
     void delete() {
+        when(genreRepository.findById(anyLong())).thenReturn(Optional.ofNullable(returnGenre));
+
         genreService.delete(returnGenre);
         verify(genreRepository,times(1)).delete(any());
     }
 
     @Test
     void deleteById() {
+        when(genreRepository.findById(anyLong())).thenReturn(Optional.ofNullable(returnGenre));
+
         genreService.deleteById(genreId);
         verify(genreRepository).deleteById(anyLong());
     }

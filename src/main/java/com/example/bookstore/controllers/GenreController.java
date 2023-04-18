@@ -31,8 +31,13 @@ public class GenreController {
     }
 
     @RequestMapping("/genre/{id}/show")
-    public String showGenreById(@PathVariable String id, Model model){
-        model.addAttribute("genre", genreService.findById(Long.valueOf(id)));
+    public String showGenreById(@PathVariable Long id, Model model){
+        Genre genre = genreService.findById(id);
+        if(genre == null){
+            model.addAttribute("exception", new Exception("There is no genre with id: " + id));
+            return "/error/400error";
+        }
+        model.addAttribute("genre", genre);
         return "genre/show";
     }
 
@@ -54,12 +59,22 @@ public class GenreController {
 
     @GetMapping("/genre/{id}/update")
     public String initUpdateGenreForm(@PathVariable Long id, Model model){
-        model.addAttribute(genreService.findById(id));
+        Genre genre = genreService.findById(id);
+        if(genre == null){
+            model.addAttribute("exception", new Exception("There is no genre with id: " + id));
+            return "/error/400error";
+        }
+        model.addAttribute(genre);
         return genreForm;
     }
 
     @PostMapping("/genre/{id}/update")
-    public String processUpdateGenreForm(@Valid Genre genre, BindingResult result, @PathVariable Long id){
+    public String processUpdateGenreForm(@Valid Genre genre, BindingResult result, @PathVariable Long id,
+                                         Model model){
+        if(genreService.findById(id) == null){
+            model.addAttribute("exception", new Exception("There is no genre with id: " + id));
+            return "/error/400error";
+        }
         if(result.hasErrors()){
             return genreForm;
         }else{
@@ -69,7 +84,11 @@ public class GenreController {
     }
 
     @RequestMapping("genre/{id}/delete")
-    public String deleteGenre(@PathVariable Long id){
+    public String deleteGenre(@PathVariable Long id, Model model){
+        if(genreService.findById(id) == null){
+            model.addAttribute("exception", new Exception("There is no genre with id: " + id));
+            return "/error/400error";
+        }
         genreService.deleteById(id);
         return "redirect:/genres";
     }

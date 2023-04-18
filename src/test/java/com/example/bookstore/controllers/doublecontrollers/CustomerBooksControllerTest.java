@@ -42,6 +42,8 @@ class CustomerBooksControllerTest {
 
     MockMvc mockMvc;
 
+    Customer customerMock = Customer.builder().build();
+
     @BeforeEach
     void setUp() {
         mockMvc = MockMvcBuilders.standaloneSetup(customerBooksController).build();
@@ -62,18 +64,19 @@ class CustomerBooksControllerTest {
                 .andExpect(model().attributeExists("customer"))
                 .andExpect(view().name("customer/customerbooks/index"));
 
-        verify(customerService, times(1)).findById(anyLong());
+        verify(customerService, times(2)).findById(anyLong());
         verifyNoInteractions(bookService);
     }
 
     @Test
     void initCreationForm() throws Exception{
+        when(customerService.findById(anyLong())).thenReturn(customerMock);
         mockMvc.perform(get("/customer/1/book/new"))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("book"))
                 .andExpect(view().name(customerBookForm));
 
-        verifyNoInteractions(customerService);
+        verify(customerService, times(1)).findById(anyLong());
         verifyNoInteractions(bookService);
     }
 
@@ -95,7 +98,7 @@ class CustomerBooksControllerTest {
                 .andExpect(view().name("redirect:/customer/" + customer.getId() + "/books"));
 
         verify(customerService, times(1)).save(any());
-        verify(customerService, times(1)).findById(anyLong());
+        verify(customerService, times(2)).findById(anyLong());
         verify(bookService, times(1)).save(any());
         verify(bookService, times(1)).findByName(anyString());
     }
@@ -117,7 +120,7 @@ class CustomerBooksControllerTest {
                 .andExpect(view().name("redirect:/customer/" + customer.getId() + "/books"));
 
         verify(customerService, times(1)).save(any());
-        verify(customerService, times(1)).findById(anyLong());
+        verify(customerService, times(2)).findById(anyLong());
         verify(bookService, times(1)).save(any());
         verify(bookService, times(1)).findById(anyLong());
     }

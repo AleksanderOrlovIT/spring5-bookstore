@@ -21,6 +21,8 @@ public class AuthorBooksController {
 
     private final static String authorBookForm = "author/authorbooks/authorbookform";
 
+    private final static String errorPage = "/error/400error";
+
     private final AuthorService authorService;
 
     private final BookService bookService;
@@ -33,7 +35,10 @@ public class AuthorBooksController {
     }
 
     @RequestMapping({"/books", "/books/show"})
-    public String getAllAuthorsBooks(@PathVariable Long authorId, Model model){
+    public String getAllAuthorsBooks(@PathVariable Long authorId, Model model) {
+        if(checkIfAuthorIdIsWrong(authorId, model))
+            return errorPage;
+
         currentAuthor = authorService.findById(authorId);
         model.addAttribute("books", currentAuthor.getBooks());
         model.addAttribute("author", currentAuthor);
@@ -42,19 +47,25 @@ public class AuthorBooksController {
 
 
     @GetMapping("/book/new")
-    public String initCreationForm(Model model){
+    public String initCreationForm(Model model, @PathVariable Long authorId) {
+        if(checkIfAuthorIdIsWrong(authorId, model))
+            return errorPage;
+
         model.addAttribute("book", Book.builder().price(BigDecimal.valueOf(0.0)).build());
         return authorBookForm;
     }
 
     @PostMapping("/book/new")
-    public String processCreationForm(@Valid Book book, BindingResult result, @PathVariable Long authorId){
-        if(result.hasErrors()){
+    public String processCreationForm(@Valid Book book, BindingResult result, @PathVariable Long authorId,
+                                      Model model) {
+        if(checkIfAuthorIdIsWrong(authorId, model))
+            return errorPage;
+        if (result.hasErrors()) {
             return authorBookForm;
-        }else{
+        } else {
             Book findBook = bookService.findByName(book.getName());
             currentAuthor = authorService.findById(authorId);
-            if(findBook != null){
+            if (findBook != null) {
                 findBook.setPrice(book.getPrice());
                 book = findBook;
             }
@@ -68,8 +79,15 @@ public class AuthorBooksController {
     }
 
     @RequestMapping("/book/{bookId}/delete")
-    public String deleteBook(@PathVariable Long bookId, @PathVariable Long authorId){
+    public String deleteBook(@PathVariable Long bookId, @PathVariable Long authorId, Model model) {
+        if(checkIfAuthorIdIsWrong(authorId, model))
+            return errorPage;
+
         Book deletedBook = bookService.findById(bookId);
+        if(deletedBook == null){
+            model.addAttribute("exception", new Exception("There is no book with id: " + bookId));
+            return errorPage;
+        }
         currentAuthor = authorService.findById(authorId);
 
         currentAuthor.getBooks().remove(deletedBook);
@@ -80,4 +98,11 @@ public class AuthorBooksController {
         return "redirect:/author/" + authorId + "/books";
     }
 
+
+    public boolean checkIfAuthorIdIsWrong(@PathVariable Long authorId, Model model) {
+        if (authorService.findById(authorId) == null) {
+            model.addAttribute("exception", new Exception("There is no author with id: " + authorId));
+            return true;
+        } else return false;
+    }
 }

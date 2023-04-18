@@ -42,6 +42,8 @@ class GenreAuthorsControllerTest {
 
     MockMvc mockMvc;
 
+    Genre genreMock = Genre.builder().build();
+
     @BeforeEach
     void setUp() {
         mockMvc = MockMvcBuilders.standaloneSetup(genreAuthorsController).build();
@@ -62,18 +64,20 @@ class GenreAuthorsControllerTest {
                 .andExpect(model().attributeExists("genre"))
                 .andExpect(view().name("genre/genreauthors/index"));
 
-        verify(genreService, times(1)).findById(anyLong());
+        verify(genreService, times(2)).findById(anyLong());
         verifyNoInteractions(authorService);
     }
 
     @Test
     void initCreationForm() throws Exception{
+        when(genreService.findById(anyLong())).thenReturn(genreMock);
+
         mockMvc.perform(get("/genre/1/author/new"))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("author"))
                 .andExpect(view().name(genreAuthorForm));
 
-        verifyNoInteractions(genreService);
+        verify(genreService, times(1)).findById(anyLong());
         verifyNoInteractions(authorService);
     }
 
@@ -95,7 +99,7 @@ class GenreAuthorsControllerTest {
                 .andExpect(view().name("redirect:/genre/" + genre.getId() + "/authors"));
 
         verify(genreService, times(1)).save(any());
-        verify(genreService, times(1)).findById(anyLong());
+        verify(genreService, times(2)).findById(anyLong());
         verify(authorService, times(1)).save(any());
         verify(authorService, times(1)).findByFullName(anyString(), anyString());
     }
@@ -117,7 +121,7 @@ class GenreAuthorsControllerTest {
                 .andExpect(view().name("redirect:/genre/" + genre.getId() + "/authors"));
 
         verify(genreService, times(1)).save(any());
-        verify(genreService, times(1)).findById(anyLong());
+        verify(genreService, times(2)).findById(anyLong());
         verify(authorService, times(1)).save(any());
         verify(authorService, times(1)).findById(anyLong());
     }

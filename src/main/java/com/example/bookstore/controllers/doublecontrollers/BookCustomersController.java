@@ -19,6 +19,8 @@ import javax.validation.Valid;
 public class BookCustomersController {
     private final static String bookCustomerForm = "book/bookcustomers/bookcustomerform";
 
+    private final static String errorPage = "/error/400error";
+
     private final BookService bookService;
 
     private final CustomerService customerService;
@@ -32,6 +34,8 @@ public class BookCustomersController {
 
     @RequestMapping({"/customers", "customers/show"})
     public String getAllBookCustomers(@PathVariable Long bookId, Model model){
+        if(checkIfBookIdIsWrong(bookId, model))
+            return errorPage;
         currentBook = bookService.findById(bookId);
         model.addAttribute("customers", currentBook.getCustomers());
         model.addAttribute("book", currentBook);
@@ -39,13 +43,18 @@ public class BookCustomersController {
     }
 
     @GetMapping("/customer/new")
-    public String initCreationForm(Model model){
+    public String initCreationForm(Model model, @PathVariable Long bookId){
+        if(checkIfBookIdIsWrong(bookId, model))
+            return errorPage;
         model.addAttribute("customer", Customer.builder().build());
         return bookCustomerForm;
     }
 
     @PostMapping("/customer/new")
-    public String processCreationForm(@Valid Customer customer, BindingResult result, @PathVariable Long bookId) {
+    public String processCreationForm(@Valid Customer customer, BindingResult result, @PathVariable Long bookId,
+                                      Model model) {
+        if(checkIfBookIdIsWrong(bookId, model))
+            return errorPage;
         if (result.hasErrors()) {
             return bookCustomerForm;
         } else {
@@ -66,8 +75,15 @@ public class BookCustomersController {
     }
 
     @RequestMapping("/customer/{customerId}/delete")
-    public String deleteAuthor(@PathVariable Long customerId, @PathVariable Long bookId){
+    public String deleteAuthor(@PathVariable Long customerId, @PathVariable Long bookId, Model model){
+        if(checkIfBookIdIsWrong(bookId, model))
+            return errorPage;
+
         Customer deletedCustomer = customerService.findById(customerId);
+        if(deletedCustomer == null){
+            model.addAttribute("exception", new Exception("There is no customer with id: " + customerId));
+            return errorPage;
+        }
         currentBook = bookService.findById(bookId);
 
         currentBook.getCustomers().remove(deletedCustomer);
@@ -76,5 +92,12 @@ public class BookCustomersController {
         customerService.save(deletedCustomer);
         bookService.save(currentBook);
         return "redirect:/book/" + bookId + "/customers";
+    }
+
+    public boolean checkIfBookIdIsWrong(@PathVariable Long bookId, Model model) {
+        if (bookService.findById(bookId) == null) {
+            model.addAttribute("exception", new Exception("There is no book with id: " + bookId));
+            return true;
+        } else return false;
     }
 }

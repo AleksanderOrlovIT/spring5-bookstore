@@ -20,6 +20,8 @@ public class AuthorGenresController {
 
     private final static String authorGenreForm = "author/authorgenres/authorgenreform";
 
+    private final static String errorPage = "/error/400error";
+
     private final AuthorService authorService;
 
     private final GenreService genreService;
@@ -33,6 +35,8 @@ public class AuthorGenresController {
 
     @RequestMapping({"/genres", "/genres/show"})
     public String getAllAuthorsGenres(@PathVariable Long authorId, Model model){
+        if(checkIfAuthorIdIsWrong(authorId, model))
+            return errorPage;
         currentAuthor = authorService.findById(authorId);
         model.addAttribute("genres", currentAuthor.getGenres());
         model.addAttribute("author", currentAuthor);
@@ -41,13 +45,17 @@ public class AuthorGenresController {
 
 
     @GetMapping("/genre/new")
-    public String initCreationForm(Model model){
+    public String initCreationForm(Model model, @PathVariable Long authorId){
+        if(checkIfAuthorIdIsWrong(authorId, model))
+            return errorPage;
         model.addAttribute("genre", Genre.builder().build());
         return authorGenreForm;
     }
 
     @PostMapping("/genre/new")
-    public String processCreationForm(@Valid Genre genre, BindingResult result, @PathVariable Long authorId){
+    public String processCreationForm(@Valid Genre genre, BindingResult result, @PathVariable Long authorId, Model model){
+        if(checkIfAuthorIdIsWrong(authorId, model))
+            return errorPage;
         if(result.hasErrors()){
             return authorGenreForm;
         }else{
@@ -66,8 +74,15 @@ public class AuthorGenresController {
     }
 
     @RequestMapping("/genre/{genreId}/delete")
-    public String deleteGenre(@PathVariable Long genreId, @PathVariable Long authorId){
+    public String deleteGenre(@PathVariable Long genreId, @PathVariable Long authorId, Model model){
+        if(checkIfAuthorIdIsWrong(authorId, model))
+            return errorPage;
+
         Genre deletedGenre = genreService.findById(genreId);
+        if(deletedGenre == null){
+            model.addAttribute("exception", new Exception("There is no genre with id: " + genreId));
+            return errorPage;
+        }
         currentAuthor = authorService.findById(authorId);
 
         currentAuthor.getGenres().remove(deletedGenre);
@@ -76,6 +91,13 @@ public class AuthorGenresController {
         genreService.save(deletedGenre);
         authorService.save(currentAuthor);
         return "redirect:/author/" + authorId + "/genres";
+    }
+
+    public boolean checkIfAuthorIdIsWrong(@PathVariable Long authorId, Model model) {
+        if (authorService.findById(authorId) == null) {
+            model.addAttribute("exception", new Exception("There is no author with id: " + authorId));
+            return true;
+        } else return false;
     }
 
 }

@@ -42,6 +42,8 @@ class GenreBooksControllerTest {
 
     MockMvc mockMvc;
 
+    Genre genreMock = Genre.builder().build();
+
     @BeforeEach
     void setUp() {
         mockMvc = MockMvcBuilders.standaloneSetup(genreBooksController).build();
@@ -62,18 +64,20 @@ class GenreBooksControllerTest {
                 .andExpect(model().attributeExists("genre"))
                 .andExpect(view().name("genre/genrebooks/index"));
 
-        verify(genreService, times(1)).findById(anyLong());
+        verify(genreService, times(2)).findById(anyLong());
         verifyNoInteractions(bookService);
     }
 
     @Test
     void initCreationForm() throws Exception{
+        when(genreService.findById(anyLong())).thenReturn(genreMock);
+
         mockMvc.perform(get("/genre/1/book/new"))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("book"))
                 .andExpect(view().name(genreBookForm));
 
-        verifyNoInteractions(genreService);
+        verify(genreService, times(1)).findById(anyLong());
         verifyNoInteractions(bookService);
     }
 
@@ -95,7 +99,7 @@ class GenreBooksControllerTest {
                 .andExpect(view().name("redirect:/genre/" + genre.getId() + "/books"));
 
         verify(genreService, times(1)).save(any());
-        verify(genreService, times(1)).findById(anyLong());
+        verify(genreService, times(2)).findById(anyLong());
         verify(bookService, times(1)).save(any());
         verify(bookService, times(1)).findByName(anyString());
     }
@@ -117,7 +121,7 @@ class GenreBooksControllerTest {
                 .andExpect(view().name("redirect:/genre/" + genre.getId() + "/books"));
 
         verify(genreService, times(1)).save(any());
-        verify(genreService, times(1)).findById(anyLong());
+        verify(genreService, times(2)).findById(anyLong());
         verify(bookService, times(1)).save(any());
         verify(bookService, times(1)).findById(anyLong());
     }

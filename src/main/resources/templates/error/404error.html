@@ -20,8 +20,12 @@
 <div class="container-fluid" style="margin-top: 20px">
   <div class="row">
     <div class="col-md-6 col-md-offset-3">
-      <h1>404 Not Found</h1>
-      <p th:text="${exception.getMessage()}"></p>
+      <h1 th:text="${code} + ' Error'"> Not Found Page</h1>
+      <p style="font-size: 20px">Please return to main page</p>
+      <div class="col-md-1" style="margin-left: 750px;">
+        <a class="btn btn-default" href="#" th:href="@{'/'}" role="button"
+           style="font-size: 20px">Main page</a>
+      </div>
     </div>
   </div>
 </div>

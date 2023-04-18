@@ -118,6 +118,7 @@ class CustomerControllerTest {
     void processUpdateCustomerForm() throws Exception{
         Customer customer = Customer.builder().id(1L).userName("userName").balance(BigDecimal.valueOf(1.0)).build();
         when(customerService.save(any())).thenReturn(customer);
+        when(customerService.findById(anyLong())).thenReturn(customer);
 
         mockMvc.perform(post("/customer/1/update")
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
@@ -127,18 +128,23 @@ class CustomerControllerTest {
                 .andExpect(view().name("redirect:/customer/" + customer.getId() + "/show"));
 
         verify(customerService, times(1)).save(any());
+        verify(customerService, times(1)).findById(anyLong());
     }
 
     @Test
     void processUpdateAuthorFormWithoutParams() throws Exception{
+        when(customerService.findById(anyLong())).thenReturn(Customer.builder().build());
+
         mockMvc.perform(post("/customer/1/update"))
                 .andExpect(status().isOk())
                 .andExpect(view().name(customerForm));
-        verifyNoInteractions(customerService);
+        verify(customerService, times(1)).findById(anyLong());
     }
 
     @Test
     void deleteCustomer() throws Exception{
+        when(customerService.findById(anyLong())).thenReturn(Customer.builder().build());
+
         mockMvc.perform(get("/customer/1/delete"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/customers"));

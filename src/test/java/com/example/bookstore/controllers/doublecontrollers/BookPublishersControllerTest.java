@@ -40,6 +40,8 @@ class BookPublishersControllerTest {
 
     MockMvc mockMvc;
 
+    Book bookMock = Book.builder().build();
+
     @BeforeEach
     void setUp() {
         mockMvc = MockMvcBuilders.standaloneSetup(bookPublishersController).build();
@@ -60,18 +62,20 @@ class BookPublishersControllerTest {
                 .andExpect(model().attributeExists("book"))
                 .andExpect(view().name("book/bookpublishers/index"));
 
-        verify(bookService, times(1)).findById(anyLong());
+        verify(bookService, times(2)).findById(anyLong());
         verifyNoInteractions(publisherService);
     }
 
     @Test
     void initCreationForm() throws Exception{
+        when(bookService.findById(anyLong())).thenReturn(bookMock);
+
         mockMvc.perform(get("/book/1/publisher/new"))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("publisher"))
                 .andExpect(view().name(bookPublisherForm));
 
-        verifyNoInteractions(bookService);
+        verify(bookService, times(1)).findById(anyLong());
         verifyNoInteractions(publisherService);
     }
 
@@ -93,7 +97,7 @@ class BookPublishersControllerTest {
 
         verify(publisherService, times(1)).findByName(anyString());
         verify(publisherService, times(1)).save(any());
-        verify(bookService, times(1)).findById(anyLong());
+        verify(bookService, times(2)).findById(anyLong());
         verify(bookService, times(1)).save(any());
     }
 
@@ -115,7 +119,7 @@ class BookPublishersControllerTest {
 
         verify(publisherService, times(1)).findById(anyLong());
         verify(publisherService, times(1)).save(any());
-        verify(bookService, times(1)).findById(anyLong());
+        verify(bookService, times(2)).findById(anyLong());
         verify(bookService, times(1)).save(any());
     }
 }

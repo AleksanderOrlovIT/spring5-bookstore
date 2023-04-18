@@ -92,12 +92,16 @@ public class PublisherServiceImplTest {
 
     @Test
     void delete() {
+        when(publisherRepository.findById(anyLong())).thenReturn(Optional.ofNullable(returnPublisher));
+
        publisherService.delete(returnPublisher);
        verify(publisherRepository, times(1)).delete(any());
     }
 
     @Test
     void deleteById() {
+        when(publisherRepository.findById(anyLong())).thenReturn(Optional.ofNullable(returnPublisher));
+
        publisherService.deleteById(publisherId);
        verify(publisherRepository).deleteById(anyLong());
     }

@@ -117,6 +117,7 @@ class BookControllerTest {
     @Test
     void processUpdateBookForm() throws Exception{
         Book book = Book.builder().id(1L).name("book").price(BigDecimal.valueOf(1.0)).build();
+        when(bookService.findById(anyLong())).thenReturn(book);
         when(bookService.saveBookSets(any(),any())).thenReturn(book);
         when(bookService.save(any())).thenReturn(book);
 
@@ -129,19 +130,25 @@ class BookControllerTest {
 
         verify(bookService, times(1)).saveBookSets(any(), any());
         verify(bookService, times(1)).save(any());
+        verify(bookService, times(2)).findById(anyLong());
     }
 
     @Test
     void processUpdateBookFormWithoutParams() throws Exception{
+        when(bookService.findById(anyLong())).thenReturn(Book.builder().build());
+
         mockMvc.perform(post("/book/1/update"))
                 .andExpect(status().isOk())
                 .andExpect(view().name(bookForm));
-        verifyNoInteractions(bookService);
+
+        verify(bookService, times(1)).findById(anyLong());
     }
 
 
     @Test
     void deleteBook() throws Exception{
+        when(bookService.findById(anyLong())).thenReturn(Book.builder().build());
+
         mockMvc.perform(get("/book/1/delete"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/books"));

@@ -38,31 +38,45 @@ public class GenreServiceImpl implements GenreService {
 
     @Override
     public void delete(Genre genre) {
-        genreRepository.delete(genre);
-    }
-
-    @Override
-    public void deleteById(Long id) {
-        Genre genre = findById(id);
-        if(genre != null) {
-            if (genre.getBooks() != null) {
+        if (genreRepository.findById(genre.getId()).isPresent()) {
+            if(genre.getBooks() != null){
                 for (Book book : genre.getBooks()) {
                     book.getGenres().remove(genre);
                 }
             }
-            if (genre.getAuthors() != null){
-                for (Author author : genre.getAuthors()){
+            if (genre.getAuthors() != null) {
+                for (Author author : genre.getAuthors()) {
                     author.getGenres().remove(genre);
                 }
             }
+            genreRepository.delete(genre);
         }
-        genreRepository.deleteById(id);
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        if(genreRepository.findById(id).isPresent()) {
+            Genre genre = findById(id);
+            if (genre != null) {
+                if (genre.getBooks() != null) {
+                    for (Book book : genre.getBooks()) {
+                        book.getGenres().remove(genre);
+                    }
+                }
+                if (genre.getAuthors() != null) {
+                    for (Author author : genre.getAuthors()) {
+                        author.getGenres().remove(genre);
+                    }
+                }
+            }
+            genreRepository.deleteById(id);
+        }
     }
 
     @Override
     public Genre findByName(String name) {
-        for(Genre genre : genreRepository.findAll()){
-            if(genre.getName().equals(name))
+        for (Genre genre : genreRepository.findAll()) {
+            if (genre.getName().equals(name))
                 return genre;
         }
         return null;

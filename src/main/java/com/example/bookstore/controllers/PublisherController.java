@@ -30,8 +30,13 @@ public class PublisherController {
     }
 
     @RequestMapping("/publisher/{id}/show")
-    public String showPublisherById(@PathVariable String id, Model model){
-        model.addAttribute("publisher", publisherService.findById(Long.valueOf(id)));
+    public String showPublisherById(@PathVariable Long id, Model model){
+        Publisher publisher = publisherService.findById(id);
+        if(publisher == null){
+            model.addAttribute("exception", new Exception("There is no publisher with id: " + id));
+            return "/error/400error";
+        }
+        model.addAttribute("publisher", publisher);
         return "publisher/show";
     }
 
@@ -53,12 +58,22 @@ public class PublisherController {
 
     @GetMapping("/publisher/{id}/update")
     public String initUpdatePublisherForm(@PathVariable Long id, Model model){
-        model.addAttribute(publisherService.findById(id));
+        Publisher publisher = publisherService.findById(id);
+        if(publisher == null){
+            model.addAttribute("exception", new Exception("There is no publisher with id: " + id));
+            return "/error/400error";
+        }
+        model.addAttribute(publisher);
         return publisherForm;
     }
 
     @PostMapping("/publisher/{id}/update")
-    public String processUpdatePublisherForm(@Valid Publisher publisher, BindingResult result, @PathVariable Long id){
+    public String processUpdatePublisherForm(@Valid Publisher publisher, BindingResult result, @PathVariable Long id,
+                                             Model model){
+        if(publisherService.findById(id) == null){
+            model.addAttribute("exception", new Exception("There is no publisher with id: " + id));
+            return "/error/400error";
+        }
         if(result.hasErrors()){
             return publisherForm;
         }else{
@@ -68,7 +83,11 @@ public class PublisherController {
     }
 
     @RequestMapping("publisher/{id}/delete")
-    public String deletePublisher(@PathVariable Long id){
+    public String deletePublisher(@PathVariable Long id, Model model){
+        if(publisherService.findById(id) == null){
+            model.addAttribute("exception", new Exception("There is no publisher with id: " + id));
+            return "/error/400error";
+        }
         publisherService.deleteById(id);
         return "redirect:/publishers";
     }

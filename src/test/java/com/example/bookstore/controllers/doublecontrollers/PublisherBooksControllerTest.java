@@ -42,6 +42,8 @@ class PublisherBooksControllerTest {
 
     MockMvc mockMvc;
 
+    Publisher publisherMock = Publisher.builder().build();
+
     @BeforeEach
     void setUp() {
         mockMvc = MockMvcBuilders.standaloneSetup(publisherBooksController).build();
@@ -62,18 +64,20 @@ class PublisherBooksControllerTest {
                 .andExpect(model().attributeExists("publisher"))
                 .andExpect(view().name("publisher/publisherbooks/index"));
 
-        verify(publisherService, times(1)).findById(anyLong());
+        verify(publisherService, times(2)).findById(anyLong());
         verifyNoInteractions(bookService);
     }
 
     @Test
     void initCreationForm() throws Exception{
+        when(publisherService.findById(anyLong())).thenReturn(publisherMock);
+
         mockMvc.perform(get("/publisher/1/book/new"))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("book"))
                 .andExpect(view().name(publisherBookForm));
 
-        verifyNoInteractions(publisherService);
+        verify(publisherService, times(1)).findById(anyLong());
         verifyNoInteractions(bookService);
     }
 
@@ -95,7 +99,7 @@ class PublisherBooksControllerTest {
                 .andExpect(view().name("redirect:/publisher/" + publisher.getId() + "/books"));
 
         verify(publisherService, times(1)).save(any());
-        verify(publisherService, times(1)).findById(anyLong());
+        verify(publisherService, times(2)).findById(anyLong());
         verify(bookService, times(1)).save(any());
         verify(bookService, times(1)).findByName(anyString());
     }
@@ -117,7 +121,7 @@ class PublisherBooksControllerTest {
                 .andExpect(view().name("redirect:/publisher/" + publisher.getId() + "/books"));
 
         verify(publisherService, times(1)).save(any());
-        verify(publisherService, times(1)).findById(anyLong());
+        verify(publisherService, times(2)).findById(anyLong());
         verify(bookService, times(1)).save(any());
         verify(bookService, times(1)).findById(anyLong());
     }

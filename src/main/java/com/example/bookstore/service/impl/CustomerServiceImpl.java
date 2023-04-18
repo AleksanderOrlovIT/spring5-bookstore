@@ -37,7 +37,14 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public void delete(Customer customer) {
-        customerRepository.delete(customer);
+        if(customerRepository.findById(customer.getId()).isPresent()){
+            if(customer.getBooks() != null){
+                for(Book book : customer.getBooks()){
+                    book.getCustomers().remove(customer);
+                }
+            }
+            customerRepository.delete(customer);
+        }
     }
 
     @Override

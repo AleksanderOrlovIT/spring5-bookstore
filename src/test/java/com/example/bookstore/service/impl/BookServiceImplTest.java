@@ -94,12 +94,16 @@ class BookServiceImplTest {
 
     @Test
     void delete() {
+        when(bookRepository.findById(anyLong())).thenReturn(Optional.ofNullable(returnBook));
+
         bookService.delete(returnBook);
         verify(bookRepository, times(1)).delete(any());
     }
 
     @Test
     void deleteById() {
+        when(bookRepository.findById(anyLong())).thenReturn(Optional.ofNullable(returnBook));
+
         bookService.deleteById(bookId);
         verify(bookRepository).deleteById(anyLong());
     }

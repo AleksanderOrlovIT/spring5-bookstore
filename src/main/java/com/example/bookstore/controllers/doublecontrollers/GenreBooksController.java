@@ -6,6 +6,7 @@ import com.example.bookstore.service.BookService;
 import com.example.bookstore.service.GenreService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,6 +19,8 @@ import javax.validation.Valid;
 @RequestMapping("/genre/{genreId}")
 public class GenreBooksController {
     private final static String genreBookForm = "genre/genrebooks/genrebookform";
+
+    private final static String errorPage = "/error/400error";
 
     private final GenreService genreService;
 
@@ -32,6 +35,8 @@ public class GenreBooksController {
 
     @RequestMapping({"/books", "/books/show"})
     public String getAllGenresBooks(@PathVariable Long genreId, Model model){
+        if(checkIfGenreIdIsWrong(genreId, model))
+            return errorPage;
         currentGenre = genreService.findById(genreId);
         model.addAttribute("books", currentGenre.getBooks());
         model.addAttribute("genre", currentGenre);
@@ -39,13 +44,17 @@ public class GenreBooksController {
     }
 
     @GetMapping("/book/new")
-    public String initCreationForm(Model model){
+    public String initCreationForm(Model model, @PathVariable Long genreId){
+        if(checkIfGenreIdIsWrong(genreId, model))
+            return errorPage;
         model.addAttribute("book", Book.builder().build());
         return genreBookForm;
     }
 
     @PostMapping("/book/new")
-    public String processCreationForm(@Valid Book book, BindingResult result, @PathVariable Long genreId){
+    public String processCreationForm(@Valid Book book, BindingResult result, @PathVariable Long genreId, Model model){
+        if(checkIfGenreIdIsWrong(genreId, model))
+            return errorPage;
         if(result.hasErrors()){
             return genreBookForm;
         }else{
@@ -65,8 +74,15 @@ public class GenreBooksController {
     }
 
     @RequestMapping("/book/{bookId}/delete")
-    public String deleteBook(@PathVariable Long bookId, @PathVariable Long genreId){
+    public String deleteBook(@PathVariable Long bookId, @PathVariable Long genreId, Model model){
+        if(checkIfGenreIdIsWrong(genreId, model))
+            return errorPage;
+
         Book deletedBook = bookService.findById(bookId);
+        if(deletedBook == null){
+            model.addAttribute("exception", new Exception("There is no book with id: " + bookId));
+            return errorPage;
+        }
         currentGenre = genreService.findById(genreId);
 
         currentGenre.getBooks().remove(deletedBook);
@@ -75,5 +91,12 @@ public class GenreBooksController {
         genreService.save(currentGenre);
         bookService.save(deletedBook);
         return "redirect:/genre/" + genreId + "/books";
+    }
+
+    public boolean checkIfGenreIdIsWrong(@PathVariable Long genreId, Model model) {
+        if (genreService.findById(genreId) == null) {
+            model.addAttribute("exception", new Exception("There is no genre with id: " + genreId));
+            return true;
+        } else return false;
     }
 }

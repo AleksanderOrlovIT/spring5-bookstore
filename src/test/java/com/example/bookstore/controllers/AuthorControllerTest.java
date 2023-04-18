@@ -119,6 +119,7 @@ class AuthorControllerTest {
     @Test
     void processUpdateAuthorForm() throws Exception{
         Author author = Author.builder().id(1L).firstName("first").lastName("last").build();
+        when(authorService.findById(anyLong())).thenReturn(author);
         when(authorService.save(any())).thenReturn(author);
 
         mockMvc.perform(post("/author/1/update")
@@ -133,14 +134,18 @@ class AuthorControllerTest {
 
     @Test
     void processUpdateAuthorFormWithoutParams() throws Exception{
+        when(authorService.findById(anyLong())).thenReturn(Author.builder().build());
+
         mockMvc.perform(post("/author/1/update"))
                 .andExpect(status().isOk())
                 .andExpect(view().name(authorForm));
-        verifyNoInteractions(authorService);
+        verify(authorService, times(1)).findById(anyLong());
     }
 
     @Test
     void deleteAuthor() throws Exception{
+        when(authorService.findById(anyLong())).thenReturn(Author.builder().build());
+
         mockMvc.perform(get("/author/1/delete"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/authors"));

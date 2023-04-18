@@ -4,6 +4,7 @@ import com.example.bookstore.model.Book;
 import com.example.bookstore.model.Customer;
 import com.example.bookstore.service.BookService;
 import com.example.bookstore.service.CustomerService;
+import org.springframework.boot.Banner;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -19,6 +20,8 @@ import javax.validation.Valid;
 public class CustomerBooksController {
     private final static String customerBookForm = "customer/customerbooks/customerbookform";
 
+    private final static String errorPage = "/error/400error";
+
     private final CustomerService customerService;
 
     private final BookService bookService;
@@ -32,6 +35,9 @@ public class CustomerBooksController {
 
     @RequestMapping({"/books", "/books/show"})
     public String getAllCustomersBooks(@PathVariable Long customerId, Model model){
+        if(checkIfCustomerIdIsWrong(customerId, model)){
+            return errorPage;
+        }
         currentCustomer = customerService.findById(customerId);
         model.addAttribute("books", currentCustomer.getBooks());
         model.addAttribute("customer", currentCustomer);
@@ -39,13 +45,20 @@ public class CustomerBooksController {
     }
 
     @GetMapping("/book/new")
-    public String initCreationForm(Model model){
+    public String initCreationForm(Model model, @PathVariable Long customerId){
+        if(checkIfCustomerIdIsWrong(customerId, model)){
+            return errorPage;
+        }
+
         model.addAttribute("book", Book.builder().build());
         return customerBookForm;
     }
 
     @PostMapping("/book/new")
-    public String processCreationForm(@Valid Book book, BindingResult result, @PathVariable Long customerId){
+    public String processCreationForm(@Valid Book book, BindingResult result, @PathVariable Long customerId, Model model){
+        if(checkIfCustomerIdIsWrong(customerId, model)){
+            return errorPage;
+        }
         if(result.hasErrors()){
             return customerBookForm;
         }else{
@@ -65,8 +78,16 @@ public class CustomerBooksController {
     }
 
     @RequestMapping("/book/{bookId}/delete")
-    public String deleteBook(@PathVariable Long bookId, @PathVariable Long customerId){
+    public String deleteBook(@PathVariable Long bookId, @PathVariable Long customerId, Model model){
+        if(checkIfCustomerIdIsWrong(customerId, model)){
+            return errorPage;
+        }
+
         Book deletedBook = bookService.findById(bookId);
+        if(deletedBook == null){
+            model.addAttribute("exception", new Exception("There is no book with id: " + bookId));
+            return errorPage;
+        }
         currentCustomer = customerService.findById(customerId);
 
         currentCustomer.getBooks().remove(deletedBook);
@@ -75,5 +96,12 @@ public class CustomerBooksController {
         customerService.save(currentCustomer);
         bookService.save(deletedBook);
         return "redirect:/customer/" + customerId + "/books";
+    }
+
+    public boolean checkIfCustomerIdIsWrong(@PathVariable Long customerId, Model model) {
+        if (customerService.findById(customerId) == null) {
+            model.addAttribute("exception", new Exception("There is no customer with id: " + customerId));
+            return true;
+        } else return false;
     }
 }

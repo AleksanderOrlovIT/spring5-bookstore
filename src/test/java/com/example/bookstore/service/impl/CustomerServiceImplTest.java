@@ -92,12 +92,16 @@ public class CustomerServiceImplTest {
 
     @Test
     void delete() {
+        when(customerRepository.findById(anyLong())).thenReturn(Optional.ofNullable(returnCustomer));
+
         customerService.delete(returnCustomer);
         verify(customerRepository, times(1)).delete(any());
     }
 
     @Test
     void deleteById() {
+        when(customerRepository.findById(anyLong())).thenReturn(Optional.ofNullable(returnCustomer));
+
         customerService.deleteById(customerId);
         verify(customerRepository).deleteById(anyLong());
     }

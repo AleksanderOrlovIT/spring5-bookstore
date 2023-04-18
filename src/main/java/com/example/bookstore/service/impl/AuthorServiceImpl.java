@@ -37,18 +37,27 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     public void delete(Author author) {
-        authorRepository.delete(author);
+        if(authorRepository.findById(author.getId()).isPresent()) {
+            if (author.getBooks() != null) {
+                for (Book book : author.getBooks()) {
+                    book.getAuthors().remove(author);
+                }
+            }
+            authorRepository.delete(author);
+        }
     }
 
     @Override
     public void deleteById(Long id) {
-        Author author = findById(id);
-        if(author != null && author.getBooks() != null){
-            for(Book book : author.getBooks()){
-                book.getAuthors().remove(author);
+        if(authorRepository.findById(id).isPresent()) {
+            Author author = findById(id);
+            if (author != null && author.getBooks() != null) {
+                for (Book book : author.getBooks()) {
+                    book.getAuthors().remove(author);
+                }
             }
+            authorRepository.deleteById(id);
         }
-        authorRepository.deleteById(id);
     }
 
     @Override

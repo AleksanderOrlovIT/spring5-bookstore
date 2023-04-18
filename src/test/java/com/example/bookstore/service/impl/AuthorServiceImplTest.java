@@ -93,12 +93,16 @@ public class AuthorServiceImplTest {
 
     @Test
     void delete() {
+        when(authorRepository.findById(anyLong())).thenReturn(Optional.ofNullable(returnAuthor));
+
         authorService.delete(returnAuthor);
         verify(authorRepository,times(1)).delete(any());
     }
 
     @Test
     void deleteById() {
+        when(authorRepository.findById(anyLong())).thenReturn(Optional.ofNullable(returnAuthor));
+
         authorService.deleteById(authorId);
         verify(authorRepository).deleteById(anyLong());
     }

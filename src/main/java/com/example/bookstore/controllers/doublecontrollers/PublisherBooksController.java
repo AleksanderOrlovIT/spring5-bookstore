@@ -19,6 +19,8 @@ import javax.validation.Valid;
 public class PublisherBooksController {
     private final static String publisherBookForm = "publisher/publisherbooks/publisherbookform";
 
+    private final static String errorPage = "/error/400error";
+
     private final PublisherService publisherService;
 
     private final BookService bookService;
@@ -32,6 +34,8 @@ public class PublisherBooksController {
 
     @RequestMapping({"/books", "/books/show"})
     public String getAllPublishersBooks(@PathVariable Long publisherId, Model model){
+        if(checkIfPublisherIdIsWrong(publisherId, model))
+            return errorPage;
         currentPublisher = publisherService.findById(publisherId);
         model.addAttribute("books", currentPublisher.getBooks());
         model.addAttribute("publisher", currentPublisher);
@@ -39,13 +43,17 @@ public class PublisherBooksController {
     }
 
     @GetMapping("/book/new")
-    public String initCreationForm(Model model){
+    public String initCreationForm(Model model, @PathVariable Long publisherId){
+        if(checkIfPublisherIdIsWrong(publisherId, model))
+            return errorPage;
         model.addAttribute("book", Book.builder().build());
         return publisherBookForm;
     }
 
     @PostMapping("/book/new")
-    public String processCreationForm(@Valid Book book, BindingResult result, @PathVariable Long publisherId){
+    public String processCreationForm(@Valid Book book, BindingResult result, @PathVariable Long publisherId, Model model){
+        if(checkIfPublisherIdIsWrong(publisherId, model))
+            return errorPage;
         if(result.hasErrors()){
             return publisherBookForm;
         }else{
@@ -65,8 +73,15 @@ public class PublisherBooksController {
     }
 
     @RequestMapping("/book/{bookId}/delete")
-    public String deleteBook(@PathVariable Long bookId, @PathVariable Long publisherId){
+    public String deleteBook(@PathVariable Long bookId, @PathVariable Long publisherId, Model model){
+        if(checkIfPublisherIdIsWrong(publisherId, model))
+            return errorPage;
+
         Book deletedBook = bookService.findById(bookId);
+        if(deletedBook == null){
+            model.addAttribute("exception", new Exception("There is no book with id: " + bookId));
+            return errorPage;
+        }
         currentPublisher = publisherService.findById(publisherId);
 
         currentPublisher.getBooks().remove(deletedBook);
@@ -75,5 +90,12 @@ public class PublisherBooksController {
         publisherService.save(currentPublisher);
         bookService.save(deletedBook);
         return "redirect:/publisher/" + publisherId + "/books";
+    }
+
+    public boolean checkIfPublisherIdIsWrong(@PathVariable Long publisherId, Model model) {
+        if (publisherService.findById(publisherId) == null) {
+            model.addAttribute("exception", new Exception("There is no publisher with id: " + publisherId));
+            return true;
+        } else return false;
     }
 }
