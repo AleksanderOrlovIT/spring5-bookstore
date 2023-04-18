@@ -62,23 +62,25 @@
                     <div class="panel-heading">
                         <div class="row">
                             <div class="col-md-11">
-                                <h5 style="font-size: 20px">Genre:</h5>
+                                <h1 class="panel-title" style="font-size: 20px">Genres</h1>
                             </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="panel panel-primary">
-                    <div class="panel-heading">
-                        <div class="row">
-                            <div class="col-md-11">
-                                <h5 style="font-size: 20px">Price:</h5>
+                            <div class="col-md-1" style="margin-left: 775px;">
+                                <a class="btn btn-default" href="#"
+                                   th:href="@{'/book/' + ${book.id} + '/genres'}" role="button"
+                                   style="font-size: 20px">View</a>
                             </div>
                         </div>
                     </div>
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-md-12">
-                                <p th:text="${(book.price) +  '  $'}" style="font-size: 20px">30 $</p>
+                                <ul>
+                                    <li th:remove="all">1 Cup of milk</li>
+                                    <li th:remove="all">1 Teaspoon of chocolate</li>
+                                    <li th:each="genre : ${book.genres}"
+                                        th:text="${genre.getName()}" style="font-size: 20px">1 Teaspoon of Sugar
+                                    </li>
+                                </ul>
                             </div>
                         </div>
                     </div>
@@ -163,6 +165,22 @@
                                         th:text="${customer.getUserName()}" style="font-size: 20px">1 Teaspoon of Sugar
                                     </li>
                                 </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-md-11">
+                                <h5 style="font-size: 20px">Price:</h5>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <p th:text="${(book.price) +  '  $'}" style="font-size: 20px">30 $</p>
                             </div>
                         </div>
                     </div>

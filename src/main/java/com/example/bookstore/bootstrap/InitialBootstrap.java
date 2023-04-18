@@ -1,9 +1,6 @@
 package com.example.bookstore.bootstrap;
 
-import com.example.bookstore.model.Author;
-import com.example.bookstore.model.Book;
-import com.example.bookstore.model.Customer;
-import com.example.bookstore.model.Publisher;
+import com.example.bookstore.model.*;
 import com.example.bookstore.service.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.mock.web.MockMultipartFile;
@@ -25,14 +22,16 @@ public class InitialBootstrap implements CommandLineRunner {
     private final AuthorService authorService;
     private final PublisherService publisherService;
     private final CustomerService customerService;
+    private final GenreService genreService;
     private final ImageService imageService;
 
     public InitialBootstrap(BookService bookService, AuthorService authorService, PublisherService publisherService,
-                            CustomerService customerService, ImageService imageService) {
+                            CustomerService customerService,GenreService genreService, ImageService imageService) {
         this.bookService = bookService;
         this.authorService = authorService;
         this.publisherService = publisherService;
         this.customerService = customerService;
+        this.genreService = genreService;
         this.imageService = imageService;
     }
 
@@ -48,15 +47,20 @@ public class InitialBootstrap implements CommandLineRunner {
 
         Customer customer1 = Customer.builder().userName("SashaOrlov").balance(BigDecimal.valueOf(11.0)).build();
 
+        Genre genrePhilFic = Genre.builder().name("Philosophical fiction").build();
+        Genre genreDistPolFic = Genre.builder().name("Dystopian political fiction").build();
+
 
         //adding to sets
         bookDorian.getAuthors().add(authorOscar);
         bookDorian.getPublishers().add(publisherLondon);
         bookDorian.getCustomers().add(customer1);
+        bookDorian.getGenres().add(genrePhilFic);
 
         book1984.getAuthors().add(authorJorj);
         book1984.getPublishers().add(publisherLondon);
         book1984.getCustomers().add(customer1);
+        book1984.getGenres().add(genreDistPolFic);
 
         authorOscar.getBooks().add(bookDorian);
         authorJorj.getBooks().add(book1984);
@@ -68,6 +72,9 @@ public class InitialBootstrap implements CommandLineRunner {
         customer1.getBooks().add(bookDorian);
 
         //saving
+        genreService.save(genrePhilFic);
+        genreService.save(genreDistPolFic);
+
         publisherService.save(publisherLondon);
 
         authorService.save(authorOscar);

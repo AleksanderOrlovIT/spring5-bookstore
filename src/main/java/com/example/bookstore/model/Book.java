@@ -60,4 +60,9 @@ public class Book extends BaseEntity{
             inverseJoinColumns = @JoinColumn(name = "customer_id"))
     private Set<Customer> customers = new HashSet<>();
 
+    @ManyToMany
+    @JoinTable(name = "book_genres", joinColumns = @JoinColumn(name = "book_id"),
+            inverseJoinColumns = @JoinColumn(name = "genre_id"))
+    private Set<Genre> genres = new HashSet<>();
+
 }
