@@ -40,7 +40,7 @@ public class InitialBootstrap implements CommandLineRunner {
         Author authorOscar = Author.builder().firstName("Oscar").lastName("Wilde").build();
         Author authorJorj = Author.builder().firstName("George").lastName("Orwell").build();
 
-        Book bookDorian = Book.builder().name("Dorian gray").price(BigDecimal.valueOf(5.0)).build();
+        Book bookDorian = Book.builder().name("Dorian Gray").price(BigDecimal.valueOf(5.0)).build();
         Book book1984 = Book.builder().name("1984").price(BigDecimal.valueOf(6.0)).build();
 
         Publisher publisherLondon = Publisher.builder().name("LondonPublicity").address("London").build();
@@ -95,7 +95,7 @@ public class InitialBootstrap implements CommandLineRunner {
         imagePath = Paths.get("src/main/resources/static/images/dorian.jpg");
         multipartFile = returnMultiPartFile(imagePath);
         if (multipartFile != null)
-            imageService.saveBookImage(bookService.findByName("Dorian gray"), multipartFile);
+            imageService.saveBookImage(bookService.findByName("Dorian Gray"), multipartFile);
 
         imagePath = Paths.get("src/main/resources/static/images/georgeOrwell.jpeg");
         multipartFile = returnMultiPartFile(imagePath);
