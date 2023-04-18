@@ -1,6 +1,9 @@
 package com.example.bookstore.service.impl;
 
+import com.example.bookstore.model.Author;
 import com.example.bookstore.model.Book;
+import com.example.bookstore.model.Customer;
+import com.example.bookstore.model.Publisher;
 import com.example.bookstore.repositories.AuthorRepository;
 import com.example.bookstore.repositories.BookRepository;
 import com.example.bookstore.repositories.CustomerRepository;
@@ -34,31 +37,30 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public void saveBookImage(Long bookId, MultipartFile multipartFile) {
-        if(bookRepository.findById(bookId).isPresent()){
-            Book book = bookRepository.findById(bookId).get();
+    public void saveBookImage(Book book, MultipartFile multipartFile) {
             Byte[] bytes = new Byte[0];
             bytes = returnByteObjects(bytes, multipartFile);
 
             book.setImage(bytes);
             bookRepository.save(book);
-        }else{
-            log.error("There is no such book id: "  + bookId);
-        }
     }
 
     @Override
-    public void saveAuthorImage(Long authorId, MultipartFile multipartFile) {
+    public void saveAuthorImage(Author author, MultipartFile multipartFile) {
+            Byte[] bytes = new Byte[0];
+            bytes = returnByteObjects(bytes, multipartFile);
+
+            author.setImage(bytes);
+            authorRepository.save(author);
+    }
+
+    @Override
+    public void savePublisherImage(Publisher publisher, MultipartFile multipartFile) {
 
     }
 
     @Override
-    public void savePublisherImage(Long publisherId, MultipartFile multipartFile) {
-
-    }
-
-    @Override
-    public void saveCustomerImage(Long customerId, MultipartFile multipartFile) {
+    public void saveCustomerImage(Customer customer, MultipartFile multipartFile) {
 
     }
 

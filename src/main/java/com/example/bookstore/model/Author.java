@@ -32,6 +32,9 @@ public class Author extends BaseEntity{
     @Column(name = "lastName")
     private String lastName;
 
+    @Lob
+    Byte[] image;
+
     @ManyToMany(mappedBy = "authors")
     private Set<Book> books = new HashSet<>();
 }

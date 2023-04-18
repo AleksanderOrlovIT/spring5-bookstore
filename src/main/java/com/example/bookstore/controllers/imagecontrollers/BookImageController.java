@@ -37,7 +37,11 @@ public class BookImageController {
     @PostMapping("book/{bookId}/image")
     public String handleImagePost(@PathVariable Long bookId, @RequestParam("imagefile") MultipartFile file){
 
-        imageService.saveBookImage(bookId, file);
+        Book savedBook = bookService.findById(bookId);
+
+        if(savedBook != null) {
+            imageService.saveBookImage(savedBook, file);
+        }
 
         return "redirect:/book/" + bookId + "/show";
     }

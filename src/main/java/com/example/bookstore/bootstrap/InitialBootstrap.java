@@ -36,10 +36,10 @@ public class InitialBootstrap implements CommandLineRunner {
         this.imageService = imageService;
     }
 
-    private void loadData(){
+    private void loadData() {
         //Init
         Author authorOscar = Author.builder().firstName("Oscar").lastName("Wilde").build();
-        Author authorJorj = Author.builder().firstName("George").lastName("Oruell").build();
+        Author authorJorj = Author.builder().firstName("George").lastName("Orwell").build();
 
         Book bookDorian = Book.builder().name("Dorian gray").price(BigDecimal.valueOf(5.0)).build();
         Book book1984 = Book.builder().name("1984").price(BigDecimal.valueOf(6.0)).build();
@@ -79,23 +79,33 @@ public class InitialBootstrap implements CommandLineRunner {
         bookService.save(bookDorian);
     }
 
-    private void loadImages(){
-            Path image1984Path = Paths.get("src/main/resources/static/images/1984.jpg");
-            MultipartFile multipartFile = returnMultiPartFile(image1984Path);
-            if(multipartFile != null)
-                imageService.saveBookImage(bookService.findByName("1984").getId(), multipartFile);
+    private void loadImages() {
+        Path imagePath = Paths.get("src/main/resources/static/images/1984.jpg");
+        MultipartFile multipartFile = returnMultiPartFile(imagePath);
+        if (multipartFile != null)
+            imageService.saveBookImage(bookService.findByName("1984"), multipartFile);
 
-            Path imageDorianPath = Paths.get("src/main/resources/static/images/dorian.jpg");
-            multipartFile = returnMultiPartFile(imageDorianPath);
-            if(multipartFile != null)
-                imageService.saveBookImage(bookService.findByName("Dorian gray").getId(), multipartFile);
+        imagePath = Paths.get("src/main/resources/static/images/dorian.jpg");
+        multipartFile = returnMultiPartFile(imagePath);
+        if (multipartFile != null)
+            imageService.saveBookImage(bookService.findByName("Dorian gray"), multipartFile);
+
+        imagePath = Paths.get("src/main/resources/static/images/georgeOrwell.jpeg");
+        multipartFile = returnMultiPartFile(imagePath);
+        if (multipartFile != null)
+            imageService.saveAuthorImage(authorService.findByFullName("George", "Orwell"), multipartFile);
+
+        imagePath = Paths.get("src/main/resources/static/images/oscarWilde.jpeg");
+        multipartFile = returnMultiPartFile(imagePath);
+        if (multipartFile != null)
+            imageService.saveAuthorImage(authorService.findByFullName("Oscar", "Wilde"), multipartFile);
     }
 
-    private MultipartFile returnMultiPartFile(Path path){
+    private MultipartFile returnMultiPartFile(Path path) {
         try {
             return new MockMultipartFile("file",
                     path.getFileName().toString(), "image/jpeg", Files.readAllBytes(path));
-        }catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
             return null;
         }
