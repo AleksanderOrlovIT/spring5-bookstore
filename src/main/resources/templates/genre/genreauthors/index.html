@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
-    <title>Publisher Home</title>
+    <title>Authors Home</title>
 
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
@@ -25,7 +25,8 @@
                 <div class="panel-heading">
                     <div class="row">
                         <div class="col-md-11">
-                            <h1 class="panel-title" style="font-size: 30px;">Publishers in our site</h1>
+                            <h1 class="panel-title"
+                                th:text="${genre.name} + ' authors'" style="font-size: 30px">Authors!</h1>
                         </div>
                         <div class="col-md-1" style="margin-left: 750px;">
                             <a class="btn btn-default" href="#" th:href="@{'/'}" role="button"
@@ -34,32 +35,31 @@
                     </div>
                 </div>
                 <div class="panel-body">
-                    <div class="table-responsive" th:if="${not #lists.isEmpty(publishers)}">
+                    <div class="table-responsive" th:if="${not #lists.isEmpty(authors)}">
                         <table class="table table-hover ">
                             <thead class="thead-inverse">
                             <tr>
                                 <th style="font-size: 25px">ID</th>
                                 <th style="font-size: 25px">Name</th>
                                 <th style="font-size: 25px">View</th>
-                                <th style="font-size: 25px">Update</th>
                                 <th style="font-size: 25px">Delete</th>
                             </tr>
                             </thead>
-                            <tr th:each="publisher : ${publishers}">
-                                <td th:text="${publisher.id}" style="font-size: 20px">334</td>
-                                <td th:text="${publisher.name}" style="font-size: 20px">Tasty Goodnees 3</td>
-                                <td><a href="#" th:href="@{'/publisher/' + ${publisher.id} + '/show'}"
-                                       style="font-size: 20px">View</a></td>
-                                <td><a href="#" th:href="@{'/publisher/' + ${publisher.id} + '/update'}"
-                                       style="font-size: 20px">Update</a></td>
-                                <td><a href="#" th:href="@{'/publisher/' + ${publisher.id} + '/delete'}"
+                            <tr th:each="author : ${authors}">
+                                <td th:text="${author.id}" style="font-size: 20px">334</td>
+                                <td th:text="${author.firstName + ' ' + author.lastName}" style="font-size: 20px">Tasty Goodnees 3</td>
+                                <td><a href="#" th:href="@{'/author/' + ${author.id} + '/show'}" style="font-size: 20px">View</a>
+                                </td>
+                                <td><a href="#"
+                                       th:href="@{'/genre/' + ${genre.id} + '/author/' + ${author.id} + '/delete'}"
                                        style="font-size: 20px">Delete</a></td>
                             </tr>
                         </table>
                     </div>
                     <div class="col-md-1">
                         <a class="btn btn-default" href="#"
-                           th:href="@{'/publisher/new'}" role="button" style="font-size: 20px">New Publisher</a>
+                           th:href="@{'/genre/' + ${genre.id} +'/author/new'}" role="button"
+                           style="font-size: 20px">Add Author</a>
                     </div>
                 </div>
             </div>

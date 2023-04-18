@@ -75,8 +75,6 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <ul>
-                                    <li th:remove="all">1 Cup of milk</li>
-                                    <li th:remove="all">1 Teaspoon of chocolate</li>
                                     <li th:each="genre : ${book.genres}"
                                         th:text="${genre.getName()}" style="font-size: 20px">1 Teaspoon of Sugar
                                     </li>
@@ -102,8 +100,6 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <ul>
-                                    <li th:remove="all">1 Cup of milk</li>
-                                    <li th:remove="all">1 Teaspoon of chocolate</li>
                                     <li th:each="author : ${book.authors}"
                                         th:text="${(author.getFirstName() +
                                         ' ' + author.getLastName())}" style="font-size: 20px">1 Teaspoon of Sugar
@@ -130,8 +126,6 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <ul>
-                                    <li th:remove="all">1 Cup of milk</li>
-                                    <li th:remove="all">1 Teaspoon of chocolate</li>
                                     <li th:each="publisher : ${book.publishers}"
                                         th:text="${(publisher.getName() +
                                         ' (address : ' + publisher.getAddress() + ')')}" style="font-size: 20px">1
@@ -159,8 +153,6 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <ul>
-                                    <li th:remove="all">1 Cup of milk</li>
-                                    <li th:remove="all">1 Teaspoon of chocolate</li>
                                     <li th:each="customer : ${book.customers}"
                                         th:text="${customer.getUserName()}" style="font-size: 20px">1 Teaspoon of Sugar
                                     </li>

@@ -61,7 +61,10 @@ public class InitialBootstrap implements CommandLineRunner {
         book1984.getGenres().add(genreDistPolFic);
 
         authorOscar.getBooks().add(bookDorian);
+        authorOscar.getGenres().add(genrePhilFic);
+
         authorJorj.getBooks().add(book1984);
+        authorJorj.getGenres().add(genreDistPolFic);
 
         publisherLondon.getBooks().add(book1984);
         publisherLondon.getBooks().add(bookDorian);

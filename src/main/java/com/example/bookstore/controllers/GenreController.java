@@ -1,5 +1,6 @@
 package com.example.bookstore.controllers;
 
+import com.example.bookstore.model.Book;
 import com.example.bookstore.model.Genre;
 import com.example.bookstore.service.GenreService;
 import org.springframework.stereotype.Controller;

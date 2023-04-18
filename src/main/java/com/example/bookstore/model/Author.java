@@ -15,12 +15,15 @@ import java.util.Set;
 public class Author extends BaseEntity{
 
     @Builder
-    public Author(Long id, String firstName, String lastName, Set<Book> books){
+    public Author(Long id, String firstName, String lastName, Set<Book> books, Set<Genre> genres){
         super(id);
         this.firstName = firstName;
         this.lastName = lastName;
         if(books != null){
             this.books = books;
+        }
+        if(genres != null){
+            this.genres = genres;
         }
     }
 
@@ -37,4 +40,9 @@ public class Author extends BaseEntity{
 
     @ManyToMany(mappedBy = "authors")
     private Set<Book> books = new HashSet<>();
+
+    @ManyToMany
+    @JoinTable(name = "author_genres", joinColumns = @JoinColumn(name = "author_id"),
+            inverseJoinColumns = @JoinColumn(name = "genre_id"))
+    private Set<Genre> genres = new HashSet<>();
 }

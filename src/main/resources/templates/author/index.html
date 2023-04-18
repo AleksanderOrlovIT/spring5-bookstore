@@ -44,16 +44,6 @@
                                 <th style="font-size: 25px">Delete</th>
                             </tr>
                             </thead>
-                            <tr th:remove="all">
-                                <td>123</td>
-                                <td>Tasty Goodnees 1</td>
-                                <td><a href="#">View</a></td>
-                            </tr>
-                            <tr th:remove="all">
-                                <td>12333</td>
-                                <td>Tasty Goodnees 2</td>
-                                <td><a href="#">View</a></td>
-                            </tr>
                             <tr th:each="author : ${authors}">
                                 <td th:text="${author.id}" style="font-size: 20px">334</td>
                                 <td th:text="${(author.firstName + ' ' + author.lastName)}" style="font-size: 20px">

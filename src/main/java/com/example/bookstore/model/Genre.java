@@ -21,11 +21,13 @@ import java.util.Set;
 public class Genre extends BaseEntity{
 
     @Builder
-    public Genre(Long id, String name, Set<Book> books) {
+    public Genre(Long id, String name, Set<Book> books, Set<Author> authors) {
         super(id);
         this.name = name;
         if(books != null)
             this.books = books;
+        if(authors != null)
+            this.authors = authors;
     }
 
     @NotEmpty
@@ -34,4 +36,7 @@ public class Genre extends BaseEntity{
 
     @ManyToMany(mappedBy = "genres")
     private Set<Book> books = new HashSet<>();
+
+    @ManyToMany(mappedBy = "genres")
+    private Set<Author> authors = new HashSet<>();
 }

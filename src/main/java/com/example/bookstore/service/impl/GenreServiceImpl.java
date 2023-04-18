@@ -1,5 +1,6 @@
 package com.example.bookstore.service.impl;
 
+import com.example.bookstore.model.Author;
 import com.example.bookstore.model.Book;
 import com.example.bookstore.model.Genre;
 import com.example.bookstore.repositories.GenreRepository;
@@ -43,9 +44,16 @@ public class GenreServiceImpl implements GenreService {
     @Override
     public void deleteById(Long id) {
         Genre genre = findById(id);
-        if(genre != null && genre.getBooks() != null){
-            for(Book book : genre.getBooks()){
-                book.getGenres().remove(genre);
+        if(genre != null) {
+            if (genre.getBooks() != null) {
+                for (Book book : genre.getBooks()) {
+                    book.getGenres().remove(genre);
+                }
+            }
+            if (genre.getAuthors() != null){
+                for (Author author : genre.getAuthors()){
+                    author.getGenres().remove(genre);
+                }
             }
         }
         genreRepository.deleteById(id);
