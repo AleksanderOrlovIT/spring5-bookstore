@@ -33,7 +33,7 @@ public class Author extends BaseEntity{
     private String lastName;
 
     @Lob
-    Byte[] image;
+    private Byte[] image;
 
     @ManyToMany(mappedBy = "authors")
     private Set<Book> books = new HashSet<>();

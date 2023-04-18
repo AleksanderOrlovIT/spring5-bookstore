@@ -2,10 +2,7 @@ package com.example.bookstore.model;
 
 import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import java.util.HashSet;
 import java.util.Set;
@@ -34,6 +31,9 @@ public class Publisher extends BaseEntity{
     @NotEmpty
     @Column(name = "address")
     private String address;
+
+    @Lob
+    private Byte[] image;
 
     @ManyToMany(mappedBy = "publishers")
     private Set<Book> books = new HashSet<>();

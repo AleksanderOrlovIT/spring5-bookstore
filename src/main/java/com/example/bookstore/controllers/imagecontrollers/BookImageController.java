@@ -1,6 +1,7 @@
 package com.example.bookstore.controllers.imagecontrollers;
 
 import com.example.bookstore.service.ImageService;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -16,6 +17,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+@Slf4j
 @Controller
 public class BookImageController {
 
@@ -41,6 +43,8 @@ public class BookImageController {
 
         if(savedBook != null) {
             imageService.saveBookImage(savedBook, file);
+        }else {
+            log.error("BookImageController savedBook with id :" + bookId + " is null");
         }
 
         return "redirect:/book/" + bookId + "/show";

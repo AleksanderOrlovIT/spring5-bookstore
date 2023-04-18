@@ -56,7 +56,11 @@ public class ImageServiceImpl implements ImageService {
 
     @Override
     public void savePublisherImage(Publisher publisher, MultipartFile multipartFile) {
+        Byte[] bytes = new Byte[0];
+        bytes = returnByteObjects(bytes, multipartFile);
 
+        publisher.setImage(bytes);
+        publisherRepository.save(publisher);
     }
 
     @Override
