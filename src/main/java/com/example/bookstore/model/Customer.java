@@ -37,6 +37,9 @@ public class Customer extends BaseEntity{
     @Column(name = "balance")
     private BigDecimal balance;
 
+    @Lob
+    private Byte[] image;
+
     @ManyToMany(mappedBy = "customers")
     private Set<Book> books = new HashSet<>();
 }

@@ -104,6 +104,11 @@ public class InitialBootstrap implements CommandLineRunner {
         multipartFile = returnMultiPartFile(imagePath);
         if (multipartFile != null)
             imageService.savePublisherImage(publisherService.findByName("LondonPublicity"), multipartFile);
+
+        imagePath = Paths.get("src/main/resources/static/images/customerSasha.png");
+        multipartFile = returnMultiPartFile(imagePath);
+        if (multipartFile != null)
+            imageService.saveCustomerImage(customerService.findByUserName("SashaOrlov"), multipartFile);
     }
 
     private MultipartFile returnMultiPartFile(Path path) {
