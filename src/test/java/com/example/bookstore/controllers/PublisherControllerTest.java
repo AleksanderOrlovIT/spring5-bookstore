@@ -1,6 +1,5 @@
 package com.example.bookstore.controllers;
 
-import com.example.bookstore.model.Author;
 import com.example.bookstore.model.Publisher;
 import com.example.bookstore.service.PublisherService;
 import org.junit.jupiter.api.BeforeEach;

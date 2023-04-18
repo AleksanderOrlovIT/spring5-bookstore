@@ -2,8 +2,6 @@ package com.example.bookstore.controllers;
 
 import com.example.bookstore.model.Book;
 import com.example.bookstore.service.BookService;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.hibernate.annotations.Parameter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

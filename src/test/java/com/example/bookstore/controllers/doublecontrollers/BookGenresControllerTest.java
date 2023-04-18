@@ -10,26 +10,23 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ExtendWith(MockitoExtension.class)
-class GenreBooksControllerTest {
+class BookGenresControllerTest {
 
-    private final static String genreBookForm = "genre/genrebooks/genrebookform";
+    private final static String bookGenreForm = "book/bookgenres/bookgenreform";
 
     @Mock
     BookService bookService;
@@ -38,70 +35,68 @@ class GenreBooksControllerTest {
     GenreService genreService;
 
     @InjectMocks
-    GenreBooksController genreBooksController;
+    BookGenresController bookGenresController;
 
     MockMvc mockMvc;
 
     @BeforeEach
     void setUp() {
-        mockMvc = MockMvcBuilders.standaloneSetup(genreBooksController).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(bookGenresController).build();
     }
 
     @Test
-    void getAllCustomersBooks() throws Exception{
-        Set<Book> booksSet = new HashSet<>();
-        booksSet.add(Book.builder().id(1L).build());
-        booksSet.add(Book.builder().id(2L).build());
-        Genre genre = Genre.builder().id(1L).books(booksSet).build();
+    void getAllBookCustomers() throws Exception{
+        Set<Genre> genresSet = new HashSet<>();
+        genresSet.add(Genre.builder().id(1L).build());
+        genresSet.add(Genre.builder().id(2L).build());
+        Book book = Book.builder().id(1L).genres(genresSet).build();
 
-        when(genreService.findById(anyLong())).thenReturn(genre);
+        when(bookService.findById(anyLong())).thenReturn(book);
 
-        mockMvc.perform(get("/genre/" + genre.getId() + "/books"))
+        mockMvc.perform(get("/book/" + book.getId() + "/genres"))
                 .andExpect(status().isOk())
-                .andExpect(model().attribute("books", hasSize(2)))
-                .andExpect(model().attributeExists("genre"))
-                .andExpect(view().name("genre/genrebooks/index"));
+                .andExpect(model().attribute("genres", hasSize(2)))
+                .andExpect(model().attributeExists("book"))
+                .andExpect(view().name("book/bookgenres/index"));
 
-        verify(genreService, times(1)).findById(anyLong());
-        verifyNoInteractions(bookService);
+        verify(bookService, times(1)).findById(anyLong());
+        verifyNoInteractions(genreService);
     }
 
     @Test
     void initCreationForm() throws Exception{
-        mockMvc.perform(get("/genre/1/book/new"))
+        mockMvc.perform(get("/book/1/genre/new"))
                 .andExpect(status().isOk())
-                .andExpect(model().attributeExists("book"))
-                .andExpect(view().name(genreBookForm));
+                .andExpect(model().attributeExists("genre"))
+                .andExpect(view().name(bookGenreForm));
 
-        verifyNoInteractions(genreService);
         verifyNoInteractions(bookService);
+        verifyNoInteractions(genreService);
     }
 
     @Test
     void processCreationForm() throws Exception{
-        Genre genre = Genre.builder().id(1L).build();
-        Book book = Book.builder().name("book").price(BigDecimal.valueOf(1.0)).build();
+        Genre genre = Genre.builder().name("name").build();
+        Book book = Book.builder().id(1L).build();
 
+        when(genreService.findByName(anyString())).thenReturn(genre);
         when(genreService.save(any())).thenReturn(genre);
-        when(genreService.findById(anyLong())).thenReturn(genre);
+        when(bookService.findById(anyLong())).thenReturn(book);
         when(bookService.save(any())).thenReturn(book);
-        when(bookService.findByName(anyString())).thenReturn(book);
 
-        mockMvc.perform(post("/genre/" + genre.getId() + "/book/new")
-                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                        .param("name", book.getName())
-                        .param("price", book.getPrice().toString()))
+        mockMvc.perform(post("/book/" + book.getId() + "/genre/new")
+                        .param("name", genre.getName()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/genre/" + genre.getId() + "/books"));
+                .andExpect(view().name("redirect:/book/" + book.getId() + "/genres"));
 
+        verify(genreService, times(1)).findByName(anyString());
         verify(genreService, times(1)).save(any());
-        verify(genreService, times(1)).findById(anyLong());
+        verify(bookService, times(1)).findById(anyLong());
         verify(bookService, times(1)).save(any());
-        verify(bookService, times(1)).findByName(anyString());
     }
 
     @Test
-    void deleteBook() throws Exception{
+    void deleteAuthor() throws Exception{
         Genre genre = Genre.builder().id(1L).build();
         Book book = Book.builder().id(1L).build();
         genre.getBooks().add(book);
@@ -112,13 +107,13 @@ class GenreBooksControllerTest {
         when(bookService.findById(anyLong())).thenReturn(book);
         when(bookService.save(any())).thenReturn(book);
 
-        mockMvc.perform(get("/genre/" + genre.getId() + "/book/" + book.getId() + "/delete"))
+        mockMvc.perform(get("/book/" + book.getId() + "/genre/" + genre.getId() + "/delete"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/genre/" + genre.getId() + "/books"));
+                .andExpect(view().name("redirect:/book/" + book.getId() + "/genres"));
 
-        verify(genreService, times(1)).save(any());
         verify(genreService, times(1)).findById(anyLong());
-        verify(bookService, times(1)).save(any());
+        verify(genreService, times(1)).save(any());
         verify(bookService, times(1)).findById(anyLong());
+        verify(bookService, times(1)).save(any());
     }
 }

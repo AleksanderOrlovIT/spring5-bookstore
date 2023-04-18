@@ -2,7 +2,6 @@ package com.example.bookstore.controllers.doublecontrollers;
 
 import com.example.bookstore.model.Book;
 import com.example.bookstore.model.Publisher;
-import com.example.bookstore.service.AuthorService;
 import com.example.bookstore.service.BookService;
 import com.example.bookstore.service.PublisherService;
 import org.springframework.stereotype.Controller;

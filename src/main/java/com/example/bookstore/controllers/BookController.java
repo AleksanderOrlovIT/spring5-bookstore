@@ -1,10 +1,7 @@
 package com.example.bookstore.controllers;
 
 import com.example.bookstore.model.Book;
-import com.example.bookstore.service.AuthorService;
 import com.example.bookstore.service.BookService;
-import com.example.bookstore.service.CustomerService;
-import com.example.bookstore.service.PublisherService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;

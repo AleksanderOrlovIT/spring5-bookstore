@@ -17,7 +17,7 @@ public class Book extends BaseEntity{
 
     @Builder
     public Book(Long id, String name, BigDecimal price, Set<Author> authors, Set<Publisher> publishers,
-                Set<Customer> customers) {
+                Set<Customer> customers, Set<Genre> genres) {
         super(id);
         this.name = name;
         this.price = price;
@@ -29,6 +29,9 @@ public class Book extends BaseEntity{
         }
         if(customers != null) {
             this.customers = customers;
+        }
+        if(genres != null){
+            this.genres = genres;
         }
     }
 

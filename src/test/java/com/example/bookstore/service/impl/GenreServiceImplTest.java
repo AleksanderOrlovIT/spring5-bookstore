@@ -1,8 +1,6 @@
 package com.example.bookstore.service.impl;
 
-import com.example.bookstore.model.Author;
 import com.example.bookstore.model.Genre;
-import com.example.bookstore.repositories.AuthorRepository;
 import com.example.bookstore.repositories.GenreRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

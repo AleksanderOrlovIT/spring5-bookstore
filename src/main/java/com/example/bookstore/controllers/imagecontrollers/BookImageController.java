@@ -4,13 +4,11 @@ import com.example.bookstore.service.ImageService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.ui.Model;
-import org.springframework.util.StringUtils;
 import com.example.bookstore.model.Book;
 import com.example.bookstore.service.BookService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayInputStream;

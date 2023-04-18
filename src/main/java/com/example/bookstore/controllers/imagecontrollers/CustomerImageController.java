@@ -1,10 +1,8 @@
 package com.example.bookstore.controllers.imagecontrollers;
 
 import com.example.bookstore.model.Customer;
-import com.example.bookstore.model.Publisher;
 import com.example.bookstore.service.CustomerService;
 import com.example.bookstore.service.ImageService;
-import com.example.bookstore.service.PublisherService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.stereotype.Controller;

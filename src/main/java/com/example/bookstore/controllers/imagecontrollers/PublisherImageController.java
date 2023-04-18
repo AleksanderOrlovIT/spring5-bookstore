@@ -1,8 +1,6 @@
 package com.example.bookstore.controllers.imagecontrollers;
 
-import com.example.bookstore.model.Author;
 import com.example.bookstore.model.Publisher;
-import com.example.bookstore.service.AuthorService;
 import com.example.bookstore.service.ImageService;
 import com.example.bookstore.service.PublisherService;
 import lombok.extern.slf4j.Slf4j;
