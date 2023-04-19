@@ -28,6 +28,8 @@ class CustomerControllerTest {
 
     private static final String customerForm = "/customer/customerform";
 
+    private static final String errorPage = "/error/400error";
+
     @Mock
     CustomerService customerService;
 
@@ -64,6 +66,16 @@ class CustomerControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("customer/show"))
                 .andExpect(model().attribute("customer", hasProperty("id", is(1L))));
+
+        verify(customerService, times(1)).findById(anyLong());
+    }
+
+    @Test
+    void showCustomerByIdWithBrokenId() throws Exception{
+        mockMvc.perform(get("/customer/1/delete"))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("exception"))
+                .andExpect(view().name(errorPage));
 
         verify(customerService, times(1)).findById(anyLong());
     }
@@ -115,6 +127,16 @@ class CustomerControllerTest {
     }
 
     @Test
+    void initUpdateCustomerFormWIthBrokenId() throws Exception{
+        mockMvc.perform(get("/customer/1/update"))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("exception"))
+                .andExpect(view().name(errorPage));
+
+        verify(customerService, times(1)).findById(anyLong());
+    }
+
+    @Test
     void processUpdateCustomerForm() throws Exception{
         Customer customer = Customer.builder().id(1L).userName("userName").balance(BigDecimal.valueOf(1.0)).build();
         when(customerService.save(any())).thenReturn(customer);
@@ -142,6 +164,16 @@ class CustomerControllerTest {
     }
 
     @Test
+    void processUpdateCustomerFormWithBrokenId() throws Exception{
+        mockMvc.perform(post("/customer/1/update"))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("exception"))
+                .andExpect(view().name(errorPage));
+        verify(customerService, times(1)).findById(anyLong());
+    }
+
+
+    @Test
     void deleteCustomer() throws Exception{
         when(customerService.findById(anyLong())).thenReturn(Customer.builder().build());
 
@@ -150,5 +182,14 @@ class CustomerControllerTest {
                 .andExpect(view().name("redirect:/customers"));
 
         verify(customerService).deleteById(anyLong());
+    }
+
+    @Test
+    void deleteCustomerWIthBrokenID() throws Exception{
+        mockMvc.perform(get("/customer/1/delete"))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("exception"))
+                .andExpect(view().name(errorPage));
+        verify(customerService, times(1)).findById(anyLong());
     }
 }

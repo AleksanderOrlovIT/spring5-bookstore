@@ -27,6 +27,8 @@ class PublisherControllerTest {
 
     private static final String publisherForm = "/publisher/publisherform";
 
+    private static final String errorPage = "/error/400error";
+
     @Mock
     PublisherService publisherService;
 
@@ -65,6 +67,15 @@ class PublisherControllerTest {
                 .andExpect(view().name("publisher/show"))
                 .andExpect(model().attribute("publisher", hasProperty("id", is(1L))));
 
+        verify(publisherService, times(1)).findById(anyLong());
+    }
+
+    @Test
+    void showPublisherByIdWithBrokenId() throws Exception{
+        mockMvc.perform(get("/publisher/1/show"))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("exception"))
+                .andExpect(view().name(errorPage));
         verify(publisherService, times(1)).findById(anyLong());
     }
 
@@ -115,6 +126,15 @@ class PublisherControllerTest {
     }
 
     @Test
+    void initUpdatePublisherFormWithBrokenId() throws Exception{
+        mockMvc.perform(get("/publisher/1/update"))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("exception"))
+                .andExpect(view().name(errorPage));
+        verify(publisherService, times(1)).findById(anyLong());
+    }
+
+    @Test
     void processUpdatePublisherForm() throws Exception{
         Publisher publisher = Publisher.builder().id(1L).name("publisher").address("address").build();
         when(publisherService.save(any())).thenReturn(publisher);
@@ -143,6 +163,15 @@ class PublisherControllerTest {
     }
 
     @Test
+    void processUpdatePublisherFormWithBrokenId() throws Exception{
+        mockMvc.perform(post("/publisher/1/update"))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("exception"))
+                .andExpect(view().name(errorPage));
+        verify(publisherService, times(1)).findById(anyLong());
+    }
+
+    @Test
     void deletePublisher() throws Exception{
         when(publisherService.findById(anyLong())).thenReturn(Publisher.builder().build());
 
@@ -151,5 +180,14 @@ class PublisherControllerTest {
                 .andExpect(view().name("redirect:/publishers"));
 
         verify(publisherService).deleteById(anyLong());
+    }
+
+    @Test
+    void deletePublisherWithBrokenId() throws Exception{
+        mockMvc.perform(get("/publisher/1/delete"))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("exception"))
+                .andExpect(view().name(errorPage));
+        verify(publisherService, times(1)).findById(anyLong());
     }
 }

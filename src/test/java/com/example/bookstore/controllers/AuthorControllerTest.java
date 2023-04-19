@@ -29,6 +29,8 @@ class AuthorControllerTest {
 
     private static final String authorForm = "/author/authorform";
 
+    private static final String errorPage = "/error/400error";
+
     @Mock
     AuthorService authorService;
 
@@ -65,6 +67,16 @@ class AuthorControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("author/show"))
                 .andExpect(model().attribute("author", hasProperty("id", is(1L))));
+
+        verify(authorService, times(1)).findById(anyLong());
+    }
+
+    @Test
+    void showAuthorWithBrokenId() throws Exception{
+        mockMvc.perform(get("/author/1/show"))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("exception"))
+                .andExpect(view().name(errorPage));
 
         verify(authorService, times(1)).findById(anyLong());
     }
@@ -115,6 +127,16 @@ class AuthorControllerTest {
         verify(authorService, times(1)).findById(anyLong());
     }
 
+    @Test
+    void initUpdateAuthorFormWithBrokenId() throws Exception{
+        mockMvc.perform(get("/author/1/update"))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("exception"))
+                .andExpect(view().name(errorPage));
+
+        verify(authorService, times(1)).findById(anyLong());
+    }
+
 
     @Test
     void processUpdateAuthorForm() throws Exception{
@@ -143,6 +165,16 @@ class AuthorControllerTest {
     }
 
     @Test
+    void processUpdateAuthorFormWithBrokenId() throws Exception{
+        mockMvc.perform(post("/author/1/update"))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("exception"))
+                .andExpect(view().name(errorPage));
+
+        verify(authorService, times(1)).findById(anyLong());
+    }
+
+    @Test
     void deleteAuthor() throws Exception{
         when(authorService.findById(anyLong())).thenReturn(Author.builder().build());
 
@@ -151,5 +183,15 @@ class AuthorControllerTest {
                 .andExpect(view().name("redirect:/authors"));
 
         verify(authorService).deleteById(anyLong());
+    }
+
+    @Test
+    void deleteAuthorWithBrokenId() throws Exception{
+        mockMvc.perform(get("/author/1/delete"))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("exception"))
+                .andExpect(view().name(errorPage));
+
+        verify(authorService, times(1)).findById(anyLong());
     }
 }

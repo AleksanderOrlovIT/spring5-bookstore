@@ -28,6 +28,8 @@ class BookControllerTest {
 
     private static final String bookForm = "/book/bookform";
 
+    private static final String errorPage = "/error/400error";
+
     @Mock
     BookService bookService;
 
@@ -64,6 +66,16 @@ class BookControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("book/show"))
                 .andExpect(model().attribute("book", hasProperty("id", is(1L))));
+
+        verify(bookService, times(1)).findById(anyLong());
+    }
+
+    @Test
+    void showByIdWithBrokenId() throws Exception{
+        mockMvc.perform(get("/book/1/show"))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("exception"))
+                .andExpect(view().name(errorPage));
 
         verify(bookService, times(1)).findById(anyLong());
     }
@@ -115,6 +127,16 @@ class BookControllerTest {
     }
 
     @Test
+    void initUpdateBookFormWitBrokenId() throws Exception{
+        mockMvc.perform(get("/book/1/update"))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("exception"))
+                .andExpect(view().name(errorPage));
+
+        verify(bookService, times(1)).findById(anyLong());
+    }
+
+    @Test
     void processUpdateBookForm() throws Exception{
         Book book = Book.builder().id(1L).name("book").price(BigDecimal.valueOf(1.0)).build();
         when(bookService.findById(anyLong())).thenReturn(book);
@@ -144,6 +166,16 @@ class BookControllerTest {
         verify(bookService, times(1)).findById(anyLong());
     }
 
+    @Test
+    void processUpdateBookFormWitBrokenId() throws Exception{
+        mockMvc.perform(post("/book/1/update"))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("exception"))
+                .andExpect(view().name(errorPage));
+
+        verify(bookService, times(1)).findById(anyLong());
+    }
+
 
     @Test
     void deleteBook() throws Exception{
@@ -154,5 +186,15 @@ class BookControllerTest {
                 .andExpect(view().name("redirect:/books"));
 
         verify(bookService).deleteById(anyLong());
+    }
+
+    @Test
+    void deleteBookWithBrokenId() throws Exception{
+        mockMvc.perform(get("/book/1/delete"))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("exception"))
+                .andExpect(view().name(errorPage));
+
+        verify(bookService, times(1)).findById(anyLong());
     }
 }
