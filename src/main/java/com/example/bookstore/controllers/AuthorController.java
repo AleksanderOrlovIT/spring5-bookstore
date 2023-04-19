@@ -17,6 +17,8 @@ import javax.validation.Valid;
 public class AuthorController {
     private final static String authorForm = "/author/authorform";
 
+    private final static String errorPage = "/error/400error";
+
     private final AuthorService authorService;
 
     public AuthorController(AuthorService authorService) {
@@ -34,7 +36,7 @@ public class AuthorController {
         Author author = authorService.findById(id);
         if(author == null){
             model.addAttribute("exception", new Exception("There is no author with id: " + id));
-            return "/error/400error";
+            return errorPage;
         }
         model.addAttribute("author", author);
         return "author/show";
@@ -61,7 +63,7 @@ public class AuthorController {
         Author author = authorService.findById(id);
         if(author == null){
             model.addAttribute("exception", new Exception("There is no author with id: " + id));
-            return "/error/400error";
+            return errorPage;
         }
         model.addAttribute(author);
         return authorForm;
@@ -71,7 +73,7 @@ public class AuthorController {
     public String processUpdateAuthorForm(@Valid Author author, BindingResult result, @PathVariable Long id, Model model){
         if(authorService.findById(id) == null){
             model.addAttribute("exception", new Exception("There is no author with id: " + id));
-            return "/error/400error";
+            return errorPage;
         }
         if(result.hasErrors()){
             return authorForm;
@@ -85,7 +87,7 @@ public class AuthorController {
     public String deleteAuthor(@PathVariable Long id, Model model){
         if(authorService.findById(id) == null){
             model.addAttribute("exception", new Exception("There is no author with id: " + id));
-            return "/error/400error";
+            return errorPage;
         }
         authorService.deleteById(id);
         return "redirect:/authors";

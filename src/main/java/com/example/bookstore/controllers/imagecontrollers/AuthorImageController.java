@@ -22,6 +22,8 @@ import java.io.InputStream;
 @Controller
 public class AuthorImageController {
 
+    private final static String errorPage = "error/400error";
+
     private final ImageService imageService;
     private final AuthorService authorService;
 
@@ -30,39 +32,47 @@ public class AuthorImageController {
         this.authorService = authorService;
     }
 
-    @GetMapping("author/{authorId}/image")
-    public String showUploadForm(@PathVariable Long authorId, Model model){
-        model.addAttribute("author", authorService.findById(authorId));
-
+    @GetMapping("author/{authorId}/newImage")
+    public String showUploadForm(@PathVariable Long authorId, Model model) {
+        Author author = authorService.findById(authorId);
+        if (author == null) {
+            model.addAttribute("exception", new Exception("There is no author with id: " + authorId));
+            return errorPage;
+        }
+        model.addAttribute("author", author);
         return "author/imageuploadform";
     }
 
-    @PostMapping("author/{authorId}/image")
-    public String handleImagePost(@PathVariable Long authorId, @RequestParam("imagefile") MultipartFile file){
+    @PostMapping("author/{authorId}/newImage")
+    public String handleImagePost(@PathVariable Long authorId, @RequestParam("imagefile") MultipartFile file, Model model) {
         Author savedAuthor = authorService.findById(authorId);
-
-        if(savedAuthor != null) {
-            imageService.saveAuthorImage(authorService.findById(authorId), file);
-        }else {
-            log.error("AuthorImageController savedAuthor with id :" + authorId + " is null");
+        if (savedAuthor != null) {
+            imageService.saveAuthorImage(savedAuthor, file);
+        } else {
+            model.addAttribute("exception", new Exception("There is no author with id: " + authorId));
+            return errorPage;
         }
         return "redirect:/author/" + authorId + "/show";
     }
 
-    @GetMapping("author/{authorId}/authorimage")
+    @GetMapping("author/{authorId}/image")
     public void renderImageFromDB(@PathVariable Long authorId, HttpServletResponse response) throws IOException {
+        log.debug("Invoked");
         Author author = authorService.findById(authorId);
-        if (author.getImage() != null) {
-            byte[] byteArray = new byte[author.getImage().length];
-            int i = 0;
+        if (author == null) {
+            log.error("AuthorImageController.renderImageFromDB(), error : there is no author with id" + authorId);
+        } else if (author.getImage() != null) {
+                byte[] byteArray = new byte[author.getImage().length];
+                int i = 0;
 
-            for (Byte wrappedByte : author.getImage()){
-                byteArray[i++] = wrappedByte;
-            }
+                for (Byte wrappedByte : author.getImage()) {
+                    byteArray[i++] = wrappedByte;
+                }
 
-            response.setContentType("image/jpeg");
-            InputStream is = new ByteArrayInputStream(byteArray);
-            IOUtils.copy(is, response.getOutputStream());
+                response.setContentType("image/jpeg");
+                InputStream is = new ByteArrayInputStream(byteArray);
+                IOUtils.copy(is, response.getOutputStream());
+                log.debug("Every thing works fine");
         }
     }
 }

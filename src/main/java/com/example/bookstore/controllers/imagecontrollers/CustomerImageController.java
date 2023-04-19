@@ -22,6 +22,8 @@ import java.io.InputStream;
 @Controller
 public class CustomerImageController {
 
+    private final static String errorPage = "error/400error";
+
     private final ImageService imageService;
     private final CustomerService customerService;
 
@@ -30,29 +32,35 @@ public class CustomerImageController {
         this.customerService = customerService;
     }
 
-    @GetMapping("customer/{customerId}/image")
+    @GetMapping("customer/{customerId}/newImage")
     public String showUploadForm(@PathVariable Long customerId, Model model){
-        model.addAttribute("customer", customerService.findById(customerId));
-
+        Customer customer = customerService.findById(customerId);
+        if(customer == null){
+            model.addAttribute("exception", new Exception("There is no customer with id: " + customerId));
+            return errorPage;
+        }
+        model.addAttribute("customer", customer);
         return "customer/imageuploadform";
     }
 
-    @PostMapping("customer/{customerId}/image")
-    public String handleImagePost(@PathVariable Long customerId, @RequestParam("imagefile") MultipartFile file){
+    @PostMapping("customer/{customerId}/newImage")
+    public String handleImagePost(@PathVariable Long customerId, @RequestParam("imagefile") MultipartFile file, Model model){
         Customer savedCustomer = customerService.findById(customerId);
-
         if(savedCustomer != null) {
-            imageService.saveCustomerImage(customerService.findById(customerId), file);
+            imageService.saveCustomerImage(savedCustomer, file);
         }else {
-            log.error("CustomerImageController savedCustomer with id :" + customerId + " is null");
+            model.addAttribute("exception", new Exception("There is no customer with id: " + customerId));
+            return errorPage;
         }
         return "redirect:/customer/" + customerId + "/show";
     }
 
-    @GetMapping("customer/{customerId}/customerimage")
+    @GetMapping("customer/{customerId}/image")
     public void renderImageFromDB(@PathVariable Long customerId, HttpServletResponse response) throws IOException {
         Customer customer = customerService.findById(customerId);
-        if (customer.getImage() != null) {
+        if(customer == null){
+            log.error("CustomerImageController.renderImageFromDB(), error : there is no customer with id" + customerId);
+        } else if (customer.getImage() != null) {
             byte[] byteArray = new byte[customer.getImage().length];
             int i = 0;
 

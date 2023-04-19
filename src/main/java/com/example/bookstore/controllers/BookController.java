@@ -14,6 +14,8 @@ public class BookController {
 
     private static final String bookForm = "/book/bookform";
 
+    private final static String errorPage = "/error/400error";
+
     private final BookService bookService;
 
     public BookController(BookService bookService){
@@ -31,7 +33,7 @@ public class BookController {
         Book book = bookService.findById(id);
         if(book == null){
             model.addAttribute("exception", new Exception("There is no book with id: " + id));
-            return "/error/400error";
+            return errorPage;
         }
         model.addAttribute("book", book);
         return "book/show";
@@ -58,7 +60,7 @@ public class BookController {
         Book book = bookService.findById(id);
         if(book == null){
             model.addAttribute("exception", new Exception("There is no book with id: " + id));
-            return "/error/400error";
+            return errorPage;
         }
         model.addAttribute(book);
         return bookForm;
@@ -68,7 +70,7 @@ public class BookController {
     public String processUpdateBookForm(@Valid Book book, BindingResult result, @PathVariable Long id, Model model){
         if(bookService.findById(id) == null){
             model.addAttribute("exception", new Exception("There is no book with id: " + id));
-            return "/error/400error";
+            return errorPage;
         }
         if(result.hasErrors()){
             return bookForm;
@@ -83,7 +85,7 @@ public class BookController {
     public String deleteBook(@PathVariable Long id, Model model){
         if(bookService.findById(id) == null){
             model.addAttribute("exception", new Exception("There is no book with id: " + id));
-            return "/error/400error";
+            return errorPage;
         }
         bookService.deleteById(id);
         return "redirect:/books";

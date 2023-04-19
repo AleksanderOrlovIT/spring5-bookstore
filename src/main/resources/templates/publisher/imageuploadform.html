@@ -29,7 +29,7 @@
             <div class="row">
               <div class="col-md-5">
                 <form  action="http:\\localhost" method="post" enctype="multipart/form-data"
-                       th:action="@{'/publisher/' + ${publisher.getId()} + '/image'}">
+                       th:action="@{'/publisher/' + ${publisher.getId()} + '/newImage'}">
                   <label class="control-label" style="font-size: 20px;">Select File</label>
                   <input id="imagefile" name="imagefile" type="file" class="file" style="font-size: 20px;">
                   </br>

@@ -17,6 +17,8 @@ public class CustomerController {
 
     private final static String customerForm = "/customer/customerform";
 
+    private final static String errorPage = "/error/400error";
+
     private final CustomerService customerService;
 
     public CustomerController(CustomerService customerService) {
@@ -34,7 +36,7 @@ public class CustomerController {
         Customer customer = customerService.findById(id);
         if(customer == null){
             model.addAttribute("exception", new Exception("There is no customer with id: " + id));
-            return "/error/400error";
+            return errorPage;
         }
         model.addAttribute("customer", customer);
         return "customer/show";
@@ -61,7 +63,7 @@ public class CustomerController {
         Customer customer = customerService.findById(id);
         if(customer == null){
             model.addAttribute("exception", new Exception("There is no customer with id: " + id));
-            return "/error/400error";
+            return errorPage;
         }
         model.addAttribute(customer);
         return customerForm;
@@ -72,7 +74,7 @@ public class CustomerController {
                                             Model model){
         if(customerService.findById(id) == null){
             model.addAttribute("exception", new Exception("There is no customer with id: " + id));
-            return "/error/400error";
+            return errorPage;
         }
         if(result.hasErrors()){
             return customerForm;
@@ -86,7 +88,7 @@ public class CustomerController {
     public String deleteCustomer(@PathVariable Long id, Model model){
         if(customerService.findById(id) == null){
             model.addAttribute("exception", new Exception("There is no customer with id: " + id));
-            return "/error/400error";
+            return errorPage;
         }
         customerService.deleteById(id);
         return "redirect:/customers";

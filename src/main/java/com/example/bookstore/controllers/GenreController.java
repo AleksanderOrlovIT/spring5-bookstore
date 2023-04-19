@@ -18,6 +18,8 @@ public class GenreController {
 
     private final static String genreForm = "/genre/genreform";
 
+    private final static String errorPage = "/error/400error";
+
     private final GenreService genreService;
 
     public GenreController(GenreService genreService) {
@@ -35,7 +37,7 @@ public class GenreController {
         Genre genre = genreService.findById(id);
         if(genre == null){
             model.addAttribute("exception", new Exception("There is no genre with id: " + id));
-            return "/error/400error";
+            return errorPage;
         }
         model.addAttribute("genre", genre);
         return "genre/show";
@@ -62,7 +64,7 @@ public class GenreController {
         Genre genre = genreService.findById(id);
         if(genre == null){
             model.addAttribute("exception", new Exception("There is no genre with id: " + id));
-            return "/error/400error";
+            return errorPage;
         }
         model.addAttribute(genre);
         return genreForm;
@@ -73,7 +75,7 @@ public class GenreController {
                                          Model model){
         if(genreService.findById(id) == null){
             model.addAttribute("exception", new Exception("There is no genre with id: " + id));
-            return "/error/400error";
+            return errorPage;
         }
         if(result.hasErrors()){
             return genreForm;
@@ -87,7 +89,7 @@ public class GenreController {
     public String deleteGenre(@PathVariable Long id, Model model){
         if(genreService.findById(id) == null){
             model.addAttribute("exception", new Exception("There is no genre with id: " + id));
-            return "/error/400error";
+            return errorPage;
         }
         genreService.deleteById(id);
         return "redirect:/genres";

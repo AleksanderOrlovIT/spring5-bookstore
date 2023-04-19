@@ -22,6 +22,8 @@ import java.io.InputStream;
 @Controller
 public class PublisherImageController {
 
+    private final static String errorPage = "error/400error";
+
     private final ImageService imageService;
     private final PublisherService publisherService;
 
@@ -30,29 +32,35 @@ public class PublisherImageController {
         this.publisherService = publisherService;
     }
 
-    @GetMapping("publisher/{publisherId}/image")
+    @GetMapping("publisher/{publisherId}/newImage")
     public String showUploadForm(@PathVariable Long publisherId, Model model){
-        model.addAttribute("publisher", publisherService.findById(publisherId));
-
+        Publisher publisher = publisherService.findById(publisherId);
+        if(publisher == null){
+            model.addAttribute("exception", new Exception("There is no publisher with id: " + publisherId));
+            return errorPage;
+        }
+        model.addAttribute("publisher", publisher);
         return "publisher/imageuploadform";
     }
 
-    @PostMapping("publisher/{publisherId}/image")
-    public String handleImagePost(@PathVariable Long publisherId, @RequestParam("imagefile") MultipartFile file){
+    @PostMapping("publisher/{publisherId}/newImage")
+    public String handleImagePost(@PathVariable Long publisherId, @RequestParam("imagefile") MultipartFile file, Model model){
         Publisher savedPublisher = publisherService.findById(publisherId);
-
         if(savedPublisher != null) {
-            imageService.savePublisherImage(publisherService.findById(publisherId), file);
+            imageService.savePublisherImage(savedPublisher, file);
         }else {
-            log.error("PublisherImageController savedPublisher with id :" + publisherId + " is null");
+            model.addAttribute("exception", new Exception("There is no publisher with id: " + publisherId));
+            return errorPage;
         }
         return "redirect:/publisher/" + publisherId + "/show";
     }
 
-    @GetMapping("publisher/{publisherId}/publisherimage")
+    @GetMapping("publisher/{publisherId}/image")
     public void renderImageFromDB(@PathVariable Long publisherId, HttpServletResponse response) throws IOException {
         Publisher publisher = publisherService.findById(publisherId);
-        if (publisher.getImage() != null) {
+        if(publisher == null){
+            log.error("PublisherImageController.renderImageFromDB(), error : there is no publisher with id" + publisherId);
+        } else if (publisher.getImage() != null) {
             byte[] byteArray = new byte[publisher.getImage().length];
             int i = 0;
 

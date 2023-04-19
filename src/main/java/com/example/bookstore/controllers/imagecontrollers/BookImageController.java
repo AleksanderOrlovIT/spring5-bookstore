@@ -19,6 +19,8 @@ import java.io.InputStream;
 @Controller
 public class BookImageController {
 
+    private final static String errorPage = "error/400error";
+
     private final ImageService imageService;
     private final BookService bookService;
 
@@ -27,35 +29,41 @@ public class BookImageController {
         this.bookService = bookService;
     }
 
-    @GetMapping("book/{bookId}/image")
-    public String showUploadForm(@PathVariable Long bookId, Model model){
-        model.addAttribute("book", bookService.findById(bookId));
+    @GetMapping("book/{bookId}/newImage")
+    public String showUploadForm(@PathVariable Long bookId, Model model) {
+        Book book = bookService.findById(bookId);
+        if (book == null) {
+            model.addAttribute("exception", new Exception("There is no book with id: " + bookId));
+            return errorPage;
+        }
+        model.addAttribute("book", book);
 
         return "book/imageuploadform";
     }
 
-    @PostMapping("book/{bookId}/image")
-    public String handleImagePost(@PathVariable Long bookId, @RequestParam("imagefile") MultipartFile file){
-
+    @PostMapping("book/{bookId}/newImage")
+    public String handleImagePost(@PathVariable Long bookId, @RequestParam("imagefile") MultipartFile file, Model model) {
         Book savedBook = bookService.findById(bookId);
-
-        if(savedBook != null) {
+        if (savedBook != null) {
             imageService.saveBookImage(savedBook, file);
-        }else {
-            log.error("BookImageController savedBook with id :" + bookId + " is null");
+        } else {
+            model.addAttribute("exception", new Exception("There is no book with id: " + bookId));
+            return errorPage;
         }
 
         return "redirect:/book/" + bookId + "/show";
     }
 
-    @GetMapping("book/{bookId}/bookimage")
+    @GetMapping("book/{bookId}/image")
     public void renderImageFromDB(@PathVariable Long bookId, HttpServletResponse response) throws IOException {
         Book book = bookService.findById(bookId);
-        if (book.getImage() != null) {
+        if (book == null) {
+            log.error("BookImageController.renderImageFromDB(), error : there is no book with id" + bookId);
+        } else if (book.getImage() != null) {
             byte[] byteArray = new byte[book.getImage().length];
             int i = 0;
 
-            for (Byte wrappedByte : book.getImage()){
+            for (Byte wrappedByte : book.getImage()) {
                 byteArray[i++] = wrappedByte;
             }
 

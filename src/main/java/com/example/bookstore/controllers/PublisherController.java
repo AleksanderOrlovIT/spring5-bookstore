@@ -17,6 +17,8 @@ public class PublisherController {
 
     private final static String publisherForm = "/publisher/publisherform";
 
+    private final static String errorPage = "/error/400error";
+
     private final PublisherService publisherService;
 
     public PublisherController(PublisherService publisherService) {
@@ -34,7 +36,7 @@ public class PublisherController {
         Publisher publisher = publisherService.findById(id);
         if(publisher == null){
             model.addAttribute("exception", new Exception("There is no publisher with id: " + id));
-            return "/error/400error";
+            return errorPage;
         }
         model.addAttribute("publisher", publisher);
         return "publisher/show";
@@ -61,7 +63,7 @@ public class PublisherController {
         Publisher publisher = publisherService.findById(id);
         if(publisher == null){
             model.addAttribute("exception", new Exception("There is no publisher with id: " + id));
-            return "/error/400error";
+            return errorPage;
         }
         model.addAttribute(publisher);
         return publisherForm;
@@ -72,7 +74,7 @@ public class PublisherController {
                                              Model model){
         if(publisherService.findById(id) == null){
             model.addAttribute("exception", new Exception("There is no publisher with id: " + id));
-            return "/error/400error";
+            return errorPage;
         }
         if(result.hasErrors()){
             return publisherForm;
@@ -86,7 +88,7 @@ public class PublisherController {
     public String deletePublisher(@PathVariable Long id, Model model){
         if(publisherService.findById(id) == null){
             model.addAttribute("exception", new Exception("There is no publisher with id: " + id));
-            return "/error/400error";
+            return errorPage;
         }
         publisherService.deleteById(id);
         return "redirect:/publishers";
