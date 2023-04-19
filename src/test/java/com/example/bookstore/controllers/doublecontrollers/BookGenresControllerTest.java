@@ -28,6 +28,8 @@ class BookGenresControllerTest {
 
     private final static String bookGenreForm = "book/bookgenres/bookgenreform";
 
+    private static final String errorPage = "/error/400error";
+
     @Mock
     BookService bookService;
 
@@ -47,7 +49,7 @@ class BookGenresControllerTest {
     }
 
     @Test
-    void getAllBookCustomers() throws Exception{
+    void getAllBookGenres() throws Exception{
         Set<Genre> genresSet = new HashSet<>();
         genresSet.add(Genre.builder().id(1L).build());
         genresSet.add(Genre.builder().id(2L).build());
@@ -66,6 +68,16 @@ class BookGenresControllerTest {
     }
 
     @Test
+    void getAllBookGenresWithBrokenBookId() throws Exception{
+        mockMvc.perform(get("/book/1/genres"))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("exception"))
+                .andExpect(view().name(errorPage));
+
+        verify(bookService, times(1)).findById(anyLong());
+    }
+
+    @Test
     void initCreationForm() throws Exception{
         when(bookService.findById(anyLong())).thenReturn(bookMock);
 
@@ -76,6 +88,16 @@ class BookGenresControllerTest {
 
         verify(bookService, times(1)).findById(anyLong());
         verifyNoInteractions(genreService);
+    }
+
+    @Test
+    void initCreationFormWithBrokenBookId() throws Exception{
+        mockMvc.perform(get("/book/1/genre/new"))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("exception"))
+                .andExpect(view().name(errorPage));
+
+        verify(bookService, times(1)).findById(anyLong());
     }
 
     @Test
@@ -100,7 +122,17 @@ class BookGenresControllerTest {
     }
 
     @Test
-    void deleteAuthor() throws Exception{
+    void processCreationFormWithBrokenBookId() throws Exception{
+        mockMvc.perform(post("/book/1/genre/new"))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("exception"))
+                .andExpect(view().name(errorPage));
+
+        verify(bookService, times(1)).findById(anyLong());
+    }
+
+    @Test
+    void deleteBookGenre() throws Exception{
         Genre genre = Genre.builder().id(1L).build();
         Book book = Book.builder().id(1L).build();
         genre.getBooks().add(book);
@@ -119,5 +151,28 @@ class BookGenresControllerTest {
         verify(genreService, times(1)).save(any());
         verify(bookService, times(2)).findById(anyLong());
         verify(bookService, times(1)).save(any());
+    }
+
+    @Test
+    void deleteBookGenreWithBrokenBookId() throws Exception{
+        mockMvc.perform(get("/book/1/genre/1/delete"))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("exception"))
+                .andExpect(view().name(errorPage));
+
+        verify(bookService, times(1)).findById(anyLong());
+    }
+
+    @Test
+    void deleteBookGenreWithBrokenGenreId() throws Exception{
+        when(bookService.findById(anyLong())).thenReturn(bookMock);
+
+        mockMvc.perform(get("/book/1/genre/1/delete"))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("exception"))
+                .andExpect(view().name(errorPage));
+
+        verify(bookService, times(1)).findById(anyLong());
+        verify(genreService, times(1)).findById(anyLong());
     }
 }

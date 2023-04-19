@@ -31,6 +31,8 @@ class AuthorBooksControllerTest {
 
     private final static String authorBookForm = "author/authorbooks/authorbookform";
 
+    private static final String errorPage = "/error/400error";
+
     @Mock
     BookService bookService;
 
@@ -70,6 +72,16 @@ class AuthorBooksControllerTest {
     }
 
     @Test
+    void getAllAuthorsBooksWithBrokenAuthorId() throws Exception{
+        mockMvc.perform(get("/author/1/books"))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("exception"))
+                .andExpect(view().name(errorPage));
+
+        verify(authorService, times(1)).findById(anyLong());
+    }
+
+    @Test
     void initCreationForm() throws Exception{
         when(authorService.findById(anyLong())).thenReturn(authorMock);
 
@@ -80,6 +92,16 @@ class AuthorBooksControllerTest {
 
         verify(authorService, times(1)).findById(anyLong());
         verifyNoInteractions(bookService);
+    }
+
+    @Test
+    void initCreationFormWithBrokenAuthorId() throws Exception{
+        mockMvc.perform(get("/author/1/book/new"))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("exception"))
+                .andExpect(view().name(errorPage));
+
+        verify(authorService, times(1)).findById(anyLong());
     }
 
     @Test
@@ -106,6 +128,16 @@ class AuthorBooksControllerTest {
     }
 
     @Test
+    void processCreationFormWithBrokenAuthorId() throws Exception{
+        mockMvc.perform(post("/author/1/book/new"))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("exception"))
+                .andExpect(view().name(errorPage));
+
+        verify(authorService, times(1)).findById(anyLong());
+    }
+
+    @Test
     void deleteBook() throws Exception{
         Author author = Author.builder().id(1L).build();
         Book book = Book.builder().id(1L).build();
@@ -124,6 +156,29 @@ class AuthorBooksControllerTest {
         verify(authorService, times(1)).save(any());
         verify(authorService, times(2)).findById(anyLong());
         verify(bookService, times(1)).save(any());
+        verify(bookService, times(1)).findById(anyLong());
+    }
+
+    @Test
+    void deleteBookWithBrokenAuthorId() throws Exception{
+        mockMvc.perform(get("/author/1/book/1/delete"))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("exception"))
+                .andExpect(view().name(errorPage));
+
+        verify(authorService, times(1)).findById(anyLong());
+    }
+
+    @Test
+    void deleteBookWithBrokenBookId() throws Exception{
+        when(authorService.findById(anyLong())).thenReturn(authorMock);
+
+        mockMvc.perform(get("/author/1/book/1/delete"))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("exception"))
+                .andExpect(view().name(errorPage));
+
+        verify(authorService, times(1)).findById(anyLong());
         verify(bookService, times(1)).findById(anyLong());
     }
 }

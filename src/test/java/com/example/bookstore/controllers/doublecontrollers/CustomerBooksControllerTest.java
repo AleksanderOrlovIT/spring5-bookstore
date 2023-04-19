@@ -31,6 +31,8 @@ class CustomerBooksControllerTest {
 
     private final static String customerBookForm = "customer/customerbooks/customerbookform";
 
+    private static final String errorPage = "/error/400error";
+
     @Mock
     BookService bookService;
 
@@ -69,6 +71,16 @@ class CustomerBooksControllerTest {
     }
 
     @Test
+    void getAllCustomersBooksWithBrokenCustomerId() throws Exception{
+        mockMvc.perform(get("/customer/1/books"))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("exception"))
+                .andExpect(view().name(errorPage));
+
+        verify(customerService, times(1)).findById(anyLong());
+    }
+
+    @Test
     void initCreationForm() throws Exception{
         when(customerService.findById(anyLong())).thenReturn(customerMock);
         mockMvc.perform(get("/customer/1/book/new"))
@@ -78,6 +90,16 @@ class CustomerBooksControllerTest {
 
         verify(customerService, times(1)).findById(anyLong());
         verifyNoInteractions(bookService);
+    }
+
+    @Test
+    void initCreationFormWithBrokenCustomerId() throws Exception{
+        mockMvc.perform(get("/customer/1/book/new"))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("exception"))
+                .andExpect(view().name(errorPage));
+
+        verify(customerService, times(1)).findById(anyLong());
     }
 
     @Test
@@ -104,7 +126,17 @@ class CustomerBooksControllerTest {
     }
 
     @Test
-    void deleteBook() throws Exception{
+    void processCreationFormWithBrokenCustomerId() throws Exception{
+        mockMvc.perform(post("/customer/1/book/new"))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("exception"))
+                .andExpect(view().name(errorPage));
+
+        verify(customerService, times(1)).findById(anyLong());
+    }
+
+    @Test
+    void deleteCustomerBook() throws Exception{
         Customer customer = Customer.builder().id(1L).build();
         Book book = Book.builder().id(1L).build();
         customer.getBooks().add(book);
@@ -122,6 +154,29 @@ class CustomerBooksControllerTest {
         verify(customerService, times(1)).save(any());
         verify(customerService, times(2)).findById(anyLong());
         verify(bookService, times(1)).save(any());
+        verify(bookService, times(1)).findById(anyLong());
+    }
+
+    @Test
+    void deleteCustomerBookWithBrokenCustomerId() throws Exception{
+        mockMvc.perform(get("/customer/1/book/1/delete"))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("exception"))
+                .andExpect(view().name(errorPage));
+
+        verify(customerService, times(1)).findById(anyLong());
+    }
+
+    @Test
+    void deleteCustomerBookWithBrokenBookId() throws Exception{
+        when(customerService.findById(anyLong())).thenReturn(customerMock);
+
+        mockMvc.perform(get("/customer/1/book/1/delete"))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("exception"))
+                .andExpect(view().name(errorPage));
+
+        verify(customerService, times(1)).findById(anyLong());
         verify(bookService, times(1)).findById(anyLong());
     }
 }

@@ -31,6 +31,8 @@ class PublisherBooksControllerTest {
 
     private final static String publisherBookForm = "publisher/publisherbooks/publisherbookform";
 
+    private static final String errorPage = "/error/400error";
+
     @Mock
     BookService bookService;
 
@@ -69,6 +71,16 @@ class PublisherBooksControllerTest {
     }
 
     @Test
+    void getAllPublishersBooksWithBrokenPublisherId() throws Exception{
+        mockMvc.perform(get("/publisher/1/books"))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("exception"))
+                .andExpect(view().name(errorPage));
+
+        verify(publisherService, times(1)).findById(anyLong());
+    }
+
+    @Test
     void initCreationForm() throws Exception{
         when(publisherService.findById(anyLong())).thenReturn(publisherMock);
 
@@ -79,6 +91,16 @@ class PublisherBooksControllerTest {
 
         verify(publisherService, times(1)).findById(anyLong());
         verifyNoInteractions(bookService);
+    }
+
+    @Test
+    void initCreationFormWithBrokenPublisherId() throws Exception{
+        mockMvc.perform(get("/publisher/1/book/new"))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("exception"))
+                .andExpect(view().name(errorPage));
+
+        verify(publisherService, times(1)).findById(anyLong());
     }
 
     @Test
@@ -105,7 +127,17 @@ class PublisherBooksControllerTest {
     }
 
     @Test
-    void deleteBook() throws Exception{
+    void processCreationFormWithBrokenPublisherId() throws Exception{
+        mockMvc.perform(post("/publisher/1/book/new"))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("exception"))
+                .andExpect(view().name(errorPage));
+
+        verify(publisherService, times(1)).findById(anyLong());
+    }
+
+    @Test
+    void deletePublishersBook() throws Exception{
         Publisher publisher = Publisher.builder().id(1L).build();
         Book book = Book.builder().id(1L).build();
         publisher.getBooks().add(book);
@@ -123,6 +155,29 @@ class PublisherBooksControllerTest {
         verify(publisherService, times(1)).save(any());
         verify(publisherService, times(2)).findById(anyLong());
         verify(bookService, times(1)).save(any());
+        verify(bookService, times(1)).findById(anyLong());
+    }
+
+    @Test
+    void deletePublishersBookWithBrokenPublisherId() throws Exception{
+        mockMvc.perform(get("/publisher/1/book/1/delete"))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("exception"))
+                .andExpect(view().name(errorPage));
+
+        verify(publisherService, times(1)).findById(anyLong());
+    }
+
+    @Test
+    void deletePublishersBookWithBrokenBookId() throws Exception{
+        when(publisherService.findById(anyLong())).thenReturn(publisherMock);
+
+        mockMvc.perform(get("/publisher/1/book/1/delete"))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("exception"))
+                .andExpect(view().name(errorPage));
+
+        verify(publisherService, times(1)).findById(anyLong());
         verify(bookService, times(1)).findById(anyLong());
     }
 }
