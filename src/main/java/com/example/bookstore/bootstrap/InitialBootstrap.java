@@ -22,31 +22,37 @@ public class InitialBootstrap implements CommandLineRunner {
     private final CustomerService customerService;
     private final GenreService genreService;
     private final ImageService imageService;
+    private final RoleService roleService;
 
     public InitialBootstrap(BookService bookService, AuthorService authorService, PublisherService publisherService,
-                            CustomerService customerService,GenreService genreService, ImageService imageService) {
+                            CustomerService customerService,GenreService genreService, ImageService imageService,
+                            RoleService roleService) {
         this.bookService = bookService;
         this.authorService = authorService;
         this.publisherService = publisherService;
         this.customerService = customerService;
         this.genreService = genreService;
         this.imageService = imageService;
+        this.roleService = roleService;
     }
 
     private void loadData() {
         //Init
         Author authorOscar = Author.builder().firstName("Oscar").lastName("Wilde").build();
-        Author authorJorj = Author.builder().firstName("George").lastName("Orwell").build();
+        Author authorGeorge = Author.builder().firstName("George").lastName(    "Orwell").build();
 
         Book bookDorian = Book.builder().name("Dorian Gray").price(BigDecimal.valueOf(5.0)).build();
         Book book1984 = Book.builder().name("1984").price(BigDecimal.valueOf(6.0)).build();
 
         Publisher publisherLondon = Publisher.builder().name("LondonPublicity").address("London").build();
 
-        Customer customer1 = Customer.builder().userName("SashaOrlov").balance(BigDecimal.valueOf(11.0)).build();
+        Customer customer1 = Customer.builder().userName("SashaOrlov").password("passSasha")
+                .balance(BigDecimal.valueOf(11.0)).build();
 
         Genre genrePhilFic = Genre.builder().name("Philosophical fiction").build();
         Genre genreDistPolFic = Genre.builder().name("Dystopian political fiction").build();
+
+        Role customerRole = Role.builder().name("Customer").build();
 
 
         //adding to sets
@@ -55,7 +61,7 @@ public class InitialBootstrap implements CommandLineRunner {
         bookDorian.getCustomers().add(customer1);
         bookDorian.getGenres().add(genrePhilFic);
 
-        book1984.getAuthors().add(authorJorj);
+        book1984.getAuthors().add(authorGeorge);
         book1984.getPublishers().add(publisherLondon);
         book1984.getCustomers().add(customer1);
         book1984.getGenres().add(genreDistPolFic);
@@ -63,23 +69,28 @@ public class InitialBootstrap implements CommandLineRunner {
         authorOscar.getBooks().add(bookDorian);
         authorOscar.getGenres().add(genrePhilFic);
 
-        authorJorj.getBooks().add(book1984);
-        authorJorj.getGenres().add(genreDistPolFic);
+        authorGeorge.getBooks().add(book1984);
+        authorGeorge.getGenres().add(genreDistPolFic);
 
         publisherLondon.getBooks().add(book1984);
         publisherLondon.getBooks().add(bookDorian);
 
         customer1.getBooks().add(book1984);
         customer1.getBooks().add(bookDorian);
+        customer1.setRole(customerRole);
+
+        customerRole.getCustomers().add(customer1);
 
         //saving
+        roleService.save(customerRole);
+
         genreService.save(genrePhilFic);
         genreService.save(genreDistPolFic);
 
         publisherService.save(publisherLondon);
 
         authorService.save(authorOscar);
-        authorService.save(authorJorj);
+        authorService.save(authorGeorge);
 
         customerService.save(customer1);
 

@@ -18,18 +18,23 @@ import java.util.Set;
 public class Customer extends BaseEntity{
 
     @Builder
-    public Customer(Long id, String userName, BigDecimal balance, Set<Book> books) {
+    public Customer(Long id, String userName, String password, BigDecimal balance, Set<Book> books, Role role) {
         super(id);
         this.userName = userName;
+        this.password = password;
         this.balance = balance;
         if(books != null) {
             this.books = books;
         }
+        this.role = role;
     }
 
     @NotEmpty
-    @Column(name = "userName")
+    @Column(name = "userName", unique = true)
     private String userName;
+
+    @Column(name = "password", nullable = false)
+    private String password;
 
     @NotNull
     @DecimalMin("0.0")
@@ -41,4 +46,7 @@ public class Customer extends BaseEntity{
 
     @ManyToMany(mappedBy = "customers")
     private Set<Book> books = new HashSet<>();
+
+    @ManyToOne
+    private Role role;
 }

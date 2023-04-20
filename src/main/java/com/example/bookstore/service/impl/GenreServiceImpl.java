@@ -33,43 +33,43 @@ public class GenreServiceImpl implements GenreService {
 
     @Override
     public Genre save(Genre genre) {
-        return genreRepository.save(genre);
+        if (genre != null)
+            return genreRepository.save(genre);
+        else
+            return null;
     }
 
     @Override
     public void delete(Genre genre) {
-        if (genreRepository.findById(genre.getId()).isPresent()) {
-            if(genre.getBooks() != null){
-                for (Book book : genre.getBooks()) {
-                    book.getGenres().remove(genre);
-                }
-            }
-            if (genre.getAuthors() != null) {
-                for (Author author : genre.getAuthors()) {
-                    author.getGenres().remove(genre);
-                }
-            }
+        if (genre != null && genreRepository.findById(genre.getId()).isPresent()) {
+            removeBeforeDelete(genre);
             genreRepository.delete(genre);
         }
     }
 
     @Override
     public void deleteById(Long id) {
-        if(genreRepository.findById(id).isPresent()) {
-            Genre genre = findById(id);
-            if (genre != null) {
-                if (genre.getBooks() != null) {
-                    for (Book book : genre.getBooks()) {
-                        book.getGenres().remove(genre);
-                    }
-                }
-                if (genre.getAuthors() != null) {
-                    for (Author author : genre.getAuthors()) {
-                        author.getGenres().remove(genre);
-                    }
+        Genre genre = genreRepository.findById(id).orElse(null);
+        if (genre != null) {
+            removeBeforeDelete(genre);
+            genreRepository.deleteById(id);
+        }
+    }
+
+    public void removeBeforeDelete(Genre genre){
+        if (genre != null) {
+            Set<Book> books = genre.getBooks();
+            if (books != null) {
+                for (Book book : books) {
+                    book.getGenres().remove(genre);
                 }
             }
-            genreRepository.deleteById(id);
+            Set<Author> authors = genre.getAuthors();
+            if (authors != null) {
+                for (Author author : authors) {
+                    author.getGenres().remove(genre);
+                }
+            }
         }
     }
 

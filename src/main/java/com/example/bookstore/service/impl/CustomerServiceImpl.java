@@ -32,17 +32,16 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public Customer save(Customer customer) {
-        return customerRepository.save(customer);
+        if(customer != null)
+            return customerRepository.save(customer);
+        else
+            return null;
     }
 
     @Override
     public void delete(Customer customer) {
-        if(customerRepository.findById(customer.getId()).isPresent()){
-            if(customer.getBooks() != null){
-                for(Book book : customer.getBooks()){
-                    book.getCustomers().remove(customer);
-                }
-            }
+        if(customer != null && customerRepository.findById(customer.getId()).isPresent()){
+            removeBeforeDelete(customer);
             customerRepository.delete(customer);
         }
     }
@@ -50,12 +49,19 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public void deleteById(Long id) {
         Customer customer = findById(id);
-        if(customer != null && customer.getBooks() != null){
-            for(Book book : customer.getBooks()){
+        if(customer != null){
+            removeBeforeDelete(customer);
+            customerRepository.deleteById(id);
+        }
+    }
+
+    public void removeBeforeDelete(Customer customer){
+        Set<Book> books = customer.getBooks();
+        if(books != null){
+            for(Book book : books){
                 book.getCustomers().remove(customer);
             }
         }
-        customerRepository.deleteById(id);
     }
 
     @Override

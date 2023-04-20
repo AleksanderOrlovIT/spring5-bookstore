@@ -34,12 +34,15 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Book save(Book book) {
-        return bookRepository.save(book);
+        if(book != null)
+            return bookRepository.save(book);
+        else
+            return null;
     }
 
     @Override
     public void delete(Book book) {
-        if(bookRepository.findById(book.getId()).isPresent())
+        if(book != null && bookRepository.findById(book.getId()).isPresent())
             bookRepository.delete(book);
     }
 
@@ -51,16 +54,19 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Book saveBookSets(Book newBook, Book oldBook) {
-        for(Author author : oldBook.getAuthors()){
-            newBook.getAuthors().add(author);
+        if(newBook != null && oldBook != null) {
+            for (Author author : oldBook.getAuthors()) {
+                newBook.getAuthors().add(author);
+            }
+            for (Publisher publisher : oldBook.getPublishers()) {
+                newBook.getPublishers().add(publisher);
+            }
+            for (Customer customer : oldBook.getCustomers()) {
+                newBook.getCustomers().add(customer);
+            }
+            return newBook;
         }
-        for(Publisher publisher : oldBook.getPublishers()){
-            newBook.getPublishers().add(publisher);
-        }
-        for(Customer customer : oldBook.getCustomers()){
-            newBook.getCustomers().add(customer);
-        }
-        return newBook;
+        return null;
     }
 
     @Override

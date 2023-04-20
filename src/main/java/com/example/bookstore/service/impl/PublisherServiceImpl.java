@@ -32,31 +32,35 @@ public class PublisherServiceImpl implements PublisherService {
 
     @Override
     public Publisher save(Publisher publisher) {
-        return publisherRepository.save(publisher);
+        if(publisher != null)
+            return publisherRepository.save(publisher);
+        else
+            return null;
     }
 
     @Override
     public void delete(Publisher publisher) {
-        if(publisherRepository.findById(publisher.getId()).isPresent()) {
-            if(publisher.getBooks() != null){
-                for(Book book : publisher.getBooks()){
-                    book.getPublishers().remove(publisher);
-                }
-            }
+        if(publisher != null && publisherRepository.findById(publisher.getId()).isPresent()) {
+            removeBeforeDelete(publisher);
             publisherRepository.delete(publisher);
         }
     }
 
     @Override
     public void deleteById(Long id) {
-        if(publisherRepository.findById(id).isPresent()) {
-            Publisher publisher = findById(id);
-            if (publisher != null && publisher.getBooks() != null) {
-                for (Book book : publisher.getBooks()) {
-                    book.getPublishers().remove(publisher);
-                }
-            }
+        Publisher publisher = publisherRepository.findById(id).orElse(null);
+        if(publisher != null) {
+            removeBeforeDelete(publisher);
             publisherRepository.deleteById(id);
+        }
+    }
+
+    public void removeBeforeDelete(Publisher publisher){
+        Set<Book> books = publisher.getBooks();
+        if (books != null) {
+            for (Book book : books) {
+                book.getPublishers().remove(publisher);
+            }
         }
     }
 
