@@ -18,7 +18,7 @@ import java.util.Set;
 public class Customer extends BaseEntity{
 
     @Builder
-    public Customer(Long id, String userName, String password, BigDecimal balance, Set<Book> books, Role role) {
+    public Customer(Long id, String userName, String password, BigDecimal balance, Set<Book> books, Set<Role> roles) {
         super(id);
         this.userName = userName;
         this.password = password;
@@ -26,7 +26,8 @@ public class Customer extends BaseEntity{
         if(books != null) {
             this.books = books;
         }
-        this.role = role;
+        if(roles != null)
+            this.roles = roles;
     }
 
     @NotEmpty
@@ -47,6 +48,8 @@ public class Customer extends BaseEntity{
     @ManyToMany(mappedBy = "customers")
     private Set<Book> books = new HashSet<>();
 
-    @ManyToOne
-    private Role role;
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "customers_roles", joinColumns = @JoinColumn(name = "customer_id"),
+    inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles = new HashSet<>();
 }

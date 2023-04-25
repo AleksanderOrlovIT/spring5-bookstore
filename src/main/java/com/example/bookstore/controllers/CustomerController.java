@@ -2,6 +2,7 @@ package com.example.bookstore.controllers;
 
 import com.example.bookstore.model.Customer;
 import com.example.bookstore.service.CustomerService;
+import com.example.bookstore.service.RoleService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -21,8 +22,11 @@ public class CustomerController {
 
     private final CustomerService customerService;
 
-    public CustomerController(CustomerService customerService) {
+    private final RoleService roleService;
+
+    public CustomerController(CustomerService customerService, RoleService roleService) {
         this.customerService = customerService;
+        this.roleService = roleService;
     }
 
     @RequestMapping({"/customers", "/customers/show"})
@@ -53,6 +57,7 @@ public class CustomerController {
         if(result.hasErrors()){
             return customerForm;
         }else{
+            customer.getRoles().add(roleService.findByName("CustomerRole"));
             Customer savedCustomer = customerService.save(customer);
             return "redirect:/customer/" + savedCustomer.getId() + "/show";
         }

@@ -52,7 +52,7 @@ public class InitialBootstrap implements CommandLineRunner {
         Genre genrePhilFic = Genre.builder().name("Philosophical fiction").build();
         Genre genreDistPolFic = Genre.builder().name("Dystopian political fiction").build();
 
-        Role customerRole = Role.builder().name("Customer").build();
+        Role customerRole = Role.builder().name("CustomerRole").build();
 
 
         //adding to sets
@@ -77,7 +77,7 @@ public class InitialBootstrap implements CommandLineRunner {
 
         customer1.getBooks().add(book1984);
         customer1.getBooks().add(bookDorian);
-        customer1.setRole(customerRole);
+        customer1.getRoles().add(customerRole);
 
         customerRole.getCustomers().add(customer1);
 

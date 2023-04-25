@@ -4,6 +4,9 @@ import com.example.bookstore.model.Book;
 import com.example.bookstore.model.Customer;
 import com.example.bookstore.repositories.CustomerRepository;
 import com.example.bookstore.service.CustomerService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -11,6 +14,8 @@ import java.util.Set;
 
 @Service
 public class CustomerServiceImpl implements CustomerService {
+
+    PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     private final CustomerRepository customerRepository;
 
@@ -32,8 +37,10 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public Customer save(Customer customer) {
-        if(customer != null)
+        if(customer != null) {
+            encodePassword(customer);
             return customerRepository.save(customer);
+        }
         else
             return null;
     }
@@ -71,5 +78,10 @@ public class CustomerServiceImpl implements CustomerService {
                 return customer;
         }
         return null;
+    }
+
+    private void encodePassword(Customer customer) {
+        String encodedPassword = passwordEncoder.encode(customer.getPassword());
+        customer.setPassword(encodedPassword);
     }
 }

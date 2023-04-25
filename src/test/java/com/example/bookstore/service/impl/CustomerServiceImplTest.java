@@ -35,7 +35,7 @@ public class CustomerServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        returnCustomer = Customer.builder().id(customerId).userName(customerName).build();
+        returnCustomer = Customer.builder().id(customerId).userName(customerName).password("pass").build();
     }
 
     @Test
@@ -74,7 +74,7 @@ public class CustomerServiceImplTest {
     void saveWithId() {
         when(customerRepository.save(any())).thenReturn(returnCustomer);
 
-        Customer customer = customerService.save(Customer.builder().id(1L).build());
+        Customer customer = customerService.save(Customer.builder().id(1L).password("pass").build());
 
         assertNotNull(customer);
         verify(customerRepository).save(any());
@@ -84,7 +84,7 @@ public class CustomerServiceImplTest {
     void saveWithoutId(){
         when(customerRepository.save(any())).thenReturn(returnCustomer);
 
-        Customer customer = customerService.save(Customer.builder().build());
+        Customer customer = customerService.save(Customer.builder().password("pass").build());
 
         assertNotNull(customer);
         verify(customerRepository).save(any());

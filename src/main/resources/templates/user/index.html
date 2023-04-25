@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
-    <title>Publisher Home</title>
+    <title>Home page</title>
 
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
@@ -20,26 +20,22 @@
     <div class="row">
         <div class="col-md-6 col-md-offset-3">
             <div class="panel panel-primary">
+
                 <div class="panel-heading">
-                    <h1 class="panel-title" style="font-size: 25px">Main page</h1>
-                </div>
-                <div class="panel-body">
-                    <div class="table-responsive">
-                        <table class="table table-dark">
-                            <thead class="thead-inverse"></thead>
-                            <tr>
-                                <td><a href="#" th:href="@{'/books'}" style="font-size: 30px;">Books</a></td>
-                                <td><a href="#" th:href="@{'/authors'}" style="font-size: 30px;">Authors</a></td>
-                                <td><a href="#" th:href="@{'/publishers'}" style="font-size: 30px;">Publishers</a></td>
-                                <td><a href="#" th:href="@{'/customers'}" style="font-size: 30px;">Customers</a></td>
-                                <td><a href="#" th:href="@{'/genres'}" style="font-size: 30px;">Genres</a></td>
-                            </tr>
-                        </table>
+                    <div class="row">
+                        <div class="col-md-11">
+                            <h1 class="panel-title" style="font-size: 30px;">Home page</h1>
+                        </div>
+                        <div class="col-md-1" style="margin-left: 750px;">
+                            <a class="btn btn-default" href="#" th:href="@{'/'}" role="button"
+                               style="font-size: 20px">Main page</a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
 </body>
 </html>

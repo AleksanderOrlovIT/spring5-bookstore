@@ -59,8 +59,16 @@ public class RoleServiceImpl implements RoleService {
         Set<Customer> customers = role.getCustomers();
         if(customers != null){
             for(Customer customer : customers){
-                customer.setRole(null);
+                customer.getRoles().remove(role);
             }
         }
+    }
+
+    public Role findByName(String name){
+        for(Role role : roleRepository.findAll()){
+            if(role.getName().equals(name))
+                return role;
+        }
+        return null;
     }
 }

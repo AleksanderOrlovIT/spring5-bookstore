@@ -2,6 +2,7 @@ package com.example.bookstore.controllers;
 
 import com.example.bookstore.model.Customer;
 import com.example.bookstore.service.CustomerService;
+import com.example.bookstore.service.RoleService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -32,6 +33,9 @@ class CustomerControllerTest {
 
     @Mock
     CustomerService customerService;
+
+    @Mock
+    RoleService roleService;
 
     @InjectMocks
     CustomerController customerController;
