@@ -24,11 +24,15 @@
                 <div class="panel-heading">
                     <div class="row">
                         <div class="col-md-11">
-                            <h1 class="panel-title" style="font-size: 30px;">Home page</h1>
+                            <h1 class="panel-title" style="font-size: 30px;" th:text="${user.userName} + ' home page'">Home page</h1>
                         </div>
-                        <div class="col-md-1" style="margin-left: 750px;">
+                        <div class="btn-group" role="group">
                             <a class="btn btn-default" href="#" th:href="@{'/'}" role="button"
-                               style="font-size: 20px">Main page</a>
+                               style="font-size: 20px; margin-top: 20px; margin-right: 20px;">Login page</a>
+                            <a class="btn btn-success" href="#" th:href="@{'/user/' + ${user.id} + '/shop'}" role="button"
+                               style="font-size: 20px; margin-top: 20px; margin-right: 20px;">Buy books</a>
+                            <a class="btn btn-info" href="#" th:href="@{'/user/' + ${user.id} + '/myProfile'}" role="button"
+                               style="font-size: 20px; margin-top: 20px;">My Profile</a>
                         </div>
                     </div>
                 </div>
