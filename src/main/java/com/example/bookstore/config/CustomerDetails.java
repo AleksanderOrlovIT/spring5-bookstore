@@ -32,6 +32,10 @@ public class CustomerDetails implements UserDetails {
         return authorities;
     }
 
+    public Long getId(){
+        return customer.getId();
+    }
+
     @Override
     public String getPassword() {
         return customer.getPassword();

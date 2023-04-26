@@ -48,11 +48,14 @@ public class InitialBootstrap implements CommandLineRunner {
 
         Customer customer1 = Customer.builder().userName("SashaOrlov").password("passSasha")
                 .balance(BigDecimal.valueOf(11.0)).build();
+        Customer admin = Customer.builder().userName("admin").password("admin")
+                .balance(BigDecimal.valueOf(10000)).build();
 
         Genre genrePhilFic = Genre.builder().name("Philosophical fiction").build();
         Genre genreDistPolFic = Genre.builder().name("Dystopian political fiction").build();
 
         Role customerRole = Role.builder().name("CustomerRole").build();
+        Role adminRole = Role.builder().name("ADMIN").build();
 
 
         //adding to sets
@@ -79,10 +82,14 @@ public class InitialBootstrap implements CommandLineRunner {
         customer1.getBooks().add(bookDorian);
         customer1.getRoles().add(customerRole);
 
+        admin.getRoles().add(adminRole);
+
         customerRole.getCustomers().add(customer1);
+        adminRole.getCustomers().add(admin);
 
         //saving
         roleService.save(customerRole);
+        roleService.save(adminRole);
 
         genreService.save(genrePhilFic);
         genreService.save(genreDistPolFic);
@@ -93,6 +100,7 @@ public class InitialBootstrap implements CommandLineRunner {
         authorService.save(authorGeorge);
 
         customerService.save(customer1);
+        customerService.save(admin);
 
         bookService.save(book1984);
         bookService.save(bookDorian);

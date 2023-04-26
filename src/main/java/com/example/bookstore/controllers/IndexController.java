@@ -25,7 +25,7 @@ public class IndexController {
         this.roleService = roleService;
     }
 
-    @RequestMapping("/homePage")
+    @RequestMapping("/homepage")
     public String getHomePage(){
         return "index";
     }
@@ -47,5 +47,10 @@ public class IndexController {
             Customer savedCustomer = customerService.save(customer);
             return "redirect:/user/" + savedCustomer.getId() + "/homePage";
         }
+    }
+
+    @RequestMapping("/")
+    public String getFirstPage(){
+        return "firstpage";
     }
 }

@@ -6,9 +6,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Configuration
@@ -20,7 +21,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public WebSecurityConfig(CustomerService customerService) {
         this.customerService = customerService;
     }
-
     @Bean
     public CustomerDetailsService customerDetailsService() {
         return new CustomerDetailsService(customerService);
@@ -37,31 +37,30 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Override
-    public void configure(WebSecurity web) throws Exception {
-        web.ignoring()
-                .antMatchers("/webjars/**")
-                .antMatchers("/css/**")
-                .antMatchers("/js/**")
-                .antMatchers("/images/**");
-    }
-
-    @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable();
-        http.authorizeRequests()
+        http.csrf().disable()
+                .authorizeRequests()
                 .antMatchers("https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/**",
                         "/webjars/**", "/css/**", "/js/**", "/images/**" , "/resources/**").permitAll()
                 .antMatchers("/user/**").hasAuthority("CustomerRole")
-                .antMatchers("/index/**","/author/**", "/authors/**", "/book/**", "/books/**", "/customer/**",
+                .antMatchers("/homepage/**", "/index/**","/author/**", "/authors/**", "/book/**", "/books/**", "/customer/**",
                         "/customers/**", "/genre/**", "/genres/**", "/publisher/**", "/publishers/**")
                     .hasAuthority("ADMIN")
+                .antMatchers(HttpMethod.POST, "/register").permitAll()
+                .antMatchers(HttpMethod.GET, "/register").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
                 .usernameParameter("userName")
-                .defaultSuccessUrl("/user")
+                .defaultSuccessUrl("/findpath")
                 .permitAll()
                 .and()
                 .logout().logoutSuccessUrl("/").permitAll();
+    }
+
+    protected Long getId(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String name = authentication.getName();
+        return customerService.findByUserName(name).getId();
     }
 }
