@@ -38,6 +38,6 @@ class IndexControllerTest {
     void getHomePage() throws Exception {
         mockMvc.perform(get("/homePage"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("index"));
+                .andExpect(view().name("administratorhomepage"));
     }
 }

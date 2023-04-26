@@ -1,16 +1,21 @@
 package com.example.bookstore.config;
 
 import com.example.bookstore.service.CustomerService;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.preauth.AbstractPreAuthenticatedProcessingFilter;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
+import org.springframework.web.multipart.support.MultipartFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -43,8 +48,20 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/**",
                         "/webjars/**", "/css/**", "/js/**", "/images/**" , "/resources/**").permitAll()
                 .antMatchers("/user/**").hasAuthority("CustomerRole")
-                .antMatchers("/homepage/**", "/index/**","/author/**", "/authors/**", "/book/**", "/books/**", "/customer/**",
-                        "/customers/**", "/genre/**", "/genres/**", "/publisher/**", "/publishers/**")
+                .antMatchers("/homepage/**", "/index/**", "/authors/**","/author/**/new", "/author/**/update",
+                        "/author/**/delete","/author/**/book/new","/author/**/book/**/delete",
+                        "/author/**/genre/new","/author/**/genre/**/delete",
+                        "/books/**", "/book/new", "/book/**/update", "/book/**/delete", "/book/**/author/**",
+                        "/book/**/customer/**", "/book/**/customers","/book/**/genre/**","/book/**/publisher/**",
+                        "/book/**/newImage", "/customer/**/books",
+                        "/customer/**/book/**","/customer/**/genres",
+                        "/customer/**/genre/**", "/customer/**/show","/customer/new", "/customer/**/update",
+                        "/customer/**/delete", "/customers/**",
+                        "/genres/**","/genre/**/delete", "/genre/new", "/genre/**/update",
+                        "/genre/**/author/new", "/genre/**/author/**/delete", "/genre/**/book/**/delete",
+                        "/genre/**/book/**/new",
+                        "/publishers/**", "/publisher/new", "/publisher/**/update", "/publisher/**/delete",
+                        "/publisher/**/book/**")
                     .hasAuthority("ADMIN")
                 .antMatchers(HttpMethod.POST, "/register").permitAll()
                 .antMatchers(HttpMethod.GET, "/register").permitAll()
@@ -56,6 +73,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .and()
                 .logout().logoutSuccessUrl("/").permitAll();
+    }
+
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        web
+                .ignoring()
+                .antMatchers("/h2-console/**");
     }
 
     protected Long getId(){

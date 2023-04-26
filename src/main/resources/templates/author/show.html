@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
     <meta charset="UTF-8"/>
     <title>Show Author</title>
@@ -28,7 +28,7 @@
                                     style="font-size: 30px;">Author name here!</h1>
                             </div>
                             <div class="col-md-1" style="margin-left: 750px;">
-                                <a class="btn btn-default" href="#" th:href="@{'/homePage'}" role="button"
+                                <a class="btn btn-default" href="#" th:href="@{'/findPath'}" role="button"
                                    style="font-size: 20px">Main page</a>
                             </div>
                         </div>
@@ -40,7 +40,7 @@
                             <div class="col-md-11">
                                 <h5 style="font-size: 20px">Photo:</h5>
                             </div>
-                            <div class="col-md-1" style="margin-left: 725px;">
+                            <div sec:authorize="hasAuthority('ADMIN')" class="col-md-1" style="margin-left: 725px;">
                                 <a class="btn btn-default" href="#"
                                    th:href="@{'/author/' + ${author.id} + '/newImage'}" role="button"
                                    style="font-size: 20px">Change Image</a>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
     <meta charset="UTF-8"/>
     <title>Show Genre</title>
@@ -28,7 +28,7 @@
                                     style="font-size: 30px;">Genre name here!</h1>
                             </div>
                             <div class="col-md-1" style="margin-left: 750px;">
-                                <a class="btn btn-default" href="#" th:href="@{'/homePage'}" role="button"
+                                <a class="btn btn-default" href="#" th:href="@{'/findPath'}" role="button"
                                    style="font-size: 20px">Main page</a>
                             </div>
                         </div>

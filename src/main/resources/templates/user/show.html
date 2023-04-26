@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
-    <title>Show Publisher</title>
+    <title>Show Customer</title>
 
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
@@ -13,7 +13,7 @@
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
             integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
-            crossorigin="anonymous"></script>
+            crossorigin="anonymous" ></script>
 </head>
 <body>
 <div class="container-fluid" style="margin-top: 20px">
@@ -24,11 +24,11 @@
                     <div class="panel-heading">
                         <div class="row">
                             <div class="col-md-11">
-                                <h1 class="panel-title" th:text="${publisher.name}"
+                                <h1 class="panel-title" th:text="${user.userName}"
                                     style="font-size: 30px;">Author name here!</h1>
                             </div>
                             <div class="col-md-1" style="margin-left: 750px;">
-                                <a class="btn btn-default" href="#" th:href="@{'/findPath'}" role="button"
+                                <a class="btn btn-default" href="#" th:href="@{'/user/' + ${user.getId()} + '/homePage'}" role="button"
                                    style="font-size: 20px">Main page</a>
                             </div>
                         </div>
@@ -40,9 +40,9 @@
                             <div class="col-md-11">
                                 <h5 style="font-size: 20px">Photo:</h5>
                             </div>
-                            <div sec:authorize="hasAuthority('ADMIN')" class="col-md-1" style="margin-left: 725px;">
+                            <div class="col-md-1" style="margin-left: 725px;">
                                 <a class="btn btn-default" href="#"
-                                   th:href="@{'/publisher/' + ${publisher.id} + '/newImage'}" role="button"
+                                   th:href="@{'/customer/' + ${user.id} + '/newImage'}" role="button"
                                    style="font-size: 20px">Change Image</a>
                             </div>
                         </div>
@@ -51,7 +51,7 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <img src="../../static/images/1984.jpg"
-                                     th:src="@{'/publisher/' + ${publisher.id} + '/image'}"
+                                     th:src="@{'/customer/' + ${user.id} + '/image'}"
                                      width="400" height="400">
                             </div>
                         </div>
@@ -61,14 +61,15 @@
                     <div class="panel-heading">
                         <div class="row">
                             <div class="col-md-11">
-                                <h1 class="panel-title" style="font-size: 20px">Address</h1>
+                                <h1 class="panel-title" style="font-size: 20px">Your Balance</h1>
                             </div>
                         </div>
                     </div>
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-md-12">
-                                <p th:text="${'Address: ' + (publisher.address)}" style="font-size: 20px">30 $</p>
+                                <p th:text="${'Balance: ' + (user.balance) +  '  $'}" style="font-size: 20px">30
+                                    $</p>
                             </div>
                         </div>
                     </div>
@@ -76,32 +77,32 @@
                 <div class="panel panel-primary">
                     <div class="panel-heading">
                         <div class="row">
-                            <div class="col-md-11 ">
-                                <h1 class="panel-title" style="font-size: 20px">Books</h1>
+                            <div class="col-md-11">
+                                <h1 class="panel-title" style="font-size: 20px">Your books</h1>
                             </div>
                             <div class="col-md-1" style="margin-left: 775px;">
                                 <a class="btn btn-default" href="#"
-                                   th:href="@{'/publisher/' + ${publisher.id} + '/books'}" role="button"
+                                   th:href="@{'/user/' + ${user.id} + '/books'}" role="button"
                                    style="font-size: 20px">View</a>
                             </div>
                         </div>
                     </div>
                     <div class="panel-body">
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <ul>
-                                <li th:each="book : ${publisher.books}"
-                                    th:text="${book.getName()}" style="font-size: 20px">1 Teaspoon of Sugar
-                                </li>
-                            </ul>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <ul>
+                                    <li th:each="book : ${user.books}"
+                                        th:text="${'Book name: ' + book.getName()}" style="font-size: 20px">1 Teaspoon
+                                        of Sugar
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 </div>
 </body>
 </html>

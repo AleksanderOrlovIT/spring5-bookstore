@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
     <meta charset="UTF-8"/>
     <title>Books Home</title>
@@ -29,7 +29,7 @@
                                 website!</h1>
                         </div>
                         <div class="col-md-1" style="margin-left: 750px;">
-                            <a class="btn btn-default" href="#" th:href="@{'/homePage'}" role="button"
+                            <a class="btn btn-default" href="#" th:href="@{'/findPath'}" role="button"
                                style="font-size: 20px">Main page</a>
                         </div>
                     </div>
@@ -42,31 +42,21 @@
                                 <th style="font-size: 25px">ID</th>
                                 <th style="font-size: 25px">Name</th>
                                 <th style="font-size: 25px">View</th>
-                                <th style="font-size: 25px">Delete</th>
+                                <th sec:authorize="hasAuthority('ADMIN')" style="font-size: 25px">Delete</th>
                             </tr>
                             </thead>
-                            <tr th:remove="all">
-                                <td>123</td>
-                                <td>Tasty Goodnees 1</td>
-                                <td><a href="#">View</a></td>
-                            </tr>
-                            <tr th:remove="all">
-                                <td>12333</td>
-                                <td>Tasty Goodnees 2</td>
-                                <td><a href="#">View</a></td>
-                            </tr>
                             <tr th:each="book : ${books}">
                                 <td th:text="${book.id}" style="font-size: 20px">334</td>
                                 <td th:text="${book.name}" style="font-size: 20px">Tasty Goodnees 3</td>
                                 <td><a href="#" th:href="@{'/book/' + ${book.id} + '/show'}" style="font-size: 20px">View</a>
                                 </td>
-                                <td><a href="#"
+                                <td sec:authorize="hasAuthority('ADMIN')"><a href="#"
                                        th:href="@{'/genre/' + ${genre.id} + '/book/' + ${book.id} + '/delete'}"
                                        style="font-size: 20px">Delete</a></td>
                             </tr>
                         </table>
                     </div>
-                    <div class="col-md-1">
+                    <div sec:authorize="hasAuthority('ADMIN')" class="col-md-1">
                         <a class="btn btn-default" href="#"
                            th:href="@{'/genre/' + ${genre.id} +'/book/new'}" role="button"
                            style="font-size: 20px">Add Book</a>
