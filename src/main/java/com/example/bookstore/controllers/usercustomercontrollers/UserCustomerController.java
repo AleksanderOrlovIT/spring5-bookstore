@@ -21,13 +21,13 @@ public class UserCustomerController {
         return "user/index";
     }
 
-    @RequestMapping("/findpath")
+    @RequestMapping("/findPath")
     public String getCustomerId(){
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if(principal instanceof UserDetails){
             String userName = ((UserDetails) principal).getUsername();
             if(userName.equals("admin"))
-                return "redirect:/homepage";
+                return "redirect:/homePage";
             return "redirect:/user/" + customerService.findByUserName(userName).getId() + "/homePage";
         } else return "/error/404error";
     }

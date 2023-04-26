@@ -25,16 +25,15 @@ public class IndexController {
         this.roleService = roleService;
     }
 
-    @RequestMapping("/homepage")
+    @RequestMapping("/homePage")
     public String getHomePage(){
-        return "index";
+        return "administratorhomepage";
     }
 
 
     @GetMapping("/register")
     public String registerCustomer(Model model){
         model.addAttribute("customer", Customer.builder().build());
-
         return customerForm;
     }
 
@@ -44,8 +43,8 @@ public class IndexController {
             return customerForm;
         }else{
             customer.getRoles().add(roleService.findByName("CustomerRole"));
-            Customer savedCustomer = customerService.save(customer);
-            return "redirect:/user/" + savedCustomer.getId() + "/homePage";
+            customerService.save(customer);
+            return "redirect:/login";
         }
     }
 
