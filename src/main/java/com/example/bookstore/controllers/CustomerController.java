@@ -53,13 +53,18 @@ public class CustomerController {
     }
 
     @PostMapping("/customer/new")
-    public String processCreationForm(@Valid Customer customer, BindingResult result){
+    public String processCreationForm(@Valid Customer customer, BindingResult result, Model model){
         if(result.hasErrors()){
             return customerForm;
         }else{
-            customer.getRoles().add(roleService.findByName("CustomerRole"));
-            Customer savedCustomer = customerService.save(customer);
-            return "redirect:/customer/" + savedCustomer.getId() + "/show";
+            if(customerService.findByUserName(customer.getUserName()) == null) {
+                customer.getRoles().add(roleService.findByName("CustomerRole"));
+                Customer savedCustomer = customerService.save(customer);
+                return "redirect:/customer/" + savedCustomer.getId() + "/show";
+            }else {
+                model.addAttribute("UserNameTaken", true);
+                return customerForm;
+            }
         }
     }
 

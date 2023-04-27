@@ -38,13 +38,18 @@ public class IndexController {
     }
 
     @PostMapping("/register")
-    public String processCreationForm(@Valid Customer customer, BindingResult result){
+    public String processCreationForm(@Valid Customer customer, BindingResult result, Model model){
         if(result.hasErrors()){
             return customerForm;
         }else{
-            customer.getRoles().add(roleService.findByName("CustomerRole"));
-            customerService.save(customer);
-            return "redirect:/login";
+            if(customerService.findByUserName(customer.getUserName()) == null) {
+                customer.getRoles().add(roleService.findByName("CustomerRole"));
+                customerService.save(customer);
+                return "redirect:/login";
+            } else {
+            model.addAttribute("UserNameTaken", true);
+            return customerForm;
+        }
         }
     }
 

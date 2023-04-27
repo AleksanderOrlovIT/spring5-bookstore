@@ -16,6 +16,9 @@
                 <div th:if="${#fields.hasErrors('*')}" class="alert alert-danger">
                     <p style="font-size: 20px">Please Correct Errors Below</p>
                 </div>
+                <div th:if="${UserNameTaken == true}" class="alert alert-danger">
+                    <p style="font-size: 20px">Username has already been taken, please change it to another one</p>
+                </div>
                 <input type="hidden" th:field="*{id}"/>
                 <div class="pannel-group">
                     <div class="panel panel-primary">
