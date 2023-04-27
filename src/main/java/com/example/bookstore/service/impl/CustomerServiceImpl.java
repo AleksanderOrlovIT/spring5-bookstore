@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 @Service
 public class CustomerServiceImpl implements CustomerService {
@@ -81,14 +82,27 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     private void encodePassword(Customer customer) {
-        if (findByUserName(customer.getUserName()) == null) {
+        Pattern BCRYPT_PATTERN = Pattern.compile("\\A\\$2a?\\$\\d\\d\\$[./0-9A-Za-z]{53}");
+        if (findByUserName(customer.getUserName()) == null && !BCRYPT_PATTERN.matcher(customer.getPassword()).matches()) {
             String encodedPassword = passwordEncoder.encode(customer.getPassword());
             customer.setPassword(encodedPassword);
         } else {
             Customer foundCustomer = findById(customer.getId());
             String encodedPassword = passwordEncoder.encode(customer.getPassword());
-            if (!passwordEncoder.matches(foundCustomer.getPassword(), encodedPassword))
+            if (!passwordEncoder.matches(foundCustomer.getPassword(), encodedPassword)
+                    && !passwordEncoder.matches(foundCustomer.getPassword(), customer.getPassword()))
                 customer.setPassword(encodedPassword);
         }
+    }
+
+    @Override
+    public Customer copyOldCustomerDataInNewOne(Customer newCustomer, Customer oldCustomer) {
+        if(newCustomer != null && oldCustomer != null){
+            newCustomer.setBooks(oldCustomer.getBooks());
+            newCustomer.setRoles(oldCustomer.getRoles());
+            newCustomer.setImage(oldCustomer.getImage());
+            return newCustomer;
+        }
+        return null;
     }
 }

@@ -73,13 +73,15 @@ public class GenreController {
     @PostMapping("/genre/{id}/update")
     public String processUpdateGenreForm(@Valid Genre genre, BindingResult result, @PathVariable Long id,
                                          Model model){
-        if(genreService.findById(id) == null){
+        Genre oldGenre = genreService.findById(id);
+        if(oldGenre == null){
             model.addAttribute("exception", new Exception("There is no genre with id: " + id));
             return errorPage;
         }
         if(result.hasErrors()){
             return genreForm;
         }else{
+            genreService.copyOldGenreDataInNewOne(genre, oldGenre);
             genreService.save(genre);
             return "redirect:/genre/" + genre.getId() + "/show";
         }

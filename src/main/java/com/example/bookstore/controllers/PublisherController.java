@@ -72,13 +72,15 @@ public class PublisherController {
     @PostMapping("/publisher/{id}/update")
     public String processUpdatePublisherForm(@Valid Publisher publisher, BindingResult result, @PathVariable Long id,
                                              Model model){
-        if(publisherService.findById(id) == null){
+        Publisher oldPublisher = publisherService.findById(id);
+        if(oldPublisher == null){
             model.addAttribute("exception", new Exception("There is no publisher with id: " + id));
             return errorPage;
         }
         if(result.hasErrors()){
             return publisherForm;
         }else{
+            publisherService.copyOldPublisherDataInNewOne(publisher, oldPublisher);
             publisherService.save(publisher);
             return "redirect:/publisher/" + publisher.getId() + "/show";
         }

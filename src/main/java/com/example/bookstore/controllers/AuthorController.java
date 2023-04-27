@@ -71,13 +71,15 @@ public class AuthorController {
 
     @PostMapping("/author/{id}/update")
     public String processUpdateAuthorForm(@Valid Author author, BindingResult result, @PathVariable Long id, Model model){
-        if(authorService.findById(id) == null){
+        Author oldAuthor = authorService.findById(id);
+        if(oldAuthor == null){
             model.addAttribute("exception", new Exception("There is no author with id: " + id));
             return errorPage;
         }
         if(result.hasErrors()){
             return authorForm;
         }else{
+            authorService.copyOldAuthorDataInNewOne(author, oldAuthor);
             authorService.save(author);
             return "redirect:/author/" + author.getId() + "/show";
         }

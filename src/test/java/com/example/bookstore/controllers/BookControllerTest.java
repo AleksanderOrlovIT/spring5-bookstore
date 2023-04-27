@@ -140,7 +140,7 @@ class BookControllerTest {
     void processUpdateBookForm() throws Exception{
         Book book = Book.builder().id(1L).name("book").price(BigDecimal.valueOf(1.0)).build();
         when(bookService.findById(anyLong())).thenReturn(book);
-        when(bookService.saveBookSets(any(),any())).thenReturn(book);
+        when(bookService.copyOldBookDataInNewOne(any(),any())).thenReturn(book);
         when(bookService.save(any())).thenReturn(book);
 
         mockMvc.perform(post("/book/1/update")
@@ -150,7 +150,7 @@ class BookControllerTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/book/" + book.getId() + "/show"));
 
-        verify(bookService, times(1)).saveBookSets(any(), any());
+        verify(bookService, times(1)).copyOldBookDataInNewOne(any(), any());
         verify(bookService, times(1)).save(any());
         verify(bookService, times(2)).findById(anyLong());
     }

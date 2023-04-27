@@ -72,4 +72,14 @@ public class PublisherServiceImpl implements PublisherService {
         }
         return null;
     }
+
+    @Override
+    public Publisher copyOldPublisherDataInNewOne(Publisher newPublisher, Publisher oldPublisher) {
+        if(newPublisher != null && oldPublisher != null){
+            newPublisher.setBooks(oldPublisher.getBooks());
+            newPublisher.setImage(oldPublisher.getImage());
+            return newPublisher;
+        }
+        return null;
+    }
 }

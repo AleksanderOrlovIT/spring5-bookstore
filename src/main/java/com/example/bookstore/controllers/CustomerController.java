@@ -82,13 +82,20 @@ public class CustomerController {
     @PostMapping("/customer/{id}/update")
     public String processUpdateCustomerForm(@Valid Customer customer, BindingResult result, @PathVariable Long id,
                                             Model model){
-        if(customerService.findById(id) == null){
+        Customer oldCustomer = customerService.findById(id);
+        if(oldCustomer == null){
             model.addAttribute("exception", new Exception("There is no customer with id: " + id));
             return errorPage;
         }
         if(result.hasErrors()){
             return customerForm;
         }else{
+            Customer namedCustomer = customerService.findByUserName(customer.getUserName());
+            if(namedCustomer != null && !namedCustomer.getId().equals(id)){
+                model.addAttribute("UserNameTaken", true);
+                return customerForm;
+            }
+            customerService.copyOldCustomerDataInNewOne(customer, oldCustomer);
             customerService.save(customer);
             return "redirect:/customer/" + customer.getId() + "/show";
         }

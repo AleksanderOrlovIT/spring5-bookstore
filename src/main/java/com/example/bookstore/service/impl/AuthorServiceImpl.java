@@ -72,4 +72,15 @@ public class AuthorServiceImpl implements AuthorService {
         }
         return null;
     }
+
+    @Override
+    public Author copyOldAuthorDataInNewOne(Author newAuthor, Author oldAuthor) {
+        if(newAuthor != null && oldAuthor != null) {
+            newAuthor.setBooks(oldAuthor.getBooks());
+            newAuthor.setGenres(oldAuthor.getGenres());
+            newAuthor.setImage(oldAuthor.getImage());
+            return newAuthor;
+        } else
+            return null;
+    }
 }

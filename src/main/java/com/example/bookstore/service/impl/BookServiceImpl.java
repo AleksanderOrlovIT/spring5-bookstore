@@ -1,9 +1,6 @@
 package com.example.bookstore.service.impl;
 
-import com.example.bookstore.model.Author;
-import com.example.bookstore.model.Book;
-import com.example.bookstore.model.Customer;
-import com.example.bookstore.model.Publisher;
+import com.example.bookstore.model.*;
 import com.example.bookstore.repositories.BookRepository;
 import com.example.bookstore.service.BookService;
 import org.springframework.stereotype.Service;
@@ -53,17 +50,13 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Book saveBookSets(Book newBook, Book oldBook) {
+    public Book copyOldBookDataInNewOne(Book newBook, Book oldBook) {
         if(newBook != null && oldBook != null) {
-            for (Author author : oldBook.getAuthors()) {
-                newBook.getAuthors().add(author);
-            }
-            for (Publisher publisher : oldBook.getPublishers()) {
-                newBook.getPublishers().add(publisher);
-            }
-            for (Customer customer : oldBook.getCustomers()) {
-                newBook.getCustomers().add(customer);
-            }
+            newBook.setAuthors(oldBook.getAuthors());
+            newBook.setCustomers(oldBook.getCustomers());
+            newBook.setGenres(oldBook.getGenres());
+            newBook.setPublishers(oldBook.getPublishers());
+            newBook.setImage(oldBook.getImage());
             return newBook;
         }
         return null;

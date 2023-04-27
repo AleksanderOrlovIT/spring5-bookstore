@@ -81,4 +81,14 @@ public class GenreServiceImpl implements GenreService {
         }
         return null;
     }
+
+    @Override
+    public Genre copyOldGenreDataInNewOne(Genre newGenre, Genre oldGenre) {
+        if(newGenre != null && oldGenre != null){
+            newGenre.setAuthors(oldGenre.getAuthors());
+            newGenre.setBooks(oldGenre.getBooks());
+            return newGenre;
+        }
+        return null;
+    }
 }
