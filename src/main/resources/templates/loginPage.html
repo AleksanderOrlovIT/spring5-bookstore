@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Login page</title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+</head>
+<body>
+<div class="container-fluid" style="margin-top: 20px">
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <form name="f" th:action="@{/login}" method="post">
+                <div class="pannel-group">
+                    <div th:if="${param.error}" class="alert alert-danger">
+                        <p style="font-size: 20px">Invalid username or password</p>
+                    </div>
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <h1 class="panel-title" style="font-size: 30px">Please Login</h1>
+                                <a class="btn btn-default" href="#" th:href="@{'/register'}" role="button"
+                                   style="font-size: 20px; margin-left: 750px;">Register</a>
+                        </div>
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <label style="font-size: 25px">UserName:</label>
+                                <input type="text" id="userName" name="userName" style="font-size: 20px;">
+                            </div>
+                            <div class="form-group">
+                                <label style="font-size: 25px">Password:</label>
+                                <input type="password" id="password" name="password" style="font-size: 20px;">
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="font-size: 20px">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

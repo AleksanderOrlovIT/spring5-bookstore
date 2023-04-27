@@ -1,7 +1,6 @@
 package com.example.bookstore.config;
 
 import com.example.bookstore.service.CustomerService;
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -13,9 +12,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.authentication.preauth.AbstractPreAuthenticatedProcessingFilter;
-import org.springframework.web.multipart.commons.CommonsMultipartResolver;
-import org.springframework.web.multipart.support.MultipartFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -53,21 +49,24 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/author/**/genre/new","/author/**/genre/**/delete",
                         "/books/**", "/book/new", "/book/**/update", "/book/**/delete", "/book/**/author/**",
                         "/book/**/customer/**", "/book/**/customers","/book/**/genre/**","/book/**/publisher/**",
-                        "/book/**/newImage", "/customer/**/books",
-                        "/customer/**/book/**","/customer/**/genres",
+                        "/customer/**/books", "/customer/**/book/**","/customer/**/genres",
                         "/customer/**/genre/**", "/customer/**/show","/customer/new", "/customer/**/update",
                         "/customer/**/delete", "/customers/**",
                         "/genres/**","/genre/**/delete", "/genre/new", "/genre/**/update",
                         "/genre/**/author/new", "/genre/**/author/**/delete", "/genre/**/book/**/delete",
                         "/genre/**/book/**/new",
                         "/publishers/**", "/publisher/new", "/publisher/**/update", "/publisher/**/delete",
-                        "/publisher/**/book/**")
+                        "/publisher/**/book/**", "/book/**/newImage","/author/**/newImage",
+                        "/publisher/**/newImage")
                     .hasAuthority("ADMIN")
                 .antMatchers(HttpMethod.POST, "/register").permitAll()
                 .antMatchers(HttpMethod.GET, "/register").permitAll()
+                .antMatchers(HttpMethod.POST, "/customer/**/newImage").authenticated()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
+                    .loginPage("/login")
+                        .permitAll()
                 .usernameParameter("userName")
                 .defaultSuccessUrl("/findPath")
                 .permitAll()
@@ -80,11 +79,5 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         web
                 .ignoring()
                 .antMatchers("/h2-console/**");
-    }
-
-    protected Long getId(){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String name = authentication.getName();
-        return customerService.findByUserName(name).getId();
     }
 }

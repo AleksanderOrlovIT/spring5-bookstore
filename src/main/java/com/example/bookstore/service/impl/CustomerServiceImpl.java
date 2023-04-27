@@ -37,17 +37,16 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public Customer save(Customer customer) {
-        if(customer != null) {
+        if (customer != null) {
             encodePassword(customer);
             return customerRepository.save(customer);
-        }
-        else
+        } else
             return null;
     }
 
     @Override
     public void delete(Customer customer) {
-        if(customer != null && customerRepository.findById(customer.getId()).isPresent()){
+        if (customer != null && customerRepository.findById(customer.getId()).isPresent()) {
             removeBeforeDelete(customer);
             customerRepository.delete(customer);
         }
@@ -56,16 +55,16 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public void deleteById(Long id) {
         Customer customer = findById(id);
-        if(customer != null){
+        if (customer != null) {
             removeBeforeDelete(customer);
             customerRepository.deleteById(id);
         }
     }
 
-    public void removeBeforeDelete(Customer customer){
+    public void removeBeforeDelete(Customer customer) {
         Set<Book> books = customer.getBooks();
-        if(books != null){
-            for(Book book : books){
+        if (books != null) {
+            for (Book book : books) {
                 book.getCustomers().remove(customer);
             }
         }
@@ -73,8 +72,8 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public Customer findByUserName(String userName) {
-        for(Customer customer : customerRepository.findAll()){
-            if(customer.getUserName().equals(userName)){
+        for (Customer customer : customerRepository.findAll()) {
+            if (customer.getUserName().equals(userName)) {
                 return customer;
             }
         }
@@ -82,7 +81,14 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     private void encodePassword(Customer customer) {
-        String encodedPassword = passwordEncoder.encode(customer.getPassword());
-        customer.setPassword(encodedPassword);
+        if (findByUserName(customer.getUserName()) == null) {
+            String encodedPassword = passwordEncoder.encode(customer.getPassword());
+            customer.setPassword(encodedPassword);
+        } else {
+            Customer foundCustomer = findById(customer.getId());
+            String encodedPassword = passwordEncoder.encode(customer.getPassword());
+            if (!passwordEncoder.matches(foundCustomer.getPassword(), encodedPassword))
+                customer.setPassword(encodedPassword);
+        }
     }
 }

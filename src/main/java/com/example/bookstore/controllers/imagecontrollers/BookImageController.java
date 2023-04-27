@@ -29,7 +29,7 @@ public class BookImageController {
         this.bookService = bookService;
     }
 
-    @GetMapping("book/{bookId}/newImage")
+    @GetMapping("/book/{bookId}/newImage")
     public String showUploadForm(@PathVariable Long bookId, Model model) {
         Book book = bookService.findById(bookId);
         if (book == null) {
@@ -41,7 +41,7 @@ public class BookImageController {
         return "book/imageuploadform";
     }
 
-    @PostMapping("book/{bookId}/newImage")
+    @PostMapping("/book/{bookId}/newImage")
     public String handleImagePost(@PathVariable Long bookId, @RequestParam("imagefile") MultipartFile file, Model model) {
         Book savedBook = bookService.findById(bookId);
         if (savedBook != null) {

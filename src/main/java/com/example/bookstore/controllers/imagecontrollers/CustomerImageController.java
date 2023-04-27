@@ -32,7 +32,7 @@ public class CustomerImageController {
         this.customerService = customerService;
     }
 
-    @GetMapping("customer/{customerId}/newImage")
+    @GetMapping("/customer/{customerId}/newImage")
     public String showUploadForm(@PathVariable Long customerId, Model model){
         Customer customer = customerService.findById(customerId);
         if(customer == null){
@@ -43,7 +43,7 @@ public class CustomerImageController {
         return "customer/imageuploadform";
     }
 
-    @PostMapping("customer/{customerId}/newImage")
+    @PostMapping("/customer/{customerId}/newImage")
     public String handleImagePost(@PathVariable Long customerId, @RequestParam("imagefile") MultipartFile file, Model model){
         Customer savedCustomer = customerService.findById(customerId);
         if(savedCustomer != null) {
@@ -52,7 +52,7 @@ public class CustomerImageController {
             model.addAttribute("exception", new Exception("There is no customer with id: " + customerId));
             return errorPage;
         }
-        return "redirect:/customer/" + customerId + "/show";
+        return "redirect:/findPath" ;
     }
 
     @GetMapping("customer/{customerId}/image")

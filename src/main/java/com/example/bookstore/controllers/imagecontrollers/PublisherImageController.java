@@ -32,7 +32,7 @@ public class PublisherImageController {
         this.publisherService = publisherService;
     }
 
-    @GetMapping("publisher/{publisherId}/newImage")
+    @GetMapping("/publisher/{publisherId}/newImage")
     public String showUploadForm(@PathVariable Long publisherId, Model model){
         Publisher publisher = publisherService.findById(publisherId);
         if(publisher == null){
@@ -43,7 +43,7 @@ public class PublisherImageController {
         return "publisher/imageuploadform";
     }
 
-    @PostMapping("publisher/{publisherId}/newImage")
+    @PostMapping("/publisher/{publisherId}/newImage")
     public String handleImagePost(@PathVariable Long publisherId, @RequestParam("imagefile") MultipartFile file, Model model){
         Publisher savedPublisher = publisherService.findById(publisherId);
         if(savedPublisher != null) {

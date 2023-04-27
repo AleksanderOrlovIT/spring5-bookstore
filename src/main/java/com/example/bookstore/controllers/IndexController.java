@@ -52,4 +52,9 @@ public class IndexController {
     public String getFirstPage(){
         return "firstpage";
     }
+
+    @RequestMapping("/login")
+    public String returnLoginPage(){
+        return "loginPage";
+    }
 }

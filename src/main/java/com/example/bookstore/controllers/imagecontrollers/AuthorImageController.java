@@ -32,7 +32,7 @@ public class AuthorImageController {
         this.authorService = authorService;
     }
 
-    @GetMapping("author/{authorId}/newImage")
+    @GetMapping("/author/{authorId}/newImage")
     public String showUploadForm(@PathVariable Long authorId, Model model) {
         Author author = authorService.findById(authorId);
         if (author == null) {
@@ -43,7 +43,7 @@ public class AuthorImageController {
         return "author/imageuploadform";
     }
 
-    @PostMapping("author/{authorId}/newImage")
+    @PostMapping("/author/{authorId}/newImage")
     public String handleImagePost(@PathVariable Long authorId, @RequestParam("imagefile") MultipartFile file, Model model) {
         Author savedAuthor = authorService.findById(authorId);
         if (savedAuthor != null) {

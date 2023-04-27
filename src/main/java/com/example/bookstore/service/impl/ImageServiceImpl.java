@@ -81,7 +81,7 @@ public class ImageServiceImpl implements ImageService {
                 byteObjects[i++] = b;
             }
         }catch (IOException e){
-            log.error("Error occured", e);
+            log.error("Error occurred", e);
             e.printStackTrace();
         }
         return byteObjects;

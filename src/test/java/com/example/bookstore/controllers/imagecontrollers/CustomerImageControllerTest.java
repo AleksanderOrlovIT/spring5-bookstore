@@ -80,7 +80,7 @@ class CustomerImageControllerTest {
 
         mockMvc.perform(multipart("/customer/1/newImage").file(multipartFile))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(header().string("Location", "/customer/1/show"));
+                .andExpect(view().name("redirect:/findPath"));
 
         verify(imageService, times(1)).saveCustomerImage(any(), any());
     }
