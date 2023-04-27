@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.validation.Valid;
+import java.math.BigDecimal;
 
 @Controller
 @RequestMapping("/publisher/{publisherId}")
@@ -60,8 +61,9 @@ public class PublisherBooksController {
             Book findBook = bookService.findByName(book.getName());
             currentPublisher = publisherService.findById(publisherId);
             if(findBook != null){
-                findBook.setPrice(book.getPrice());
                 book = findBook;
+            }else{
+                book.setPrice(BigDecimal.valueOf(10));
             }
             currentPublisher.getBooks().add(book);
             book.getPublishers().add(currentPublisher);

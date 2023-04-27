@@ -96,13 +96,14 @@ class CustomerControllerTest {
 
     @Test
     void processCreationForm() throws  Exception{
-        Customer customer = Customer.builder().id(1L).userName("userName").balance(BigDecimal.valueOf(1.0)).build();
+        Customer customer = Customer.builder().id(1L).userName("userName").password("pass").balance(BigDecimal.valueOf(1.0)).build();
         when(customerService.save(any())).thenReturn(customer);
 
         mockMvc.perform(post("/customer/new")
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                         .param("userName", customer.getUserName())
-                        .param("balance", customer.getBalance().toString()))
+                        .param("balance", customer.getBalance().toString())
+                        .param("password", customer.getPassword()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/customer/" + customer.getId() + "/show"));
 
@@ -142,14 +143,15 @@ class CustomerControllerTest {
 
     @Test
     void processUpdateCustomerForm() throws Exception{
-        Customer customer = Customer.builder().id(1L).userName("userName").balance(BigDecimal.valueOf(1.0)).build();
+        Customer customer = Customer.builder().id(1L).userName("userName").password("pass").balance(BigDecimal.valueOf(1.0)).build();
         when(customerService.save(any())).thenReturn(customer);
         when(customerService.findById(anyLong())).thenReturn(customer);
 
         mockMvc.perform(post("/customer/1/update")
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                         .param("userName", customer.getUserName())
-                        .param("balance", customer.getBalance().toString()))
+                        .param("balance", customer.getBalance().toString())
+                        .param("password", customer.getPassword()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/customer/" + customer.getId() + "/show"));
 

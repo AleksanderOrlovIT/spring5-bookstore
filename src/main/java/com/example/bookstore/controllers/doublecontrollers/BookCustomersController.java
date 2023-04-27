@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.validation.Valid;
+import java.math.BigDecimal;
 
 @Controller
 @RequestMapping("/book/{bookId}")
@@ -51,7 +52,7 @@ public class BookCustomersController {
     }
 
     @PostMapping("/customer/new")
-    public String processCreationForm(@Valid Customer customer, BindingResult result, @PathVariable Long bookId,
+    public String processCreationForm(Customer customer, BindingResult result, @PathVariable Long bookId,
                                       Model model) {
         if(checkIfBookIdIsWrong(bookId, model))
             return errorPage;
@@ -62,8 +63,11 @@ public class BookCustomersController {
             currentBook = bookService.findById(bookId);
 
             if (foundCustomer != null) {
-                foundCustomer.setBalance(customer.getBalance());
                 customer = foundCustomer;
+            }else {
+                model.addAttribute("exception", new Exception("There is no customer with name: " +
+                        customer.getUserName()));
+                return errorPage;
             }
             customer.getBooks().add(currentBook);
             currentBook.getCustomers().add(customer);

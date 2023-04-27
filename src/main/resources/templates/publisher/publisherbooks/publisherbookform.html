@@ -6,13 +6,6 @@
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
           integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-
-    <script src="/webjars/jquery/1.11.1/jquery.min.js"></script>
-
-    <!-- Latest compiled and minified JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
-            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
-            crossorigin="anonymous"></script>
 </head>
 <body>
 
@@ -24,6 +17,7 @@
                     <p style="font-size: 20px">Please Correct Errors Below</p>
                 </div>
                 <input type="hidden" th:field="*{id}"/>
+                <input type="hidden" th:field="*{price}"/>
                 <div class="pannel-group">
                     <div class="panel panel-primary">
                         <div class="panel-heading">
@@ -37,13 +31,6 @@
                                     <input type="text" class="form-control" th:field="*{name}" style="font-size: 20px"/>
                                     <div class="alert alert-warning" th:if="${#fields.hasErrors('name')}"
                                          th:errors="*{name}" style="font-size: 20px"></div>
-                                </div>
-                                <div class="col-md-3 form-group">
-                                    <label style="font-size: 20px">Price:</label>
-                                    <input type="number" class="form-control" th:field="*{price}"
-                                           style="font-size: 20px"/>
-                                    <div class="alert alert-warning" th:if="${#fields.hasErrors('price')}"
-                                         th:errors="*{price}" style="font-size: 20px"></div>
                                 </div>
                             </div>
                         </div>

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.validation.Valid;
+import java.math.BigDecimal;
 
 @Controller
 @RequestMapping("/genre/{genreId}")
@@ -61,8 +62,9 @@ public class GenreBooksController {
             Book findBook = bookService.findByName(book.getName());
             currentGenre = genreService.findById(genreId);
             if(findBook != null){
-                findBook.setPrice(book.getPrice());
                 book = findBook;
+            }else{
+                book.setPrice(BigDecimal.valueOf(10));
             }
             currentGenre.getBooks().add(book);
             book.getGenres().add(currentGenre);

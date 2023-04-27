@@ -66,8 +66,9 @@ public class AuthorBooksController {
             Book findBook = bookService.findByName(book.getName());
             currentAuthor = authorService.findById(authorId);
             if (findBook != null) {
-                findBook.setPrice(book.getPrice());
                 book = findBook;
+            } else {
+                book.setPrice(BigDecimal.valueOf(10));
             }
             currentAuthor.getBooks().add(book);
             book.getAuthors().add(currentAuthor);

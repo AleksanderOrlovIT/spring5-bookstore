@@ -39,7 +39,6 @@ public class Book extends BaseEntity{
     @Column(name = "name")
     private String name;
 
-    @NotNull
     @DecimalMin(value = "0.0")
     @Column(name = "price")
     private BigDecimal price;

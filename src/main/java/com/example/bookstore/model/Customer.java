@@ -34,7 +34,8 @@ public class Customer extends BaseEntity{
     @Column(name = "userName", unique = true)
     private String userName;
 
-    @Column(name = "password", nullable = false)
+    @NotEmpty
+    @Column(name = "password")
     private String password;
 
     @NotNull
