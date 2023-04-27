@@ -21,8 +21,14 @@
                                     style="font-size: 30px;">Author name here!</h1>
                             </div>
                             <div class="col-md-1" style="margin-left: 750px;">
-                                <a class="btn btn-default" href="#" th:href="@{'/user/' + ${user.getId()} + '/homePage'}" role="button"
+                                <a class="btn btn-default" href="#"
+                                   th:href="@{'/user/' + ${user.getId()} + '/homePage'}" role="button"
                                    style="font-size: 20px">Main page</a>
+                            </div>
+                            <div class="col-md-1" style="margin-right: 100px;">
+                                <a class="btn btn-default" href="#"
+                                   th:href="@{'/user/' + ${user.getId()} + '/update'}" role="button"
+                                   style="font-size: 20px">Update your information</a>
                             </div>
                         </div>
                     </div>

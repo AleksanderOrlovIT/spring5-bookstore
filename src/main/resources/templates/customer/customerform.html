@@ -38,7 +38,7 @@
 
                                 <div class="col-md-3 form-group">
                                     <label style="font-size: 20px">Password:</label>
-                                    <input type="text" class="form-control" th:field="*{password}"
+                                    <input type="password" class="form-control" th:field="*{password}"
                                            style="font-size: 20px"/>
                                     <div class="alert alert-warning" th:if="${#fields.hasErrors('password')}"
                                          th:errors="*{password}" style="font-size: 20px"></div>
